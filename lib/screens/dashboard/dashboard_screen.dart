@@ -82,8 +82,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                     'Hello, ${profile.name} 👋',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -99,10 +99,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: 24),
 
                   // Macro Bars
-                  Text('Macronutrients',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          )),
+                  Text(
+                    'Macronutrients',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   MacroBar(
                     label: 'Protein',
@@ -127,10 +129,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: 24),
 
                   // Today's Meals
-                  Text('Today\'s Meals',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          )),
+                  Text(
+                    'Today\'s Meals',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   if (mealProv.todaysMeals.isEmpty)
                     Container(
@@ -142,36 +146,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: Center(
                         child: Column(
                           children: [
-                            Icon(Icons.restaurant_outlined,
-                                size: 48, color: AppColors.textSecondary),
+                            Icon(
+                              Icons.restaurant_outlined,
+                              size: 48,
+                              color: AppColors.textSecondary,
+                            ),
                             const SizedBox(height: 12),
-                            Text('No meals logged today',
-                                style:
-                                    TextStyle(color: AppColors.textSecondary)),
+                            Text(
+                              'No meals logged today',
+                              style: TextStyle(color: AppColors.textSecondary),
+                            ),
                             const SizedBox(height: 4),
-                            Text('Tap the camera button to get started!',
-                                style:
-                                    TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                            Text(
+                              'Tap the camera button to get started!',
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 12,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     )
                   else
-                    ...mealProv.todaysMeals.map((meal) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: MealCard(
-                            meal: meal,
-                            onDelete: () async {
-                              final uid =
-                                  context.read<AuthProvider>().userId;
-                              if (uid != null) {
-                                await context
-                                    .read<MealProvider>()
-                                    .deleteMeal(uid, meal.id);
-                              }
-                            },
+                    ...mealProv.todaysMeals.map(
+                      (meal) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Dismissible(
+                          key: Key(meal.id),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: 20),
+                            decoration: BoxDecoration(
+                              color: AppColors.error,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
                           ),
-                        )),
+                          confirmDismiss: (_) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: const Text('Delete Meal'),
+                                content: Text('Remove ${meal.foodNameEn}?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(ctx, false),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(ctx, true),
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          onDismissed: (_) async {
+                            final uid = context.read<AuthProvider>().userId;
+                            if (uid != null) {
+                              await context.read<MealProvider>().deleteMeal(
+                                uid,
+                                meal.id,
+                              );
+                            }
+                          },
+                          child: MealCard(meal: meal),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 80),
                 ],
               ),

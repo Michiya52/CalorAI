@@ -1,0 +1,3 @@
+## 2024-05-18 - Missing Interaction Hooks
+**Learning:** Sometimes components are built to handle interactions (like `MealCard` accepting an `onDelete` callback), but the parent container doesn't implement the UI to trigger it. On the dashboard, users had no way to delete a meal even though the callback was provided.
+**Action:** Always verify that provided callbacks are actually accessible to the user through the UI (e.g. via swipe-to-delete, or explicit buttons). Ensure consistency in interaction patterns across similar screens (e.g. `MealHistoryScreen` had swipe-to-delete, but `DashboardScreen` didn't).
