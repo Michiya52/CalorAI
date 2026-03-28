@@ -98,11 +98,11 @@ class _NavItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: isSelected
             ? BoxDecoration(
-                color: Colors.emerald[700],
+                color: AppTheme.primary,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.emerald[900]!.withOpacity(0.2),
+                    color: AppTheme.primary.withOpacity(0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -116,7 +116,7 @@ class _NavItem extends StatelessWidget {
               isSelected ? activeIcon : icon,
               color: isSelected
                   ? Colors.white
-                  : Colors.emerald[800]?.withOpacity(0.5),
+                  : AppTheme.primary.withOpacity(0.5),
               size: 24,
             ),
             const SizedBox(height: 4),
@@ -129,7 +129,7 @@ class _NavItem extends StatelessWidget {
                 letterSpacing: 0.5,
                 color: isSelected
                     ? Colors.white
-                    : Colors.emerald[800]?.withOpacity(0.5),
+                    : AppTheme.primary.withOpacity(0.5),
               ),
             ),
           ],

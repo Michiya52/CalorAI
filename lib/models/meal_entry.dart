@@ -60,9 +60,53 @@ class MealEntry {
     imageDeleted: map['imageDeleted'] as bool? ?? true,
   );
 
+  /// Local JSON deserialization (no Firestore Timestamp)
+  factory MealEntry.fromLocalMap(
+    String id,
+    String userId,
+    Map<String, dynamic> map,
+  ) => MealEntry(
+    id: id,
+    userId: userId,
+    date: map['date'] as String? ?? '',
+    timestamp: map['timestamp'] != null
+        ? DateTime.parse(map['timestamp'] as String)
+        : DateTime.now(),
+    foodNameEn: map['foodNameEn'] as String? ?? '',
+    foodNameMy: map['foodNameMy'] as String? ?? '',
+    myfcdId: map['myfcdId'] as String?,
+    source: map['source'] as String? ?? 'Manual',
+    calories: map['calories'] as int? ?? 0,
+    proteinG: (map['proteinG'] as num?)?.toDouble() ?? 0.0,
+    carbsG: (map['carbsG'] as num?)?.toDouble() ?? 0.0,
+    fatsG: (map['fatsG'] as num?)?.toDouble() ?? 0.0,
+    portionLabel: map['portionLabel'] as String? ?? 'Medium',
+    portionGrams: (map['portionGrams'] as num?)?.toDouble() ?? 0.0,
+    aiConfidence: map['aiConfidence'] as String?,
+    imageDeleted: map['imageDeleted'] as bool? ?? true,
+  );
+
   Map<String, dynamic> toMap() => {
     'date': date,
     'timestamp': Timestamp.fromDate(timestamp),
+    'foodNameEn': foodNameEn,
+    'foodNameMy': foodNameMy,
+    'myfcdId': myfcdId,
+    'source': source,
+    'calories': calories,
+    'proteinG': proteinG,
+    'carbsG': carbsG,
+    'fatsG': fatsG,
+    'portionLabel': portionLabel,
+    'portionGrams': portionGrams,
+    'aiConfidence': aiConfidence,
+    'imageDeleted': imageDeleted,
+  };
+
+  /// Local JSON serialization (ISO string instead of Timestamp)
+  Map<String, dynamic> toLocalMap() => {
+    'date': date,
+    'timestamp': timestamp.toIso8601String(),
     'foodNameEn': foodNameEn,
     'foodNameMy': foodNameMy,
     'myfcdId': myfcdId,

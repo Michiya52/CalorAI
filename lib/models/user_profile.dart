@@ -76,6 +76,28 @@ class UserProfile {
         createdAt: (map['createdAt'] as Timestamp).toDate(),
       );
 
+  /// Local JSON deserialization (no Firestore Timestamp)
+  factory UserProfile.fromLocalMap(String uid, Map<String, dynamic> map) =>
+      UserProfile(
+        uid: uid,
+        name: map['name'] as String? ?? '',
+        email: map['email'] as String? ?? '',
+        heightCm: (map['heightCm'] as num?)?.toDouble() ?? 170.0,
+        weightKg: (map['weightKg'] as num?)?.toDouble() ?? 70.0,
+        age: map['age'] as int? ?? 25,
+        sex: map['sex'] as String? ?? 'male',
+        activityLevel: map['activityLevel'] as String? ?? 'sedentary',
+        goal: map['goal'] as String? ?? 'maintain',
+        calorieTarget: map['calorieTarget'] as int? ?? 2000,
+        isCalorieTargetManual: map['isCalorieTargetManual'] as bool? ?? false,
+        macroTargets: map['macroTargets'] != null
+            ? MacroTargets.fromMap(Map<String, dynamic>.from(map['macroTargets'] as Map))
+            : null,
+        createdAt: map['createdAt'] != null
+            ? DateTime.parse(map['createdAt'] as String)
+            : DateTime.now(),
+      );
+
   Map<String, dynamic> toMap() => {
     'name': name,
     'email': email,
@@ -91,21 +113,42 @@ class UserProfile {
     'createdAt': Timestamp.fromDate(createdAt),
   };
 
+  /// Local JSON serialization (ISO string instead of Timestamp)
+  Map<String, dynamic> toLocalMap() => {
+    'name': name,
+    'email': email,
+    'heightCm': heightCm,
+    'weightKg': weightKg,
+    'age': age,
+    'sex': sex,
+    'activityLevel': activityLevel,
+    'goal': goal,
+    'calorieTarget': calorieTarget,
+    'isCalorieTargetManual': isCalorieTargetManual,
+    if (macroTargets != null) 'macroTargets': macroTargets!.toMap(),
+    'createdAt': createdAt.toIso8601String(),
+  };
+
   UserProfile copyWith({
+    String? name,
+    String? email,
+    double? heightCm,
     int? calorieTarget,
     bool? isCalorieTargetManual,
     MacroTargets? macroTargets,
     double? weightKg,
+    int? age,
+    String? sex,
     String? goal,
     String? activityLevel,
   }) => UserProfile(
     uid: uid,
-    name: name,
-    email: email,
-    heightCm: heightCm,
+    name: name ?? this.name,
+    email: email ?? this.email,
+    heightCm: heightCm ?? this.heightCm,
     weightKg: weightKg ?? this.weightKg,
-    age: age,
-    sex: sex,
+    age: age ?? this.age,
+    sex: sex ?? this.sex,
     activityLevel: activityLevel ?? this.activityLevel,
     goal: goal ?? this.goal,
     calorieTarget: calorieTarget ?? this.calorieTarget,

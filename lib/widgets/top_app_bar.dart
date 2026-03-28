@@ -33,9 +33,8 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                     child: const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuC0UkBgBFaHS1uBHwwRAW2TscOdJWWRBQoj-gXN8OwDOCnzgqHH4K7WqXaCydKuWU6IVHu4hGVwPpdmSyInFRDtLGtzDGMBLPzEAcjJWtVVJt8KoygG7Rlky9xmVffJIZSVvYsI5NH5rdMHUXk1SE5eLdnokiv4s5DD6FQbhieVuRYygeelgy9jWCt65z5ovWw5vFT-YW9YQVpjBVp8wymasWAIUdZFfFTIEvLAXW5Cx5ny3ujRWOBV3Jaz9iJr1YVh5flJaOdPsyyr',
-                      ),
+                      backgroundColor: AppTheme.primary,
+                      child: Icon(Icons.person, color: Colors.white, size: 20),
                     ),
                   ),
                 ],
@@ -55,7 +54,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? Text(
               title,
               style: TextStyle(
-                color: Colors.emerald[900],
+                color: AppTheme.primary,
                 fontWeight: FontWeight.w900,
                 fontSize: 24,
               ),
@@ -66,7 +65,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: Icon(
               Icons.notifications_outlined,
-              color: Colors.emerald[800],
+              color: AppTheme.primary,
             ),
             onPressed: () {},
           ),
