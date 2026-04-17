@@ -18,8 +18,8 @@ class UsdaService {
     final uri = Uri.https(_baseUrl, '/fdc/v1/foods/search', {
       'api_key': _apiKey,
       'query': query,
-      'pageSize': '10',
-      'dataType': 'Branded,Foundation',
+      'pageSize': '25',
+      'dataType': 'Branded,Foundation,Survey (FNDDS)',
     });
 
     try {

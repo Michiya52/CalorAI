@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>CalorAI needs camera access to scan barcodes and identify food from photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>CalorAI needs photo library access so you can pick food photos for nutritional analysis.</string>
 </dict>
 </plist>

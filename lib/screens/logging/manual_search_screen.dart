@@ -140,10 +140,16 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
           } else if (name.split(RegExp(r'\s+')).contains(query)) {
             score = 90;
           } else {
-            score = tokenSetRatio(query, name);
+            final ts = tokenSetRatio(query, name);
+            final wr = weightedRatio(query, name);
+            score = ts > wr ? ts : wr;
           }
           return _ScoredResult(food, score);
-        }).where((s) => s.score >= 70).toList();
+        }).where((s) => s.score >= 50).toList();
+
+        if (scored.isNotEmpty) {
+          debugPrint('Search Result [0]: ${scored[0].food.nameEn} (Score: ${scored[0].score})');
+        }
 
         scored.sort((a, b) => b.score.compareTo(a.score));
         filtered = scored.map((s) => s.food).toList();

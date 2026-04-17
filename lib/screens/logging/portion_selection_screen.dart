@@ -8,6 +8,7 @@ import '../../models/food_suggestion.dart';
 import '../../models/meal_entry.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/meal_provider.dart';
+import '../../widgets/density_badge.dart';
 
 class PortionSelectionScreen extends StatefulWidget {
   final FoodSuggestion suggestion;
@@ -25,6 +26,8 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
   late double _displayProtein;
   late double _displayCarbs;
   late double _displayFats;
+  late double _displaySodium;
+  late double _displaySugar;
   late double _displayGrams;
 
   @override
@@ -60,6 +63,8 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
       _displayProtein = scaled['proteinG'] as double;
       _displayCarbs = scaled['carbsG'] as double;
       _displayFats = scaled['fatsG'] as double;
+      _displaySodium = scaled['sodiumG'] as double? ?? 0.0;
+      _displaySugar = scaled['sugarG'] as double? ?? 0.0;
       _displayGrams = scaled['portionGrams'] as double;
     } else {
       // AI estimate - use estimated portion grams directly
@@ -84,6 +89,8 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
           portionMultiplier;
       _displayFats = (suggestion.resolvedFatsG ?? _displayGrams * 0.15) *
           portionMultiplier;
+      _displaySodium = 0.0; // AI rarely estimates sodium accurately yet
+      _displaySugar = 0.0;
     }
     setState(() {});
   }
@@ -250,26 +257,46 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10),
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10)),
                 ],
               ),
               child: Column(
                 children: [
-                  Text('${_displayGrams.round()}g',
-                      style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 14)),
-                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${_displayGrams.round()}g',
+                          style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500)),
+                      if (widget.suggestion.myfcdMatch != null)
+                        DensityBadge(
+                            density: widget.suggestion.myfcdMatch!
+                                    .caloriesPer100g /
+                                100.0),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
                   Text('$_displayCalories',
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           )),
-                  const Text('kcal'),
-                  const SizedBox(height: 16),
+                  const Text('kcal',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 24),
+
+                  // Macro Distribution Bar
+                  _buildMacroBar(),
+                  const SizedBox(height: 24),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -287,10 +314,26 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                           AppColors.warning),
                     ],
                   ),
+
+                  const Divider(height: 40),
+
+                  // Detailed Nutrients Grid
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _detailTile(
+                          'Sodium',
+                          '${(_displaySodium * 1000).toStringAsFixed(0)}mg',
+                          Icons.waves_rounded),
+                      _detailTile('Sugar', '${_displaySugar.toStringAsFixed(1)}g',
+                          Icons.bakery_dining_rounded),
+                    ],
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 32),
+
 
             SizedBox(
               height: 56,
@@ -327,10 +370,72 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
       children: [
         Text(value,
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: color, fontSize: 16)),
+                fontWeight: FontWeight.bold, color: color, fontSize: 18)),
         const SizedBox(height: 4),
         Text(label,
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+            style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w500)),
+      ],
+    );
+  }
+
+  Widget _buildMacroBar() {
+    final total = _displayProtein + _displayCarbs + _displayFats;
+    if (total == 0) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Icon(Icons.pie_chart_outline_rounded,
+                size: 14, color: Colors.grey),
+            const SizedBox(width: 4),
+            Text('MACRO BREAKDOWN',
+                style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: SizedBox(
+            height: 8,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: (_displayProtein * 10).round(),
+                  child: Container(color: const Color(0xFF42A5F5)),
+                ),
+                Expanded(
+                  flex: (_displayCarbs * 10).round(),
+                  child: Container(color: AppColors.accent),
+                ),
+                Expanded(
+                  flex: (_displayFats * 10).round(),
+                  child: Container(color: AppColors.warning),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _detailTile(String label, String value, IconData icon) {
+    return Column(
+      children: [
+        Icon(icon, size: 20, color: Colors.grey.withValues(alpha: 0.5)),
+        const SizedBox(height: 4),
+        Text(value,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 11)),
       ],
     );
   }

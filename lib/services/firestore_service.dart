@@ -226,23 +226,27 @@ class FirestoreService {
     final wordsMy = nameMy.split(RegExp(r'\s+'));
     if (wordsEn.contains(q) || wordsMy.contains(q)) return 90;
 
-    // 4. Token Set Ratio (Fuzzy-ish but strict on words)
-    // This handles "Milk Full Cream" matching "Full Cream Milk"
-    final score = tokenSetRatio(q, nameEn) > tokenSetRatio(q, nameMy)
+    // 4. Token Set Ratio
+    final tsScore = tokenSetRatio(q, nameEn) > tokenSetRatio(q, nameMy)
         ? tokenSetRatio(q, nameEn)
         : tokenSetRatio(q, nameMy);
+        
+    // 5. Weighted Ratio (Broader fallback)
+    final wScore = weightedRatio(q, nameEn) > weightedRatio(q, nameMy)
+        ? weightedRatio(q, nameEn)
+        : weightedRatio(q, nameMy);
 
-    // Threshold Check: Only relevant matches allowed
-    if (score < 75) {
-      // Very strict fallback for search terms
+    final finalScore = tsScore > wScore ? tsScore : wScore;
+
+    // Threshold Check: Lowered to 50 for better availability
+    if (finalScore < 50) {
       for (final term in record.searchTerms) {
-        if (term.toLowerCase() == q) return 85;
-        if (term.toLowerCase().startsWith(q)) return 70;
+        if (term.toLowerCase().contains(q)) return 65;
       }
       return 0;
     }
 
-    return score;
+    return finalScore;
   }
 
   Future<FoodItem?> getFoodById(String foodId) async {
