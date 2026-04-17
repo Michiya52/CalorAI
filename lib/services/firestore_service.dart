@@ -230,7 +230,7 @@ class FirestoreService {
     final tsScore = tokenSetRatio(q, nameEn) > tokenSetRatio(q, nameMy)
         ? tokenSetRatio(q, nameEn)
         : tokenSetRatio(q, nameMy);
-        
+
     // 5. Weighted Ratio (Broader fallback)
     final wScore = weightedRatio(q, nameEn) > weightedRatio(q, nameMy)
         ? weightedRatio(q, nameEn)

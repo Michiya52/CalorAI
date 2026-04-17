@@ -141,8 +141,8 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                                       context: context,
                                       builder: (ctx) => AlertDialog(
                                         title: const Text('Delete Meal'),
-                                        content: Text(
-                                            'Remove ${meal.foodNameEn}?'),
+                                        content:
+                                            Text('Remove ${meal.foodNameEn}?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () =>
@@ -175,8 +175,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                                   child: MealCard(
                                     meal: meal,
                                     onTap: () async {
-                                      final changed =
-                                          await context.push<bool>(
+                                      final changed = await context.push<bool>(
                                         '/meal-detail',
                                         extra: meal,
                                       );

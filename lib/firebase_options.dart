@@ -29,39 +29,39 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions get web => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? '',
-    appId: '1:668401123677:web:60525ae23003c38e9c68b4',
-    messagingSenderId: '668401123677',
-    projectId: 'calorai-366f4',
-    authDomain: 'calorai-366f4.firebaseapp.com',
-    storageBucket: 'calorai-366f4.firebasestorage.app',
-    measurementId: 'G-WSR72RMFC9',
-  );
+        apiKey: dotenv.env['FIREBASE_API_KEY'] ?? '',
+        appId: '1:668401123677:web:60525ae23003c38e9c68b4',
+        messagingSenderId: '668401123677',
+        projectId: 'calorai-366f4',
+        authDomain: 'calorai-366f4.firebaseapp.com',
+        storageBucket: 'calorai-366f4.firebasestorage.app',
+        measurementId: 'G-WSR72RMFC9',
+      );
 
   static FirebaseOptions get windows => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_API_KEY'] ?? '',
-    appId: '1:668401123677:web:60525ae23003c38e9c68b4',
-    messagingSenderId: '668401123677',
-    projectId: 'calorai-366f4',
-    authDomain: 'calorai-366f4.firebaseapp.com',
-    storageBucket: 'calorai-366f4.firebasestorage.app',
-    measurementId: 'G-WSR72RMFC9',
-  );
+        apiKey: dotenv.env['FIREBASE_API_KEY'] ?? '',
+        appId: '1:668401123677:web:60525ae23003c38e9c68b4',
+        messagingSenderId: '668401123677',
+        projectId: 'calorai-366f4',
+        authDomain: 'calorai-366f4.firebaseapp.com',
+        storageBucket: 'calorai-366f4.firebasestorage.app',
+        measurementId: 'G-WSR72RMFC9',
+      );
 
   static FirebaseOptions get android => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY'] ?? '',
-    appId: '1:668401123677:android:1b99e9a88a6337f99c68b4',
-    messagingSenderId: '668401123677',
-    projectId: 'calorai-366f4',
-    storageBucket: 'calorai-366f4.firebasestorage.app',
-  );
+        apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY'] ?? '',
+        appId: '1:668401123677:android:1b99e9a88a6337f99c68b4',
+        messagingSenderId: '668401123677',
+        projectId: 'calorai-366f4',
+        storageBucket: 'calorai-366f4.firebasestorage.app',
+      );
 
   static FirebaseOptions get ios => FirebaseOptions(
-    apiKey: dotenv.env['FIREBASE_IOS_API_KEY'] ?? '',
-    appId: '1:668401123677:ios:8fc15c17d33c79df9c68b4',
-    messagingSenderId: '668401123677',
-    projectId: 'calorai-366f4',
-    storageBucket: 'calorai-366f4.firebasestorage.app',
-    iosBundleId: 'com.example.calorai',
-  );
+        apiKey: dotenv.env['FIREBASE_IOS_API_KEY'] ?? '',
+        appId: '1:668401123677:ios:8fc15c17d33c79df9c68b4',
+        messagingSenderId: '668401123677',
+        projectId: 'calorai-366f4',
+        storageBucket: 'calorai-366f4.firebasestorage.app',
+        iosBundleId: 'com.example.calorai',
+      );
 }

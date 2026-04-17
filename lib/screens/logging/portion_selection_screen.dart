@@ -277,20 +277,21 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                               fontWeight: FontWeight.w500)),
                       if (widget.suggestion.myfcdMatch != null)
                         DensityBadge(
-                            density: widget.suggestion.myfcdMatch!
-                                    .caloriesPer100g /
-                                100.0),
+                            density:
+                                widget.suggestion.myfcdMatch!.caloriesPer100g /
+                                    100.0),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Text('$_displayCalories',
-                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      style:
+                          Theme.of(context).textTheme.displayMedium?.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              )),
                   const Text('kcal',
-                      style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500)),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                   const SizedBox(height: 24),
 
                   // Macro Distribution Bar
@@ -325,7 +326,9 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                           'Sodium',
                           '${(_displaySodium * 1000).toStringAsFixed(0)}mg',
                           Icons.waves_rounded),
-                      _detailTile('Sugar', '${_displaySugar.toStringAsFixed(1)}g',
+                      _detailTile(
+                          'Sugar',
+                          '${_displaySugar.toStringAsFixed(1)}g',
                           Icons.bakery_dining_rounded),
                     ],
                   ),
@@ -333,7 +336,6 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               ),
             ),
             const SizedBox(height: 32),
-
 
             SizedBox(
               height: 56,

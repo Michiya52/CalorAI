@@ -10,16 +10,16 @@ class PortionSizes {
   });
 
   factory PortionSizes.fromMap(Map<String, dynamic> map) => PortionSizes(
-    smallGrams: (map['smallGrams'] as num).toDouble(),
-    mediumGrams: (map['mediumGrams'] as num).toDouble(),
-    largeGrams: (map['largeGrams'] as num).toDouble(),
-  );
+        smallGrams: (map['smallGrams'] as num).toDouble(),
+        mediumGrams: (map['mediumGrams'] as num).toDouble(),
+        largeGrams: (map['largeGrams'] as num).toDouble(),
+      );
 
   Map<String, dynamic> toMap() => {
-    'smallGrams': smallGrams,
-    'mediumGrams': mediumGrams,
-    'largeGrams': largeGrams,
-  };
+        'smallGrams': smallGrams,
+        'mediumGrams': mediumGrams,
+        'largeGrams': largeGrams,
+      };
 }
 
 class FoodItem {
@@ -54,35 +54,35 @@ class FoodItem {
   });
 
   factory FoodItem.fromMap(String id, Map<String, dynamic> map) => FoodItem(
-    id: id,
-    nameEn: map['nameEn'] as String,
-    nameMy: map['nameMy'] as String,
-    foodGroup: map['foodGroup'] as String,
-    caloriesPer100g: (map['caloriesPer100g'] as num).toDouble(),
-    proteinPer100g: (map['proteinPer100g'] as num).toDouble(),
-    carbsPer100g: (map['carbsPer100g'] as num).toDouble(),
-    fatsPer100g: (map['fatsPer100g'] as num).toDouble(),
-    sodiumPer100g: (map['sodiumPer100g'] as num).toDouble(),
-    sugarPer100g: (map['sugarPer100g'] as num).toDouble(),
-    portionSizes: PortionSizes.fromMap(
-      map['portionSizes'] as Map<String, dynamic>,
-    ),
-    source: map['source'] as String,
-    myfcdCode: map['myfcdCode'] as String,
-  );
+        id: id,
+        nameEn: map['nameEn'] as String,
+        nameMy: map['nameMy'] as String,
+        foodGroup: map['foodGroup'] as String,
+        caloriesPer100g: (map['caloriesPer100g'] as num).toDouble(),
+        proteinPer100g: (map['proteinPer100g'] as num).toDouble(),
+        carbsPer100g: (map['carbsPer100g'] as num).toDouble(),
+        fatsPer100g: (map['fatsPer100g'] as num).toDouble(),
+        sodiumPer100g: (map['sodiumPer100g'] as num).toDouble(),
+        sugarPer100g: (map['sugarPer100g'] as num).toDouble(),
+        portionSizes: PortionSizes.fromMap(
+          map['portionSizes'] as Map<String, dynamic>,
+        ),
+        source: map['source'] as String,
+        myfcdCode: map['myfcdCode'] as String,
+      );
 
   Map<String, dynamic> toMap() => {
-    'nameEn': nameEn,
-    'nameMy': nameMy,
-    'foodGroup': foodGroup,
-    'caloriesPer100g': caloriesPer100g,
-    'proteinPer100g': proteinPer100g,
-    'carbsPer100g': carbsPer100g,
-    'fatsPer100g': fatsPer100g,
-    'sodiumPer100g': sodiumPer100g,
-    'sugarPer100g': sugarPer100g,
-    'portionSizes': portionSizes.toMap(),
-    'source': source,
-    'myfcdCode': myfcdCode,
-  };
+        'nameEn': nameEn,
+        'nameMy': nameMy,
+        'foodGroup': foodGroup,
+        'caloriesPer100g': caloriesPer100g,
+        'proteinPer100g': proteinPer100g,
+        'carbsPer100g': carbsPer100g,
+        'fatsPer100g': fatsPer100g,
+        'sodiumPer100g': sodiumPer100g,
+        'sugarPer100g': sugarPer100g,
+        'portionSizes': portionSizes.toMap(),
+        'source': source,
+        'myfcdCode': myfcdCode,
+      };
 }

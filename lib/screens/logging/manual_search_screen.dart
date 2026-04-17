@@ -126,29 +126,33 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
     if (mounted) {
       // Apply strict relevance filtering/ranking to all sources
       var filtered = fetched;
-      
+
       if (normalizedQuery.isNotEmpty) {
-        final scored = fetched.map((food) {
-          final query = normalizedQuery.toLowerCase().trim();
-          final name = food.nameEn.toLowerCase();
-          
-          int score = 0;
-          if (name == query) {
-            score = 100;
-          } else if (name.startsWith(query)) {
-            score = 95;
-          } else if (name.split(RegExp(r'\s+')).contains(query)) {
-            score = 90;
-          } else {
-            final ts = tokenSetRatio(query, name);
-            final wr = weightedRatio(query, name);
-            score = ts > wr ? ts : wr;
-          }
-          return _ScoredResult(food, score);
-        }).where((s) => s.score >= 50).toList();
+        final scored = fetched
+            .map((food) {
+              final query = normalizedQuery.toLowerCase().trim();
+              final name = food.nameEn.toLowerCase();
+
+              int score = 0;
+              if (name == query) {
+                score = 100;
+              } else if (name.startsWith(query)) {
+                score = 95;
+              } else if (name.split(RegExp(r'\s+')).contains(query)) {
+                score = 90;
+              } else {
+                final ts = tokenSetRatio(query, name);
+                final wr = weightedRatio(query, name);
+                score = ts > wr ? ts : wr;
+              }
+              return _ScoredResult(food, score);
+            })
+            .where((s) => s.score >= 50)
+            .toList();
 
         if (scored.isNotEmpty) {
-          debugPrint('Search Result [0]: ${scored[0].food.nameEn} (Score: ${scored[0].score})');
+          debugPrint(
+              'Search Result [0]: ${scored[0].food.nameEn} (Score: ${scored[0].score})');
         }
 
         scored.sort((a, b) => b.score.compareTo(a.score));

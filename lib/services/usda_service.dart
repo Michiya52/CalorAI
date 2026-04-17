@@ -103,11 +103,11 @@ class UsdaService {
     if (calories <= 0) return null;
 
     final id = 'usda_${f['fdcId']}';
-    
+
     // USDA usually provides data per 100g/100ml.
     // We'll estimate portion sizes if not provided.
     final servingSize = (f['servingSize'] as num?)?.toDouble() ?? 150.0;
-    
+
     return FoodItem(
       id: id,
       nameEn: name,

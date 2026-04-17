@@ -23,15 +23,17 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
 
     try {
       // 1. Try Open Food Facts
-      final offResult = await OpenFoodFactsService.instance.getProductByBarcode(barcode);
-      
+      final offResult =
+          await OpenFoodFactsService.instance.getProductByBarcode(barcode);
+
       if (offResult != null) {
         _navigateToPortion(offResult);
         return;
       }
 
       // 2. Try USDA FDC
-      final usdaResult = await UsdaService.instance.getProductByBarcode(barcode);
+      final usdaResult =
+          await UsdaService.instance.getProductByBarcode(barcode);
       if (usdaResult != null) {
         _navigateToPortion(usdaResult);
         return;
@@ -60,9 +62,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       confidence: '', // Scanner is certain
       cookingMethod: '',
       myfcdMatch: food,
-      resolvedCalories: food.caloriesPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedProteinG: food.proteinPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedCarbsG: food.carbsPer100g * (food.portionSizes.mediumGrams / 100.0),
+      resolvedCalories:
+          food.caloriesPer100g * (food.portionSizes.mediumGrams / 100.0),
+      resolvedProteinG:
+          food.proteinPer100g * (food.portionSizes.mediumGrams / 100.0),
+      resolvedCarbsG:
+          food.carbsPer100g * (food.portionSizes.mediumGrams / 100.0),
       resolvedFatsG: food.fatsPer100g * (food.portionSizes.mediumGrams / 100.0),
       source: food.source,
     );
@@ -81,7 +86,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -99,7 +105,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               }
             },
           ),
-          
+
           // Scanning HUD
           Center(
             child: Container(
@@ -111,12 +117,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               ),
             ),
           ),
-          
+
           if (_isProcessing)
             const Center(
               child: CircularProgressIndicator(color: Colors.white),
             ),
-            
+
           Positioned(
             bottom: 40,
             left: 0,

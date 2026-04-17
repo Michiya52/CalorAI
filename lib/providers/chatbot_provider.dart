@@ -50,12 +50,19 @@ class ChatbotProvider extends ChangeNotifier {
     } catch (e) {
       String errorMsg;
       final errorStr = e.toString();
-      if (errorStr.contains('429') || errorStr.contains('Too Many Requests') || errorStr.contains('quota') || errorStr.contains('RESOURCE_EXHAUSTED')) {
-        errorMsg = 'Rate limit reached — please wait about 60 seconds and try again. (Free Gemini API tier has limited requests per minute.)';
-      } else if (errorStr.contains('not configured') || errorStr.contains('API key')) {
-        errorMsg = 'Gemini API key is not configured. Please check your .env file.';
+      if (errorStr.contains('429') ||
+          errorStr.contains('Too Many Requests') ||
+          errorStr.contains('quota') ||
+          errorStr.contains('RESOURCE_EXHAUSTED')) {
+        errorMsg =
+            'Rate limit reached — please wait about 60 seconds and try again. (Free Gemini API tier has limited requests per minute.)';
+      } else if (errorStr.contains('not configured') ||
+          errorStr.contains('API key')) {
+        errorMsg =
+            'Gemini API key is not configured. Please check your .env file.';
       } else {
-        errorMsg = 'Sorry, I could not respond right now. Error: ${e.toString().split('\n').first}';
+        errorMsg =
+            'Sorry, I could not respond right now. Error: ${e.toString().split('\n').first}';
       }
       debugPrint('ChatbotProvider error: $e');
       _messages.add(ChatMessage(

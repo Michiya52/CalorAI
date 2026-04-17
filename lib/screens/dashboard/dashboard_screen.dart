@@ -98,8 +98,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                     opacity: _fadeIn,
                     child: SlideTransition(
                       position: _slideUp,
-                      child: _buildHeader(context, profile, consumed, target,
-                          isDark),
+                      child: _buildHeader(
+                          context, profile, consumed, target, isDark),
                     ),
                   ),
                 ),
@@ -114,8 +114,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                         padding: const EdgeInsets.all(24),
                         decoration: AppColors.premiumCard(),
                         child: Center(
-                          child: CalorieRing(
-                              consumed: consumed, target: target),
+                          child:
+                              CalorieRing(consumed: consumed, target: target),
                         ),
                       ),
                     ),
@@ -197,14 +197,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                               width: 64,
                               height: 64,
                               decoration: BoxDecoration(
-                                color:
-                                    AppColors.primary.withValues(alpha: 0.1),
+                                color: AppColors.primary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Icon(Icons.restaurant_outlined,
                                   size: 32,
-                                  color: AppColors.primary
-                                      .withValues(alpha: 0.6)),
+                                  color:
+                                      AppColors.primary.withValues(alpha: 0.6)),
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -240,8 +239,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                           child: MealCard(
                             meal: meal,
                             onDelete: () async {
-                              final uid =
-                                  context.read<AuthProvider>().userId;
+                              final uid = context.read<AuthProvider>().userId;
                               if (uid != null) {
                                 await context
                                     .read<MealProvider>()
@@ -280,10 +278,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                   children: [
                     Text(
                       'Hello, ${profile.name} 👋',
-                      style:
-                          Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 4),
                     Text(

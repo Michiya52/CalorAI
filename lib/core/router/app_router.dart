@@ -69,7 +69,8 @@ class AppRouter {
         GoRoute(
             path: '/log/search', builder: (c, s) => const ManualSearchScreen()),
         GoRoute(
-            path: '/log/barcode', builder: (c, s) => const BarcodeScannerScreen()),
+            path: '/log/barcode',
+            builder: (c, s) => const BarcodeScannerScreen()),
         GoRoute(
           path: '/meal-detail',
           builder: (c, s) => MealDetailScreen(meal: s.extra as MealEntry),

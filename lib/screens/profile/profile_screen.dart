@@ -293,8 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           'Sex', profile.sex == 'male' ? 'Male' : 'Female'),
                       _buildInfoRow('Activity',
                           profile.activityLevel.replaceAll('_', ' ')),
-                      _buildInfoRow(
-                          'Goal', profile.goal.replaceAll('_', ' ')),
+                      _buildInfoRow('Goal', profile.goal.replaceAll('_', ' ')),
                       _buildInfoRow(
                           'Daily Target', '${profile.calorieTarget} kcal'),
                       _buildInfoRow(
@@ -302,8 +301,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         profile.isCalorieTargetManual ? 'Manual' : 'Auto',
                       ),
                       if (profile.macroTargets != null) ...[
-                        _buildInfoRow('Protein',
-                            '${profile.macroTargets!.proteinG}g'),
+                        _buildInfoRow(
+                            'Protein', '${profile.macroTargets!.proteinG}g'),
                         _buildInfoRow(
                             'Carbs', '${profile.macroTargets!.carbsG}g'),
                         _buildInfoRow(
@@ -382,8 +381,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Center(
                   child: Text(
                     'Nutritional data powered by MyFCD 2026',
-                    style: TextStyle(
-                        color: AppColors.textSecondary, fontSize: 12),
+                    style:
+                        TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -430,7 +429,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: InputDecoration(
           labelText: label.toUpperCase(),
           filled: true,
-          fillColor: editable ? AppColors.surfaceContainer : AppColors.background,
+          fillColor:
+              editable ? AppColors.surfaceContainer : AppColors.background,
         ),
       ),
     );
@@ -443,8 +443,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: TextStyle(
-                  color: AppColors.textSecondary, fontSize: 14)),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
           Text(value,
               style:
                   const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),

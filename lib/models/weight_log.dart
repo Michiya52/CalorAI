@@ -10,10 +10,10 @@ class WeightLog {
   });
 
   factory WeightLog.fromMap(String id, Map<String, dynamic> map) => WeightLog(
-    id: id,
-    date: map['date'] as String,
-    weightKg: (map['weightKg'] as num).toDouble(),
-  );
+        id: id,
+        date: map['date'] as String,
+        weightKg: (map['weightKg'] as num).toDouble(),
+      );
 
   Map<String, dynamic> toMap() => {'date': date, 'weightKg': weightKg};
 
@@ -21,9 +21,10 @@ class WeightLog {
     String? id,
     String? date,
     double? weightKg,
-  }) => WeightLog(
-    id: id ?? this.id,
-    date: date ?? this.date,
-    weightKg: weightKg ?? this.weightKg,
-  );
+  }) =>
+      WeightLog(
+        id: id ?? this.id,
+        date: date ?? this.date,
+        weightKg: weightKg ?? this.weightKg,
+      );
 }

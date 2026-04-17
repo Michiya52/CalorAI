@@ -15,10 +15,10 @@ class MealProvider extends ChangeNotifier {
       _todaysMeals.fold(0, (sum, m) => sum + m.calories);
 
   Map<String, double> get totalMacrosToday => {
-    'proteinG': _todaysMeals.fold(0.0, (s, m) => s + m.proteinG),
-    'carbsG': _todaysMeals.fold(0.0, (s, m) => s + m.carbsG),
-    'fatsG': _todaysMeals.fold(0.0, (s, m) => s + m.fatsG),
-  };
+        'proteinG': _todaysMeals.fold(0.0, (s, m) => s + m.proteinG),
+        'carbsG': _todaysMeals.fold(0.0, (s, m) => s + m.carbsG),
+        'fatsG': _todaysMeals.fold(0.0, (s, m) => s + m.fatsG),
+      };
 
   Future<void> loadMealsForDate(String uid, String date) async {
     _isLoading = true;

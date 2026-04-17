@@ -6,12 +6,12 @@ import '../models/food_item.dart';
 /// Service for accessing Open Food Facts (OFF) via robust HTTP calls.
 /// Replaces the potentially unreliable SDK with direct API interaction.
 class OpenFoodFactsService {
-  static final OpenFoodFactsService instance =
-      OpenFoodFactsService._internal();
+  static final OpenFoodFactsService instance = OpenFoodFactsService._internal();
   OpenFoodFactsService._internal();
 
   static const String _baseUrl = 'api.openfoodfacts.org';
-  static const String _userAgent = 'CalorAI - Malaysian Nutrition Tracker - Version 1.0 (info@calor.ai)';
+  static const String _userAgent =
+      'CalorAI - Malaysian Nutrition Tracker - Version 1.0 (info@calor.ai)';
 
   /// Search for foods by query with Malaysian focus.
   Future<List<FoodItem>> searchFoods(String query, {int page = 1}) async {
@@ -69,26 +69,32 @@ class OpenFoodFactsService {
   }
 
   FoodItem? _mapOffToFoodItem(Map<String, dynamic> p) {
-    final name = (p['product_name'] as String?)?.trim() ?? 
-                 (p['generic_name'] as String?)?.trim() ?? '';
+    final name = (p['product_name'] as String?)?.trim() ??
+        (p['generic_name'] as String?)?.trim() ??
+        '';
     if (name.isEmpty) return null;
 
     final nutriments = p['nutriments'] as Map<String, dynamic>? ?? {};
-    
+
     // OFF uses 'energy-kcal_100g' or 'energy-kj_100g'
-    final kcal = (nutriments['energy-kcal_100g'] as num?)?.toDouble() ?? 
-                 ((nutriments['energy-kj_100g'] as num?)?.toDouble() ?? 0) / 4.184;
+    final kcal = (nutriments['energy-kcal_100g'] as num?)?.toDouble() ??
+        ((nutriments['energy-kj_100g'] as num?)?.toDouble() ?? 0) / 4.184;
 
     if (kcal <= 0) return null;
 
     final id = 'off_${p['code'] ?? name.hashCode}';
-    final servingSize = _parseServingSize(p['serving_size'] as String? ?? '150g');
+    final servingSize =
+        _parseServingSize(p['serving_size'] as String? ?? '150g');
 
     return FoodItem(
       id: id,
       nameEn: name,
       nameMy: name,
-      foodGroup: (p['categories_tags'] as List?)?.first?.toString().replaceAll('en:', '') ?? 'General',
+      foodGroup: (p['categories_tags'] as List?)
+              ?.first
+              ?.toString()
+              .replaceAll('en:', '') ??
+          'General',
       caloriesPer100g: kcal,
       proteinPer100g: (nutriments['proteins_100g'] as num?)?.toDouble() ?? 0,
       carbsPer100g: (nutriments['carbohydrates_100g'] as num?)?.toDouble() ?? 0,

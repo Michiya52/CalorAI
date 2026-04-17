@@ -108,8 +108,8 @@ class _LoginScreenState extends State<LoginScreen>
                               borderRadius: BorderRadius.circular(24),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.primary
-                                      .withValues(alpha: 0.3),
+                                  color:
+                                      AppColors.primary.withValues(alpha: 0.3),
                                   blurRadius: 20,
                                   offset: const Offset(0, 8),
                                 ),
@@ -174,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen>
                                 decoration: InputDecoration(
                                   labelText: 'PASSWORD',
                                   hintText: 'Enter your password',
-                                  prefixIcon: const Icon(Icons.lock_outlined,
-                                      size: 20),
+                                  prefixIcon:
+                                      const Icon(Icons.lock_outlined, size: 20),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _obscurePassword

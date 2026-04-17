@@ -168,8 +168,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 decoration: InputDecoration(
                                   labelText: 'PASSWORD',
                                   hintText: 'Create a password',
-                                  prefixIcon: const Icon(Icons.lock_outlined,
-                                      size: 20),
+                                  prefixIcon:
+                                      const Icon(Icons.lock_outlined, size: 20),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _obscurePassword

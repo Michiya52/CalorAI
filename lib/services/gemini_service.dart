@@ -151,7 +151,8 @@ Rules:
       // Try to repair truncated JSON
       try {
         final repaired = _repairJson(cleaned);
-        AppLogger.instance.log('JSON repair attempted. Original error: $initialError');
+        AppLogger.instance
+            .log('JSON repair attempted. Original error: $initialError');
         decoded = jsonDecode(repaired);
         AppLogger.instance.log('JSON repair successful.');
       } catch (repairError) {
@@ -163,7 +164,8 @@ Rules:
           final firstObject = cleaned.indexOf('{');
           final lastObject = cleaned.lastIndexOf('}');
           if (firstObject >= 0 && lastObject > firstObject) {
-            decoded = jsonDecode(cleaned.substring(firstObject, lastObject + 1));
+            decoded =
+                jsonDecode(cleaned.substring(firstObject, lastObject + 1));
           } else {
             rethrow;
           }
@@ -324,8 +326,7 @@ Rules:
     }
 
     // 2. Remove trailing comma (common in truncated arrays/objects)
-    final lastCharMatch =
-        RegExp(r'[^\s\n\r]').allMatches(repaired).lastOrNull;
+    final lastCharMatch = RegExp(r'[^\s\n\r]').allMatches(repaired).lastOrNull;
     if (lastCharMatch != null) {
       final lastCharIndex = lastCharMatch.start;
       if (repaired[lastCharIndex] == ',') {

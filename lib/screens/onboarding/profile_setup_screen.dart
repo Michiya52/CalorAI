@@ -320,15 +320,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
           const SizedBox(height: 24),
           _buildGoalCard(
               'Lose Weight', 'lose_weight', Icons.trending_down_rounded),
-          _buildGoalCard(
-              'Maintain Weight', 'maintain', Icons.balance_rounded),
+          _buildGoalCard('Maintain Weight', 'maintain', Icons.balance_rounded),
           _buildGoalCard(
               'Gain Muscle', 'gain_muscle', Icons.fitness_center_rounded),
-          _buildGoalCard(
-              'Eat Healthier', 'eat_healthier', Icons.eco_rounded),
+          _buildGoalCard('Eat Healthier', 'eat_healthier', Icons.eco_rounded),
           const SizedBox(height: 20),
-          Text('Activity Level',
-              style: Theme.of(context).textTheme.labelLarge),
+          Text('Activity Level', style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: 10),
           RadioGroup<String>(
             groupValue: _activityLevel,
@@ -544,9 +541,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             gradient: selected ? AppColors.primaryGradient : null,
             color: selected ? null : AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: selected
-                ? null
-                : Border.all(color: AppColors.surfaceContainer),
+            border:
+                selected ? null : Border.all(color: AppColors.surfaceContainer),
             boxShadow: selected
                 ? [
                     BoxShadow(
@@ -588,9 +584,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
           gradient: selected ? AppColors.primaryGradient : null,
           color: selected ? null : AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: selected
-              ? null
-              : Border.all(color: AppColors.surfaceContainer),
+          border:
+              selected ? null : Border.all(color: AppColors.surfaceContainer),
           boxShadow: selected
               ? [
                   BoxShadow(
@@ -613,8 +608,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon,
-                  color: selected ? Colors.white : AppColors.primary,
-                  size: 20),
+                  color: selected ? Colors.white : AppColors.primary, size: 20),
             ),
             const SizedBox(width: 14),
             Text(title,
