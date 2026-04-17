@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import '../../core/constants/app_colors.dart';
 import '../../models/food_item.dart';
 import '../../models/food_suggestion.dart';
@@ -123,11 +124,36 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
     }
 
     if (mounted) {
+      // Apply strict relevance filtering/ranking to all sources
+      var filtered = fetched;
+      
+      if (normalizedQuery.isNotEmpty) {
+        final scored = fetched.map((food) {
+          final query = normalizedQuery.toLowerCase().trim();
+          final name = food.nameEn.toLowerCase();
+          
+          int score = 0;
+          if (name == query) {
+            score = 100;
+          } else if (name.startsWith(query)) {
+            score = 95;
+          } else if (name.split(RegExp(r'\s+')).contains(query)) {
+            score = 90;
+          } else {
+            score = tokenSetRatio(query, name);
+          }
+          return _ScoredResult(food, score);
+        }).where((s) => s.score >= 70).toList();
+
+        scored.sort((a, b) => b.score.compareTo(a.score));
+        filtered = scored.map((s) => s.food).toList();
+      }
+
       setState(() {
         if (reset) {
-          _results = fetched;
+          _results = filtered;
         } else {
-          _results = [..._results, ...fetched];
+          _results = [..._results, ...filtered];
         }
 
         _offset = fetchOffset + fetched.length;
@@ -349,4 +375,10 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
     if (source.startsWith('UK_')) return 'UK';
     return source;
   }
+}
+
+class _ScoredResult {
+  final FoodItem food;
+  final int score;
+  _ScoredResult(this.food, this.score);
 }

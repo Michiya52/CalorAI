@@ -352,6 +352,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fuzzywuzzy:
+    dependency: "direct main"
+    description:
+      name: fuzzywuzzy
+      sha256: bca3c9a76e4fd98adab1c9485e2b0a3bdaa8ffbb0645454a4985a848cfb52224
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.7"
   glob:
     dependency: transitive
     description:

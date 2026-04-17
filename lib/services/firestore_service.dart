@@ -4,6 +4,7 @@ import '../models/user_profile.dart';
 import '../models/meal_entry.dart';
 import '../models/food_item.dart';
 import '../models/weight_log.dart';
+import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 
 /// FirestoreService handles all data persistence via Cloud Firestore.
 class FirestoreService {
@@ -211,39 +212,34 @@ class FirestoreService {
   int _scoreFoodMatch(String query, _CachedFoodRecord record) {
     final nameEn = record.food.nameEn.toLowerCase();
     final nameMy = record.food.nameMy.toLowerCase();
-    final foodGroup = record.food.foodGroup.toLowerCase();
-    final searchTerms =
-        record.searchTerms.map((term) => term.toLowerCase()).toList();
-    final tokens =
-        query.split(RegExp(r'\s+')).where((token) => token.isNotEmpty).toList();
+    final q = query.toLowerCase().trim();
 
-    var score = 0;
+    // 1. Exact Match (Highest)
+    if (nameEn == q || nameMy == q) return 100;
 
-    if (nameEn == query || nameMy == query) {
-      score += 1000;
-    }
-    if (nameEn.startsWith(query) || nameMy.startsWith(query)) {
-      score += 500;
-    }
-    if (nameEn.contains(query) || nameMy.contains(query)) {
-      score += 300;
-    }
-    if (foodGroup.contains(query)) {
-      score += 120;
-    }
-    if (searchTerms.any((term) =>
-        term == query || term.startsWith(query) || term.contains(query))) {
-      score += 250;
-    }
+    // 2. Prefix Match (High)
+    if (nameEn.startsWith(q) || nameMy.startsWith(q)) return 95;
 
-    for (final token in tokens) {
-      if (nameEn.contains(token) || nameMy.contains(token)) {
-        score += 40;
+    // 3. Whole Word Contains (Medium-High)
+    // Avoids "water" in "watermelon" matching "mineral water" too highly
+    final wordsEn = nameEn.split(RegExp(r'\s+'));
+    final wordsMy = nameMy.split(RegExp(r'\s+'));
+    if (wordsEn.contains(q) || wordsMy.contains(q)) return 90;
+
+    // 4. Token Set Ratio (Fuzzy-ish but strict on words)
+    // This handles "Milk Full Cream" matching "Full Cream Milk"
+    final score = tokenSetRatio(q, nameEn) > tokenSetRatio(q, nameMy)
+        ? tokenSetRatio(q, nameEn)
+        : tokenSetRatio(q, nameMy);
+
+    // Threshold Check: Only relevant matches allowed
+    if (score < 75) {
+      // Very strict fallback for search terms
+      for (final term in record.searchTerms) {
+        if (term.toLowerCase() == q) return 85;
+        if (term.toLowerCase().startsWith(q)) return 70;
       }
-      if (foodGroup.contains(token)) {
-        score += 25;
-      }
-      score += searchTerms.where((term) => term.contains(token)).length * 20;
+      return 0;
     }
 
     return score;

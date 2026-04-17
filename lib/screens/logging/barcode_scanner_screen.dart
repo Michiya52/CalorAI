@@ -41,7 +41,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Product not found in our open databases.'),
-            duration: const Duration(seconds: 5),
+            duration: Duration(seconds: 5),
           ),
         );
       }
