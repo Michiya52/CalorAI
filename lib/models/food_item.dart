@@ -85,4 +85,34 @@ class FoodItem {
         'source': source,
         'myfcdCode': myfcdCode,
       };
+
+  FoodItem copyWith({
+    String? nameEn,
+    String? nameMy,
+    String? foodGroup,
+    double? caloriesPer100g,
+    double? proteinPer100g,
+    double? carbsPer100g,
+    double? fatsPer100g,
+    double? sodiumPer100g,
+    double? sugarPer100g,
+    PortionSizes? portionSizes,
+    String? source,
+    String? myfcdCode,
+  }) =>
+      FoodItem(
+        id: id,
+        nameEn: nameEn ?? this.nameEn,
+        nameMy: nameMy ?? this.nameMy,
+        foodGroup: foodGroup ?? this.foodGroup,
+        caloriesPer100g: caloriesPer100g ?? this.caloriesPer100g,
+        proteinPer100g: proteinPer100g ?? this.proteinPer100g,
+        carbsPer100g: carbsPer100g ?? this.carbsPer100g,
+        fatsPer100g: fatsPer100g ?? this.fatsPer100g,
+        sodiumPer100g: sodiumPer100g ?? this.sodiumPer100g,
+        sugarPer100g: sugarPer100g ?? this.sugarPer100g,
+        portionSizes: portionSizes ?? this.portionSizes,
+        source: source ?? this.source,
+        myfcdCode: myfcdCode ?? this.myfcdCode,
+      );
 }

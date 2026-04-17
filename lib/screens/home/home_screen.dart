@@ -31,57 +31,32 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      extendBody: true,
       body: widget.child,
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Search FAB
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: isDark
-                  ? AppColors.aura.withValues(alpha: 0.2)
-                  : AppColors.aura.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: AppColors.aura.withValues(alpha: 0.3),
-              ),
-            ),
-            child: IconButton(
-              onPressed: () => context.push('/log/search'),
-              icon: const Icon(Icons.search_rounded, size: 20),
-              color: AppColors.aura,
-              padding: EdgeInsets.zero,
-              tooltip: 'Search food',
-            ),
-          ),
-          const SizedBox(height: 12),
-          // Camera FAB
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              gradient: AppColors.primaryGradient,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.4),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: IconButton(
-              onPressed: () => context.push('/log/photo'),
-              icon: const Icon(Icons.add_a_photo_rounded,
-                  color: Colors.white, size: 26),
-              tooltip: 'Log with photo',
-            ),
-          ),
-        ],
-      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        width: 64,
+        height: 64,
+        decoration: BoxDecoration(
+          gradient: AppColors.primaryGradient,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: _showLogMenu,
+            customBorder: const CircleBorder(),
+            child: const Icon(Icons.add_rounded, color: Colors.white, size: 32),
+          ),
+        ),
+      ),
       bottomNavigationBar: _GlassBottomBar(
         selectedIndex: _selectedIndex,
         isDark: isDark,
@@ -89,6 +64,125 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() => _selectedIndex = index);
           context.go(_routes[index]);
         },
+      ),
+    );
+  }
+
+  void _showLogMenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => _LogMenuSheet(),
+    );
+  }
+}
+
+class _LogMenuSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E293B).withValues(alpha: 0.95) : Colors.white.withValues(alpha: 0.95),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'What do you want to log?',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _LogOption(
+                  icon: Icons.add_a_photo_rounded,
+                  label: 'AI Scanner',
+                  color: AppColors.primary,
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.push('/log/photo');
+                  },
+                ),
+                _LogOption(
+                  icon: Icons.search_rounded,
+                  label: 'Manual',
+                  color: Colors.blue,
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.push('/log/search');
+                  },
+                ),
+                _LogOption(
+                  icon: Icons.soup_kitchen_rounded,
+                  label: 'Cook Meal',
+                  color: Colors.orange,
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.push('/log/create-meal');
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LogOption extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _LogOption({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: color, size: 26),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }
@@ -107,72 +201,64 @@ class _GlassBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF1E293B).withValues(alpha: 0.85)
-            : Colors.white.withValues(alpha: 0.85),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border(
-          top: BorderSide(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.06)
-                : Colors.black.withValues(alpha: 0.04),
-          ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), // Dynamic Floating!
+      child: Container(
+        height: 76,
+        decoration: BoxDecoration(
+          color: isDark
+              ? const Color(0xFF1E293B).withValues(alpha: 0.85)
+              : Colors.white.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.06),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _NavItem(
-                    icon: Icons.dashboard_outlined,
-                    activeIcon: Icons.dashboard_rounded,
-                    label: 'Dashboard',
-                    isSelected: selectedIndex == 0,
-                    isDark: isDark,
-                    onTap: () => onTap(0),
-                  ),
-                  _NavItem(
-                    icon: Icons.history_outlined,
-                    activeIcon: Icons.history_rounded,
-                    label: 'History',
-                    isSelected: selectedIndex == 1,
-                    isDark: isDark,
-                    onTap: () => onTap(1),
-                  ),
-                  const SizedBox(width: 56), // Space for FAB
-                  _NavItem(
-                    icon: Icons.auto_awesome_outlined,
-                    activeIcon: Icons.auto_awesome,
-                    label: 'AI Chat',
-                    isSelected: selectedIndex == 2,
-                    isDark: isDark,
-                    onTap: () => onTap(2),
-                  ),
-                  _NavItem(
-                    icon: Icons.person_outline_rounded,
-                    activeIcon: Icons.person_rounded,
-                    label: 'Profile',
-                    isSelected: selectedIndex == 3,
-                    isDark: isDark,
-                    onTap: () => onTap(3),
-                  ),
-                ],
-              ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavItem(
+                  icon: Icons.dashboard_outlined,
+                  activeIcon: Icons.dashboard_rounded,
+                  label: 'Home',
+                  isSelected: selectedIndex == 0,
+                  isDark: isDark,
+                  onTap: () => onTap(0),
+                ),
+                _NavItem(
+                  icon: Icons.history_outlined,
+                  activeIcon: Icons.history_rounded,
+                  label: 'History',
+                  isSelected: selectedIndex == 1,
+                  isDark: isDark,
+                  onTap: () => onTap(1),
+                ),
+                const SizedBox(width: 48), // Padding for Floating FAB
+                _NavItem(
+                  icon: Icons.auto_awesome_outlined,
+                  activeIcon: Icons.auto_awesome,
+                  label: 'AI Chat',
+                  isSelected: selectedIndex == 2,
+                  isDark: isDark,
+                  onTap: () => onTap(2),
+                ),
+                _NavItem(
+                  icon: Icons.person_outline_rounded,
+                  activeIcon: Icons.person_rounded,
+                  label: 'Profile',
+                  isSelected: selectedIndex == 3,
+                  isDark: isDark,
+                  onTap: () => onTap(3),
+                ),
+              ],
             ),
           ),
         ),
@@ -180,6 +266,7 @@ class _GlassBottomBar extends StatelessWidget {
     );
   }
 }
+
 
 class _NavItem extends StatelessWidget {
   final IconData icon;

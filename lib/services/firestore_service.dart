@@ -85,9 +85,14 @@ class FirestoreService {
           .orderBy('timestamp', descending: false)
           .get();
 
-      return snapshot.docs
-          .map((doc) => MealEntry.fromMap(doc.id, uid, doc.data()))
-          .toList();
+      return snapshot.docs.map((doc) {
+        try {
+          return MealEntry.fromMap(doc.id, uid, doc.data());
+        } catch (e) {
+          debugPrint('Error parsing meal ${doc.id}: $e');
+          return null;
+        }
+      }).whereType<MealEntry>().toList();
     } catch (e, stack) {
       debugPrint('Firestore Error [getMealsForDate]: $e');
       debugPrint(stack.toString());
@@ -107,9 +112,14 @@ class FirestoreService {
           .orderBy('date', descending: true)
           .get();
 
-      return snapshot.docs
-          .map((doc) => MealEntry.fromMap(doc.id, uid, doc.data()))
-          .toList();
+      return snapshot.docs.map((doc) {
+        try {
+          return MealEntry.fromMap(doc.id, uid, doc.data());
+        } catch (e) {
+          debugPrint('Error parsing meal range ${doc.id}: $e');
+          return null;
+        }
+      }).whereType<MealEntry>().toList();
     } catch (e, stack) {
       debugPrint('Firestore Error [getMealsForDateRange]: $e');
       debugPrint(stack.toString());

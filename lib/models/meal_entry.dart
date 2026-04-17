@@ -1,5 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class IngredientDetail {
+  final String name;
+  final double grams;
+  final int calories;
+  final double proteinG;
+  final double carbsG;
+  final double fatsG;
+  final String? sourceId;
+
+  const IngredientDetail({
+    required this.name,
+    required this.grams,
+    required this.calories,
+    required this.proteinG,
+    required this.carbsG,
+    required this.fatsG,
+    this.sourceId,
+  });
+
+  factory IngredientDetail.fromMap(Map<String, dynamic> map) {
+    return IngredientDetail(
+      name: map['name'] as String,
+      grams: (map['grams'] as num).toDouble(),
+      calories: map['calories'] as int,
+      proteinG: (map['proteinG'] as num).toDouble(),
+      carbsG: (map['carbsG'] as num).toDouble(),
+      fatsG: (map['fatsG'] as num).toDouble(),
+      sourceId: map['sourceId'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'grams': grams,
+      'calories': calories,
+      'proteinG': proteinG,
+      'carbsG': carbsG,
+      'fatsG': fatsG,
+      'sourceId': sourceId,
+    };
+  }
+}
+
 class MealEntry {
   final String id;
   final String userId;
@@ -18,6 +62,7 @@ class MealEntry {
   final String? aiConfidence; // 'low' | 'medium' | 'high' | null
   final bool imageDeleted; // Always true
   final double? caloricDensity;
+  final List<IngredientDetail>? ingredients; // For composite meals/recipes
 
   const MealEntry({
     required this.id,
@@ -37,6 +82,7 @@ class MealEntry {
     this.aiConfidence,
     required this.imageDeleted,
     this.caloricDensity,
+    this.ingredients,
   });
 
   factory MealEntry.fromMap(
@@ -62,6 +108,12 @@ class MealEntry {
         aiConfidence: map['aiConfidence'] as String?,
         imageDeleted: map['imageDeleted'] as bool? ?? true,
         caloricDensity: (map['caloricDensity'] as num?)?.toDouble(),
+        ingredients: map['ingredients'] != null
+            ? (map['ingredients'] as List)
+                .map((e) =>
+                    IngredientDetail.fromMap(e as Map<String, dynamic>))
+                .toList()
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
@@ -80,6 +132,8 @@ class MealEntry {
         'aiConfidence': aiConfidence,
         'imageDeleted': imageDeleted,
         'caloricDensity': caloricDensity,
+        if (ingredients != null)
+          'ingredients': ingredients!.map((e) => e.toMap()).toList(),
       };
 
   MealEntry copyWith({
@@ -100,6 +154,7 @@ class MealEntry {
     String? aiConfidence,
     bool? imageDeleted,
     double? caloricDensity,
+    List<IngredientDetail>? ingredients,
   }) =>
       MealEntry(
         id: id ?? this.id,
@@ -119,6 +174,7 @@ class MealEntry {
         aiConfidence: aiConfidence ?? this.aiConfidence,
         imageDeleted: imageDeleted ?? this.imageDeleted,
         caloricDensity: caloricDensity ?? this.caloricDensity,
+        ingredients: ingredients ?? this.ingredients,
       );
 
   double get effectiveCaloricDensity =>

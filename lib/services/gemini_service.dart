@@ -417,7 +417,8 @@ Rules:
     required List<MealEntry> recentMeals,
     required List<dynamic> history,
   }) async {
-    if (_chatModel == null) {
+    final apiKey = dotenv.env['GEMINI_API_KEY'];
+    if (apiKey == null || apiKey.isEmpty || apiKey == 'your_api_key_here') {
       throw Exception(
           'Gemini API key is not configured. Check your .env file.');
     }
@@ -454,10 +455,18 @@ Guidelines:
 - Use Markdown formatting for lists and emphasis
 ''';
 
+    final chatModel = GenerativeModel(
+      model: _modelName,
+      apiKey: apiKey,
+      systemInstruction: Content.system(systemPrompt),
+      generationConfig: GenerationConfig(
+        temperature: 0.7,
+        maxOutputTokens: 1024,
+      ),
+    );
+
     // Build conversation history for multi-turn chat
-    final contents = <Content>[
-      Content.text(systemPrompt),
-    ];
+    final contents = <Content>[];
 
     // Add conversation history (last 6 messages for context window)
     final recentHistory =
@@ -475,7 +484,7 @@ Guidelines:
     // Add the current user message
     contents.add(Content.text(userMessage));
 
-    final response = await _chatModel!.generateContent(contents);
+    final response = await chatModel.generateContent(contents);
     final text = response.text;
 
     if (text == null || text.isEmpty) {

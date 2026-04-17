@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../models/user_profile.dart';
@@ -292,20 +293,40 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ),
                   ],
                 ),
-                // Refresh button
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainer,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.refresh_rounded,
-                        size: 20, color: AppColors.textSecondary),
-                    onPressed: _loadData,
-                    padding: EdgeInsets.zero,
-                  ),
+                Row(
+                  children: [
+                    // Search button
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainer,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.search_rounded,
+                            size: 20, color: AppColors.textSecondary),
+                        onPressed: () => context.push('/log/search'),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Refresh button
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainer,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.refresh_rounded,
+                            size: 20, color: AppColors.textSecondary),
+                        onPressed: _loadData,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

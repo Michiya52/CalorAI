@@ -210,6 +210,38 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
               ),
             ),
           ),
+          
+          if (widget.meal.ingredients != null && widget.meal.ingredients!.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text('Recipe Ingredients',
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            Card(
+              elevation: 0,
+              color: AppColors.surface,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.meal.ingredients!.length,
+                separatorBuilder: (context, index) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final ing = widget.meal.ingredients![index];
+                  // Scale the ingredient based on the overall factor
+                  final baseGrams = widget.meal.portionGrams <= 0 ? 1.0 : widget.meal.portionGrams;
+                  final factor = _displayGrams / baseGrams;
+                  
+                  return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    title: Text(ing.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                    trailing: Text('${(ing.grams * factor).round()}g', 
+                        style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                  );
+                },
+              ),
+            ),
+          ],
+          
           const SizedBox(height: 20),
           SizedBox(
             height: 56,

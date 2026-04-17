@@ -17,6 +17,7 @@ import '../../screens/logging/suggestion_cards_screen.dart';
 import '../../screens/logging/portion_selection_screen.dart';
 import '../../screens/logging/manual_search_screen.dart';
 import '../../screens/logging/barcode_scanner_screen.dart';
+import '../../screens/logging/meal_creator_screen.dart';
 
 class AppRouter {
   static GoRouter create(AuthProvider authProvider) {
@@ -29,6 +30,7 @@ class AppRouter {
             state.matchedLocation.startsWith('/register');
         final isSetupRoute = state.matchedLocation.startsWith('/setup');
 
+        if (state.matchedLocation == '/') return isLoggedIn ? '/home' : '/login';
         if (!isLoggedIn && !isAuthRoute && !isSetupRoute) return '/login';
         if (isLoggedIn && isAuthRoute) return '/home';
         return null;
@@ -71,6 +73,9 @@ class AppRouter {
         GoRoute(
             path: '/log/barcode',
             builder: (c, s) => const BarcodeScannerScreen()),
+        GoRoute(
+            path: '/log/create-meal',
+            builder: (c, s) => const MealCreatorScreen()),
         GoRoute(
           path: '/meal-detail',
           builder: (c, s) => MealDetailScreen(meal: s.extra as MealEntry),

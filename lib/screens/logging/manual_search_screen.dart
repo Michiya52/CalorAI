@@ -206,7 +206,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                     ),
                     ButtonSegment(
                       value: _SearchSource.openFoodFacts,
-                      label: Text('OFF'),
+                      label: Text('Open Food Facts'),
                     ),
                     ButtonSegment(
                       value: _SearchSource.usda,
@@ -377,7 +377,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
   }
 
   String _sourceLabel(String source) {
-    if (source == 'OpenFoodFacts') return 'OFF';
+    if (source == 'OpenFoodFacts') return 'Open Food Facts';
     if (source.startsWith('MyFCD')) return 'MyFCD';
     if (source.startsWith('USDA')) return 'USDA';
     if (source.startsWith('SG_')) return 'SG';
