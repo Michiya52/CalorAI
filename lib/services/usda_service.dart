@@ -19,7 +19,6 @@ class UsdaService {
       'api_key': _apiKey,
       'query': query,
       'pageSize': '25',
-      'dataType': 'Branded,Foundation,Survey (FNDDS)',
     });
 
     try {
@@ -100,7 +99,7 @@ class UsdaService {
       }
     }
 
-    if (calories <= 0) return null;
+    // Removed 'if (calories <= 0) return null;' filter to allow zero-calorie items like water
 
     final id = 'usda_${f['fdcId']}';
 
