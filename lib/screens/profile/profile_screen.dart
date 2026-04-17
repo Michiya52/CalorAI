@@ -1,0 +1,455 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../core/constants/app_colors.dart';
+import '../../providers/auth_provider.dart';
+import '../../providers/profile_provider.dart';
+import '../../providers/theme_provider.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _nameController = TextEditingController();
+  final _heightController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _ageController = TextEditingController();
+  bool _isEditing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _loadProfile();
+    });
+  }
+
+  void _loadProfile() {
+    final profile = context.read<ProfileProvider>().profile;
+    if (profile != null) {
+      _nameController.text = profile.name;
+      _heightController.text = profile.heightCm.toString();
+      _weightController.text = profile.weightKg.toString();
+      _ageController.text = profile.age.toString();
+    }
+  }
+
+  Future<void> _saveChanges() async {
+    final uid = context.read<AuthProvider>().userId;
+    final profileProv = context.read<ProfileProvider>();
+    final profile = profileProv.profile;
+    if (uid == null || profile == null) return;
+
+    final ht = double.tryParse(_heightController.text);
+    final wt = double.tryParse(_weightController.text);
+    final age = int.tryParse(_ageController.text);
+
+    if (_nameController.text.trim().isEmpty ||
+        ht == null ||
+        ht <= 0 ||
+        wt == null ||
+        wt <= 0 ||
+        age == null ||
+        age <= 0) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Please enter valid numeric details'),
+              backgroundColor: AppColors.error),
+        );
+      }
+      return;
+    }
+
+    await profileProv.updateProfile(uid, {
+      'name': _nameController.text.trim(),
+      'heightCm': ht,
+      'weightKg': wt,
+      'age': age,
+    });
+
+    setState(() => _isEditing = false);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Profile updated!'),
+            backgroundColor: AppColors.success),
+      );
+    }
+  }
+
+  Future<void> _recalculateTarget() async {
+    final provider = context.read<ProfileProvider>();
+    final profile = provider.profile;
+    if (profile == null) return;
+
+    final action = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Recalculate target'),
+        content: const Text(
+          'Do you want to re-enter your details first (including activity level and goal)?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop('cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop('edit'),
+            child: const Text('Re-enter details'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(dialogContext).pop('recalculate'),
+            child: const Text('Use current details'),
+          ),
+        ],
+      ),
+    );
+
+    if (!mounted || action == null || action == 'cancel') return;
+    if (action == 'edit') {
+      await context.push('/setup', extra: profile);
+      if (mounted) {
+        _loadProfile();
+        setState(() {});
+      }
+      return;
+    }
+
+    final previousTarget = await provider.recalculateTarget();
+
+    if (!mounted || previousTarget == null) return;
+    final newTarget = provider.profile?.calorieTarget ?? previousTarget;
+    _loadProfile();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Target updated: $previousTarget -> $newTarget kcal/day'),
+        backgroundColor: AppColors.success,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _heightController.dispose();
+    _weightController.dispose();
+    _ageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: const Text('Profile'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          if (!_isEditing)
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                icon: Icon(Icons.edit_rounded,
+                    size: 18, color: AppColors.textSecondary),
+                onPressed: () {
+                  _loadProfile();
+                  setState(() => _isEditing = true);
+                },
+                padding: EdgeInsets.zero,
+              ),
+            )
+          else
+            TextButton(
+              onPressed: _saveChanges,
+              child: Text('Save',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700, color: AppColors.primary)),
+            ),
+        ],
+      ),
+      body: Consumer<ProfileProvider>(
+        builder: (context, profileProv, _) {
+          final profile = profileProv.profile;
+          if (profile == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Avatar with gradient ring
+                Center(
+                  child: Container(
+                    width: 96,
+                    height: 96,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: AppColors.primaryGradient,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 88,
+                        height: 88,
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              gradient: AppColors.primaryGradient,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                profile.name.isNotEmpty
+                                    ? profile.name[0].toUpperCase()
+                                    : '?',
+                                style: const TextStyle(
+                                    fontSize: 32,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: Text(profile.email,
+                      style: TextStyle(
+                          color: AppColors.textSecondary, fontSize: 14)),
+                ),
+                const SizedBox(height: 24),
+
+                // Editable fields card
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: AppColors.premiumCard(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Personal Info',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: AppColors.textPrimary)),
+                      const SizedBox(height: 16),
+                      _buildProfileField('Name', _nameController, _isEditing),
+                      _buildProfileField(
+                          'Height (cm)', _heightController, _isEditing,
+                          keyboardType: TextInputType.number),
+                      _buildProfileField(
+                          'Weight (kg)', _weightController, _isEditing,
+                          keyboardType: TextInputType.number),
+                      _buildProfileField('Age', _ageController, _isEditing,
+                          keyboardType: TextInputType.number),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Read-only info card
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: AppColors.premiumCard(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Goals & Targets',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: AppColors.textPrimary)),
+                      const SizedBox(height: 16),
+                      _buildInfoRow(
+                          'Sex', profile.sex == 'male' ? 'Male' : 'Female'),
+                      _buildInfoRow('Activity',
+                          profile.activityLevel.replaceAll('_', ' ')),
+                      _buildInfoRow(
+                          'Goal', profile.goal.replaceAll('_', ' ')),
+                      _buildInfoRow(
+                          'Daily Target', '${profile.calorieTarget} kcal'),
+                      _buildInfoRow(
+                        'Calorie Mode',
+                        profile.isCalorieTargetManual ? 'Manual' : 'Auto',
+                      ),
+                      if (profile.macroTargets != null) ...[
+                        _buildInfoRow('Protein',
+                            '${profile.macroTargets!.proteinG}g'),
+                        _buildInfoRow(
+                            'Carbs', '${profile.macroTargets!.carbsG}g'),
+                        _buildInfoRow(
+                            'Fats', '${profile.macroTargets!.fatsG}g'),
+                      ],
+                      _buildInfoRow(
+                        'Macro Mode',
+                        profile.isMacroTargetsManual ? 'Manual' : 'Auto',
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Theme card
+                Consumer<ThemeProvider>(
+                  builder: (context, themeProvider, _) {
+                    return Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: AppColors.premiumCard(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Appearance',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: AppColors.textPrimary)),
+                          const SizedBox(height: 16),
+                          SegmentedButton<ThemeMode>(
+                            segments: const [
+                              ButtonSegment(
+                                value: ThemeMode.system,
+                                label: Text('System'),
+                                icon: Icon(Icons.brightness_auto, size: 18),
+                              ),
+                              ButtonSegment(
+                                value: ThemeMode.light,
+                                label: Text('Light'),
+                                icon: Icon(Icons.light_mode, size: 18),
+                              ),
+                              ButtonSegment(
+                                value: ThemeMode.dark,
+                                label: Text('Dark'),
+                                icon: Icon(Icons.dark_mode, size: 18),
+                              ),
+                            ],
+                            selected: {themeProvider.themeMode},
+                            onSelectionChanged: (selection) {
+                              themeProvider.setThemeMode(selection.first);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                // Action buttons
+                OutlinedButton.icon(
+                  onPressed: () => context.push('/setup', extra: profile),
+                  icon: const Icon(Icons.tune_rounded),
+                  label: const Text('Set My Own Goals'),
+                ),
+                const SizedBox(height: 10),
+
+                OutlinedButton.icon(
+                  onPressed: _recalculateTarget,
+                  icon: const Icon(Icons.calculate_rounded),
+                  label: const Text('Recalculate Target'),
+                ),
+                const SizedBox(height: 24),
+
+                // Footer
+                Center(
+                  child: Text(
+                    'Nutritional data powered by MyFCD 2026',
+                    style: TextStyle(
+                        color: AppColors.textSecondary, fontSize: 12),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Logout
+                SizedBox(
+                  height: 48,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      await context.read<AuthProvider>().logout();
+                      if (context.mounted) context.go('/login');
+                    },
+                    icon: const Icon(Icons.logout_rounded,
+                        color: AppColors.error),
+                    label: const Text('Log Out',
+                        style: TextStyle(color: AppColors.error)),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                          color: AppColors.error.withValues(alpha: 0.3)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 100),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProfileField(
+      String label, TextEditingController controller, bool editable,
+      {TextInputType? keyboardType, ValueChanged<String>? onChanged}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextFormField(
+        controller: controller,
+        enabled: editable,
+        keyboardType: keyboardType,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          labelText: label.toUpperCase(),
+          filled: true,
+          fillColor: editable ? AppColors.surfaceContainer : AppColors.background,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: TextStyle(
+                  color: AppColors.textSecondary, fontSize: 14)),
+          Text(value,
+              style:
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+        ],
+      ),
+    );
+  }
+}
