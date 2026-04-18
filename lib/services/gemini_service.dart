@@ -10,7 +10,7 @@ import '../models/meal_entry.dart';
 /// GeminiService — connects to Google Gemini API for food identification
 /// (vision) and nutritional chatbot (text).
 class GeminiService {
-  static const String _modelName = 'gemini-1.5-flash';
+  static const String _modelName = 'gemini-2.5-flash';
   static GenerativeModel? _visionModel;
   static GenerativeModel? _chatModel;
 
@@ -30,8 +30,9 @@ class GeminiService {
       model: _modelName,
       apiKey: apiKey,
       generationConfig: GenerationConfig(
-        temperature: 0.3,
-        maxOutputTokens: 2048,
+        temperature: 0.4,
+        maxOutputTokens: 4096,
+        responseMimeType: 'application/json',
       ),
     );
 
@@ -73,7 +74,7 @@ class GeminiService {
     final prompt = '''
 You are a Malaysian food identification expert. Analyze this food image and identify the dish(es).
 
-Return a JSON array of up to 3 suggestions, ranked by confidence. Use this exact format:
+Return a JSON array of EXACTLY 4 suggestions, ranked by confidence. Ensure you provide 4 distinct possibilities. Use this exact format:
 [
   {
     "rank": 1,
@@ -88,10 +89,11 @@ Return a JSON array of up to 3 suggestions, ranked by confidence. Use this exact
 ]
 
 Rules:
-- confidence must be one of: "high", "medium", "low"
-- confidencePercent must be an integer from 0 to 100 that matches the confidence level
-- estimatedPortionGrams should be a realistic weight for the visible portion
-- Focus on Malaysian/Southeast Asian cuisine when possible
+- You MUST return a JSON array containing EXACTLY 4 candidate objects.
+- 'confidence' must be one of: "high", "medium", "low"
+- 'confidencePercent' must be a realistic, highly varied integer from 1 to 99 depending on your actual confidence for each distinct guess. Do not just use static defaults.
+- 'estimatedPortionGrams' should be a realistic weight for the visible portion
+- Focus heavily on Malaysian/Southeast Asian cuisine when possible
 - Return ONLY the JSON array, no other text
 ''';
 

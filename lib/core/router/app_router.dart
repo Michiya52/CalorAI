@@ -23,7 +23,7 @@ class AppRouter {
   static GoRouter create(AuthProvider authProvider) {
     return GoRouter(
       initialLocation: '/login',
-      refreshListenable: authProvider,
+      refreshListenable: authProvider.authStateNotifier,
       redirect: (context, state) {
         final isLoggedIn = authProvider.isLoggedIn;
         final isAuthRoute = state.matchedLocation.startsWith('/login') ||

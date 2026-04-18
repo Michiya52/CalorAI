@@ -123,6 +123,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
   }
 
   int _resolvedCalorieTarget() {
+    if (_useCustomMacros) {
+      final p = int.tryParse(_proteinController.text) ?? 0;
+      final c = int.tryParse(_carbsController.text) ?? 0;
+      final f = int.tryParse(_fatsController.text) ?? 0;
+      if (p > 0 || c > 0 || f > 0) return (p * 4) + (c * 4) + (f * 9);
+    }
     if (!_useCustomCalories) return _calculatedTarget;
     return int.tryParse(_calorieController.text) ?? _calculatedTarget;
   }
@@ -182,7 +188,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
         'isMacroTargetsManual': profile.isMacroTargetsManual,
         'macroTargets': profile.macroTargets?.toMap(),
       });
-      if (mounted) context.go('/profile');
+      if (mounted) context.pop();
       return;
     }
 
@@ -390,12 +396,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             ),
             child: Column(
               children: [
-                Text('Recommended',
+                Text(_useCustomCalories || _useCustomMacros ? 'Custom Goal' : 'Recommended',
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 13)),
                 const SizedBox(height: 8),
-                Text('$_calculatedTarget',
+                Text('${_resolvedCalorieTarget()}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 48,
@@ -522,6 +528,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
     return TextFormField(
       controller: controller,
       keyboardType: type,
+      onChanged: (v) => setState(() {}),
       decoration: InputDecoration(
         labelText: label.toUpperCase(),
         hintText: 'Enter $label',

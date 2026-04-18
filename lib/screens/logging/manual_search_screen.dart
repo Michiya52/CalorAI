@@ -198,8 +198,10 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SegmentedButton<_SearchSource>(
-                  segments: const [
+                SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton<_SearchSource>(
+                    segments: const [
                     ButtonSegment(
                       value: _SearchSource.regional,
                       label: Text('MY+SG Database'),
@@ -213,6 +215,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                       label: Text('USDA (FOSS)'),
                     ),
                   ],
+                  showSelectedIcon: false,
                   selected: {_source},
                   onSelectionChanged: (selection) {
                     setState(() {
@@ -227,7 +230,8 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                     }
                   },
                 ),
-                const SizedBox(height: 12),
+              ),
+              const SizedBox(height: 12),
                 TextField(
                   controller: _searchController,
                   autofocus: true,

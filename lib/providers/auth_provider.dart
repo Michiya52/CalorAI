@@ -16,10 +16,14 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  final ValueNotifier<bool> authStateNotifier = ValueNotifier(false);
+
   AuthProvider() {
     _user = _authService.currentUser;
+    authStateNotifier.value = isLoggedIn;
     _subscription = _authService.authStateChanges.listen((user) {
       _user = user;
+      authStateNotifier.value = isLoggedIn;
       notifyListeners();
     });
   }
@@ -27,6 +31,7 @@ class AuthProvider extends ChangeNotifier {
   @override
   void dispose() {
     _subscription.cancel();
+    authStateNotifier.dispose();
     super.dispose();
   }
 
@@ -42,6 +47,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       _error = 'Registration failed. Please try again.';
     } finally {
+      authStateNotifier.value = isLoggedIn;
       _isLoading = false;
       notifyListeners();
     }
@@ -59,6 +65,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       _error = 'Login failed. Please try again.';
     } finally {
+      authStateNotifier.value = isLoggedIn;
       _isLoading = false;
       notifyListeners();
     }
@@ -67,6 +74,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     await _authService.logout();
     _user = null;
+    authStateNotifier.value = false;
     notifyListeners();
   }
 

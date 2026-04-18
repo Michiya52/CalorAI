@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 import 'core/router/app_router.dart';
 import 'providers/auth_provider.dart';
 import 'providers/profile_provider.dart';
@@ -76,7 +77,7 @@ Future<void> main() async {
   ));
 }
 
-class CalorAIApp extends StatelessWidget {
+class CalorAIApp extends StatefulWidget {
   final bool firebaseReady;
   final String? startupError;
 
@@ -87,35 +88,58 @@ class CalorAIApp extends StatelessWidget {
   });
 
   @override
+  State<CalorAIApp> createState() => _CalorAIAppState();
+}
+
+class _CalorAIAppState extends State<CalorAIApp> {
+  late final AuthProvider _authProvider;
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _authProvider = AuthProvider();
+    _router = AppRouter.create(_authProvider);
+  }
+
+  @override
+  void dispose() {
+    // Note: Do not dispose _authProvider here if it's managed by ChangeNotifierProvider.value?
+    // Actually ChangeNotifierProvider.value DOES NOT dispose. So we should dispose it.
+    _authProvider.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (!firebaseReady) {
+    if (!widget.firebaseReady) {
       return MaterialApp(
         title: 'CalorAI',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         home: _StartupErrorScreen(
-          message: startupError ?? 'Firebase initialization failed.',
+          message: widget.startupError ?? 'Firebase initialization failed.',
         ),
       );
     }
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider.value(value: _authProvider),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => MealProvider()),
         ChangeNotifierProvider(create: (_) => ChatbotProvider()),
       ],
-      child: Consumer2<AuthProvider, ThemeProvider>(
-        builder: (context, authProvider, themeProvider, _) {
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
           return MaterialApp.router(
             title: 'CalorAI',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
-            routerConfig: AppRouter.create(authProvider),
+            routerConfig: _router,
           );
         },
       ),

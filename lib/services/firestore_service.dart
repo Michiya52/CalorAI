@@ -170,14 +170,23 @@ class FirestoreService {
       if (q.isEmpty) return [];
 
       final foods = await _loadFoodCache();
-      final scored = foods
-          .map((record) => _ScoredFood(
-                food: record.food,
-                score: _scoreFoodMatch(q, record),
-              ))
-          .where((record) => record.score > 0)
-          .toList()
-        ..sort((a, b) {
+      final scored = <_ScoredFood>[];
+      int count = 0;
+
+      for (final record in foods) {
+        final score = _scoreFoodMatch(q, record);
+        if (score > 0) {
+          scored.add(_ScoredFood(food: record.food, score: score));
+        }
+        
+        count++;
+        // Yield to the event loop every 250 items to keep UI completely buttery smooth
+        if (count % 250 == 0) {
+          await Future.delayed(Duration.zero);
+        }
+      }
+
+      scored.sort((a, b) {
           final scoreComparison = b.score.compareTo(a.score);
           if (scoreComparison != 0) return scoreComparison;
           return a.food.nameEn.compareTo(b.food.nameEn);
