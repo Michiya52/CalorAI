@@ -72,29 +72,65 @@ class GeminiService {
     }
 
     final prompt = '''
-You are a Malaysian food identification expert. Analyze this food image and identify the dish(es).
+You are a world-class Malaysian and Southeast Asian food identification expert with deep knowledge of regional cuisine variations.
 
-Return a JSON array of EXACTLY 4 suggestions, ranked by confidence. Ensure you provide 4 distinct possibilities. Use this exact format:
+ANALYZE this food image using the following steps:
+
+STEP 1 — VISUAL FEATURE ANALYSIS:
+Before identifying, carefully observe and note:
+- Broth/sauce: color (clear, reddish, orange/coconut, dark soy, brown), consistency (watery, thick, creamy)
+- Protein: type visible (prawns, chicken, beef, fish, egg, tofu), preparation (whole, sliced, shredded)
+- Base: noodle type (yellow mee, flat kuey teow, thin mihun/bihun, glass noodles) or rice (white, fried, compressed)
+- Toppings/garnishes: bean sprouts, kangkung, cucumber, sambal, fried shallots, lime, chili, peanuts, anchovies
+- Cooking style: soupy, dry/stir-fried, steamed, grilled, deep-fried, wrapped
+- Vessel/presentation: banana leaf, bowl, plate, claypot, skewer
+
+STEP 2 — DISTINGUISH SIMILAR DISHES:
+Use these visual differentiators for commonly confused Malaysian dishes:
+- Mee Udang (Prawn Noodle): REDDISH-ORANGE clear broth from prawn heads, yellow noodles, whole prawns on top, sometimes with hard-boiled egg
+- Curry Mee: COCONUT-based creamy/opaque broth (orange-yellow), cockles and tofu puffs common, mint leaves, sometimes with blood cubes
+- Laksa Lemak: THICK coconut curry broth, shredded chicken or prawns, thick vermicelli (laksa noodles), daun kesum (laksa leaf)
+- Laksa Penang/Asam Laksa: SOUR tamarind-based broth (darker, no coconut), mackerel flakes, torch ginger flower, thick round noodles
+- Char Kuey Teow: DARK soy-stained FLAT rice noodles, stir-fried, cockles, prawns, Chinese sausage, bean sprouts, chives
+- Pad Thai: THINNER rice noodles, lighter color, peanuts on top, lime wedge, different noodle texture than CKT
+- Nasi Lemak: Coconut rice (often triangle-shaped), sambal, fried anchovies, peanuts, cucumber, hard-boiled egg, served on banana leaf
+- Nasi Goreng: Fried rice, darker color from kicap/soy, often with fried egg on top, no sambal side
+- Mee Goreng: Fried YELLOW noodles (not rice), often with red chili sauce, potato cubes, tofu
+- Roti Canai: Flaky layered flatbread, golden-brown, served with dhal or curry
+- Chapati: Thin, uniform flatbread, NOT flaky, whole wheat color
+- Hokkien Mee (KL): DARK soy braised thick yellow noodles in dark sauce with pork lard, prawns, pork slices
+- Hokkien Mee (Penang): PRAWN-based SOUP with yellow noodles and rice vermicelli mix, clear reddish broth
+- Wan Tan Mee: Yellow noodles, char siu on top, served with wonton dumplings, dark soy sauce or clear soup
+- Bak Kut Teh: Herbal PORK RIB SOUP, clear dark broth, pork ribs visible, served in claypot
+- Rendang: DRY curry, dark brown, thick caramelized coconut coating, usually beef or chicken
+- Nasi Kandar: Rice with MULTIPLE curries/gravies mixed, vibrant colors, originated from Penang
+
+STEP 3 — OUTPUT:
+Return a JSON array of EXACTLY 4 suggestions ranked from most to least likely.
+Each suggestion MUST have distinct dish names (do not repeat the same dish).
+
 [
   {
     "rank": 1,
-    "dishNameEn": "English name",
-    "dishNameMy": "Malay name",
-    "mainIngredients": ["ingredient1", "ingredient2"],
-    "estimatedPortionGrams": 350,
+    "dishNameEn": "Prawn Noodle Soup (Mee Udang)",
+    "dishNameMy": "Mee Udang",
+    "mainIngredients": ["yellow noodles", "prawns", "prawn broth", "hard-boiled egg", "kangkung"],
+    "estimatedPortionGrams": 450,
     "confidence": "high",
     "confidencePercent": 88,
-    "cookingMethod": "cooking method description"
+    "cookingMethod": "boiled noodles in prawn head broth",
+    "visualEvidence": "reddish-orange clear broth, whole prawns, yellow mee noodles"
   }
 ]
 
-Rules:
-- You MUST return a JSON array containing EXACTLY 4 candidate objects.
+CRITICAL RULES:
+- Return ONLY the JSON array — no markdown, no explanation, no extra text.
 - 'confidence' must be one of: "high", "medium", "low"
-- 'confidencePercent' must be a realistic, highly varied integer from 1 to 99 depending on your actual confidence for each distinct guess. Do not just use static defaults.
-- 'estimatedPortionGrams' should be a realistic weight for the visible portion
-- Focus heavily on Malaysian/Southeast Asian cuisine when possible
-- Return ONLY the JSON array, no other text
+- 'confidencePercent' must be a realistic integer 1–99 reflecting your ACTUAL confidence for each guess. Vary these significantly.
+- 'estimatedPortionGrams' must be realistic for the visible portion (soups are heavier 400-500g, dry dishes 250-350g).
+- 'visualEvidence' must describe the specific visual features that led to this identification.
+- Focus on Malaysian/Southeast Asian cuisine. If unsure, prefer the Malaysian variant.
+- All 4 suggestions must be DIFFERENT dishes.
 ''';
 
     final content = Content.multi([
@@ -375,28 +411,55 @@ Rules:
   List<FoodSuggestion> _fallbackSuggestionsFromText(String responseText) {
     final lower = responseText.toLowerCase();
 
-    final knownDishes = <MapEntry<String, String>>[
-      const MapEntry('nasi lemak', 'Nasi lemak'),
-      const MapEntry('roti canai', 'Roti canai'),
-      const MapEntry('laksa', 'Laksa'),
-      const MapEntry('mee goreng', 'Mee goreng'),
-      const MapEntry('nasi goreng', 'Nasi goreng'),
-      const MapEntry('chicken rice', 'Chicken rice'),
-      const MapEntry('satay', 'Satay'),
-      const MapEntry('curry', 'Curry dish'),
-      const MapEntry('soup', 'Soup'),
+    // Malaysian dishes with English name → Malay name mapping
+    const knownDishes = <(String, String, String)>[
+      // (search key, English name, Malay name)
+      ('mee udang', 'Prawn Noodle Soup', 'Mee Udang'),
+      ('prawn noodle', 'Prawn Noodle Soup', 'Mee Udang'),
+      ('prawn mee', 'Prawn Noodle Soup', 'Mee Udang'),
+      ('curry mee', 'Curry Noodle', 'Mee Kari'),
+      ('curry noodle', 'Curry Noodle', 'Mee Kari'),
+      ('nasi lemak', 'Nasi Lemak', 'Nasi Lemak'),
+      ('roti canai', 'Roti Canai', 'Roti Canai'),
+      ('char kuey teow', 'Char Kuey Teow', 'Kuey Teow Goreng'),
+      ('char kway teow', 'Char Kuey Teow', 'Kuey Teow Goreng'),
+      ('laksa lemak', 'Curry Laksa', 'Laksa Lemak'),
+      ('asam laksa', 'Asam Laksa', 'Laksa Asam'),
+      ('laksa', 'Laksa', 'Laksa'),
+      ('mee goreng', 'Fried Noodles', 'Mee Goreng'),
+      ('nasi goreng', 'Fried Rice', 'Nasi Goreng'),
+      ('chicken rice', 'Chicken Rice', 'Nasi Ayam'),
+      ('nasi ayam', 'Chicken Rice', 'Nasi Ayam'),
+      ('satay', 'Satay', 'Satai'),
+      ('rendang', 'Rendang', 'Rendang'),
+      ('nasi kandar', 'Nasi Kandar', 'Nasi Kandar'),
+      ('bak kut teh', 'Pork Rib Soup', 'Bak Kut Teh'),
+      ('wan tan mee', 'Wanton Noodles', 'Wan Tan Mee'),
+      ('wonton', 'Wanton Noodles', 'Wan Tan Mee'),
+      ('hokkien mee', 'Hokkien Noodles', 'Hokkien Mee'),
+      ('teh tarik', 'Pulled Milk Tea', 'Teh Tarik'),
+      ('cendol', 'Cendol', 'Cendol'),
+      ('rojak', 'Rojak', 'Rojak'),
+      ('popiah', 'Spring Roll', 'Popiah'),
+      ('nasi kerabu', 'Blue Rice', 'Nasi Kerabu'),
+      ('ayam goreng', 'Fried Chicken', 'Ayam Goreng'),
+      ('ikan bakar', 'Grilled Fish', 'Ikan Bakar'),
+      ('tom yam', 'Tom Yam Soup', 'Tom Yam'),
+      ('curry', 'Curry', 'Kari'),
+      ('soup', 'Soup', 'Sup'),
+      ('rice', 'Rice dish', 'Hidangan nasi'),
+      ('noodle', 'Noodle dish', 'Hidangan mi'),
     ];
 
     String dishNameEn = 'Unknown dish';
-    for (final entry in knownDishes) {
-      if (lower.contains(entry.key)) {
-        dishNameEn = entry.value;
+    String dishNameMy = 'Hidangan tidak dikenali';
+    for (final (key, en, my) in knownDishes) {
+      if (lower.contains(key)) {
+        dishNameEn = en;
+        dishNameMy = my;
         break;
       }
     }
-
-    final dishNameMy =
-        dishNameEn == 'Unknown dish' ? 'Hidangan tidak dikenali' : dishNameEn;
 
     return [
       FoodSuggestion(
@@ -417,7 +480,7 @@ Rules:
     required String userMessage,
     required UserProfile profile,
     required List<MealEntry> recentMeals,
-    required List<dynamic> history,
+    required List<Map<String, String>> history,
   }) async {
     final apiKey = dotenv.env['GEMINI_API_KEY'];
     if (apiKey == null || apiKey.isEmpty || apiKey == 'your_api_key_here') {
@@ -454,9 +517,13 @@ Guidelines:
 - Provide calorie estimates when discussing foods
 - If asked about medical conditions, politely decline and recommend consulting a doctor
 - Keep responses concise (under 200 words)
-- Use Markdown formatting for lists and emphasis
+- Use simple markdown: **bold** for emphasis, bullet lists with "- " prefix
+- NEVER use citation references like [1], [2], [3] or source URLs
+- NEVER use markdown headers (#, ##, ###) — use **bold text** instead
 ''';
 
+    // A per-call model is necessary here because the system instruction
+    // includes dynamic user profile and meal context that changes each call.
     final chatModel = GenerativeModel(
       model: _modelName,
       apiKey: apiKey,
@@ -474,12 +541,10 @@ Guidelines:
     final recentHistory =
         history.length > 6 ? history.sublist(history.length - 6) : history;
     for (final msg in recentHistory) {
-      if (msg is Map<String, dynamic>) {
-        final role = msg['role'] as String?;
-        final text = msg['text'] as String?;
-        if (role != null && text != null) {
-          contents.add(Content(role, [TextPart(text)]));
-        }
+      final role = msg['role'];
+      final text = msg['text'];
+      if (role != null && text != null) {
+        contents.add(Content(role, [TextPart(text)]));
       }
     }
 

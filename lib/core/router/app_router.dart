@@ -58,13 +58,15 @@ class AppRouter {
             path: '/log/photo', builder: (c, s) => const PhotoLoggingScreen()),
         GoRoute(
             path: '/log/suggestions',
-            redirect: (context, state) => state.extra == null ? '/home' : null,
+            redirect: (context, state) =>
+                state.extra is! List<FoodSuggestion> ? '/home' : null,
             builder: (c, s) => SuggestionCardsScreen(
                   suggestions: s.extra as List<FoodSuggestion>,
                 )),
         GoRoute(
             path: '/log/portion',
-            redirect: (context, state) => state.extra == null ? '/home' : null,
+            redirect: (context, state) =>
+                state.extra is! FoodSuggestion ? '/home' : null,
             builder: (c, s) => PortionSelectionScreen(
                   suggestion: s.extra as FoodSuggestion,
                 )),
@@ -78,6 +80,8 @@ class AppRouter {
             builder: (c, s) => const MealCreatorScreen()),
         GoRoute(
           path: '/meal-detail',
+          redirect: (context, state) =>
+              state.extra is! MealEntry ? '/home' : null,
           builder: (c, s) => MealDetailScreen(meal: s.extra as MealEntry),
         ),
       ],

@@ -118,6 +118,12 @@ class UsdaService {
       fatsPer100g: fats,
       sodiumPer100g: sodium,
       sugarPer100g: sugar,
+      ingredients: (f['ingredients'] as String?)
+              ?.split(',')
+              .map((i) => i.trim())
+              .where((i) => i.isNotEmpty)
+              .toList() ??
+          [],
       portionSizes: PortionSizes(
         smallGrams: (servingSize * 0.6).roundToDouble(),
         mediumGrams: servingSize.roundToDouble(),

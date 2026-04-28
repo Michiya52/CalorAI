@@ -10,9 +10,9 @@ class PortionSizes {
   });
 
   factory PortionSizes.fromMap(Map<String, dynamic> map) => PortionSizes(
-        smallGrams: (map['smallGrams'] as num).toDouble(),
-        mediumGrams: (map['mediumGrams'] as num).toDouble(),
-        largeGrams: (map['largeGrams'] as num).toDouble(),
+        smallGrams: (map['smallGrams'] as num? ?? 100).toDouble(),
+        mediumGrams: (map['mediumGrams'] as num? ?? 250).toDouble(),
+        largeGrams: (map['largeGrams'] as num? ?? 400).toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
@@ -33,6 +33,7 @@ class FoodItem {
   final double fatsPer100g;
   final double sodiumPer100g;
   final double sugarPer100g;
+  final List<String> ingredients;
   final PortionSizes portionSizes;
   final String source; // Always 'MyFCD_2026'
   final String myfcdCode;
@@ -48,6 +49,7 @@ class FoodItem {
     required this.fatsPer100g,
     required this.sodiumPer100g,
     required this.sugarPer100g,
+    required this.ingredients,
     required this.portionSizes,
     required this.source,
     required this.myfcdCode,
@@ -55,20 +57,21 @@ class FoodItem {
 
   factory FoodItem.fromMap(String id, Map<String, dynamic> map) => FoodItem(
         id: id,
-        nameEn: map['nameEn'] as String,
-        nameMy: map['nameMy'] as String,
-        foodGroup: map['foodGroup'] as String,
-        caloriesPer100g: (map['caloriesPer100g'] as num).toDouble(),
-        proteinPer100g: (map['proteinPer100g'] as num).toDouble(),
-        carbsPer100g: (map['carbsPer100g'] as num).toDouble(),
-        fatsPer100g: (map['fatsPer100g'] as num).toDouble(),
-        sodiumPer100g: (map['sodiumPer100g'] as num).toDouble(),
-        sugarPer100g: (map['sugarPer100g'] as num).toDouble(),
-        portionSizes: PortionSizes.fromMap(
-          map['portionSizes'] as Map<String, dynamic>,
-        ),
-        source: map['source'] as String,
-        myfcdCode: map['myfcdCode'] as String,
+        nameEn: map['nameEn'] as String? ?? 'Unknown Food',
+        nameMy: map['nameMy'] as String? ?? map['nameEn'] as String? ?? '',
+        foodGroup: map['foodGroup'] as String? ?? 'Other',
+        caloriesPer100g: (map['caloriesPer100g'] as num? ?? 0).toDouble(),
+        proteinPer100g: (map['proteinPer100g'] as num? ?? 0).toDouble(),
+        carbsPer100g: (map['carbsPer100g'] as num? ?? 0).toDouble(),
+        fatsPer100g: (map['fatsPer100g'] as num? ?? 0).toDouble(),
+        sodiumPer100g: (map['sodiumPer100g'] as num? ?? 0).toDouble(),
+        sugarPer100g: (map['sugarPer100g'] as num? ?? 0).toDouble(),
+        ingredients: (map['ingredients'] as List? ?? []).cast<String>(),
+        portionSizes: map['portionSizes'] != null
+            ? PortionSizes.fromMap(map['portionSizes'] as Map<String, dynamic>)
+            : const PortionSizes(smallGrams: 100, mediumGrams: 250, largeGrams: 400),
+        source: map['source'] as String? ?? 'Unknown',
+        myfcdCode: map['myfcdCode'] as String? ?? '',
       );
 
   Map<String, dynamic> toMap() => {
@@ -81,6 +84,7 @@ class FoodItem {
         'fatsPer100g': fatsPer100g,
         'sodiumPer100g': sodiumPer100g,
         'sugarPer100g': sugarPer100g,
+        'ingredients': ingredients,
         'portionSizes': portionSizes.toMap(),
         'source': source,
         'myfcdCode': myfcdCode,
@@ -96,6 +100,7 @@ class FoodItem {
     double? fatsPer100g,
     double? sodiumPer100g,
     double? sugarPer100g,
+    List<String>? ingredients,
     PortionSizes? portionSizes,
     String? source,
     String? myfcdCode,
@@ -111,6 +116,7 @@ class FoodItem {
         fatsPer100g: fatsPer100g ?? this.fatsPer100g,
         sodiumPer100g: sodiumPer100g ?? this.sodiumPer100g,
         sugarPer100g: sugarPer100g ?? this.sugarPer100g,
+        ingredients: ingredients ?? this.ingredients,
         portionSizes: portionSizes ?? this.portionSizes,
         source: source ?? this.source,
         myfcdCode: myfcdCode ?? this.myfcdCode,

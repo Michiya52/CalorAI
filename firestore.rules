@@ -27,14 +27,11 @@ service cloud.firestore {
       }
     }
 
-    // 4. Global Food Database — read-only for anyone, write for initial seeding
+    // 4. Global Food Database — read-only for all clients.
+    //    Writes should be performed via the Firebase Admin SDK or Cloud Functions.
     match /foods/{foodId} {
-      // Allow read access to anyone (even if not authenticated) so the app 
-      // can check if seeding is needed at startup.
       allow read: if true;
-      // Allow write-access temporarily for initial seeding; this should be 
-      // strictly controlled in a production environment.
-      allow write: if true; 
+      allow write: if false;
     }
   }
 }

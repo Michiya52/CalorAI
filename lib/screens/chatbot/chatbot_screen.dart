@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/profile_provider.dart';
+import '../../providers/meal_provider.dart';
 import '../../providers/chatbot_provider.dart';
 
 class ChatbotScreen extends StatefulWidget {
@@ -49,8 +51,31 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           text: text,
           profile: profile,
           uid: uid,
+          todaysMeals: context.read<MealProvider>().todaysMeals,
         );
     _scrollToBottom();
+  }
+
+  void _showHistoryDrawer() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (ctx) => _ChatHistorySheet(
+        onSessionTap: (session) {
+          Navigator.pop(ctx);
+          context.read<ChatbotProvider>().loadSession(session);
+          _scrollToBottom();
+        },
+        onDeleteSession: (sessionId) {
+          context.read<ChatbotProvider>().deleteSession(sessionId);
+        },
+        onNewChat: () {
+          Navigator.pop(ctx);
+          context.read<ChatbotProvider>().startNewChat();
+        },
+      ),
+    );
   }
 
   @override
@@ -79,6 +104,42 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          // History button
+          Container(
+            margin: const EdgeInsets.only(right: 4),
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.history_rounded,
+                  size: 18, color: AppColors.textSecondary),
+              onPressed: _showHistoryDrawer,
+              tooltip: 'Chat history',
+              padding: EdgeInsets.zero,
+            ),
+          ),
+          // New chat button
+          Container(
+            margin: const EdgeInsets.only(right: 4),
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.add_comment_outlined,
+                  size: 18, color: AppColors.textSecondary),
+              onPressed: () =>
+                  context.read<ChatbotProvider>().startNewChat(),
+              tooltip: 'New chat',
+              padding: EdgeInsets.zero,
+            ),
+          ),
+          // Clear button
           Container(
             margin: const EdgeInsets.only(right: 8),
             width: 36,
@@ -126,10 +187,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           // Input bar
           Consumer<ChatbotProvider>(
             builder: (context, chatbot, _) => Container(
+              margin: const EdgeInsets.only(bottom: 100), // Avoid Bottom Nav Bar
               decoration: BoxDecoration(
                 color: isDark
                     ? const Color(0xFF1E293B).withValues(alpha: 0.9)
                     : Colors.white.withValues(alpha: 0.9),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                 border: Border(
                   top: BorderSide(
                     color: isDark
@@ -138,10 +201,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   ),
                 ),
               ),
-              child: ClipRect(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                   child: SafeArea(
+                    top: false,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                       child: Row(
@@ -329,14 +394,43 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             ),
           ],
         ),
-        child: Text(
-          msg.text,
-          style: TextStyle(
-            color: isUser ? Colors.white : AppColors.textPrimary,
-            fontSize: 14,
-            height: 1.4,
-          ),
-        ),
+        child: isUser
+            ? Text(
+                msg.text,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  height: 1.4,
+                ),
+              )
+            : MarkdownBody(
+                data: msg.text,
+                shrinkWrap: true,
+                selectable: true,
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                    height: 1.5,
+                  ),
+                  strong: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  listBullet: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                  ),
+                  blockSpacing: 8,
+                  listIndent: 16,
+                  listBulletPadding: const EdgeInsets.only(right: 6),
+                  a: TextStyle(color: AppColors.primary),
+                  em: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -368,6 +462,162 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     );
   }
 }
+
+// ── Chat History Bottom Sheet ───────────────────────────────────────
+
+class _ChatHistorySheet extends StatelessWidget {
+  final void Function(ChatSession) onSessionTap;
+  final void Function(String) onDeleteSession;
+  final VoidCallback onNewChat;
+
+  const _ChatHistorySheet({
+    required this.onSessionTap,
+    required this.onDeleteSession,
+    required this.onNewChat,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.6,
+      ),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Handle
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Header
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Chat History',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                TextButton.icon(
+                  onPressed: onNewChat,
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('New Chat'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          // Sessions list
+          Flexible(
+            child: Consumer<ChatbotProvider>(
+              builder: (context, chatbot, _) {
+                final sessions = chatbot.savedSessions;
+                if (sessions.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(32, 32, 32, 120),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.chat_bubble_outline,
+                            size: 40, color: AppColors.textSecondary),
+                        const SizedBox(height: 12),
+                        Text(
+                          'No previous chats',
+                          style: TextStyle(color: AppColors.textSecondary),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 120), // Avoid Bottom Nav Bar
+                  itemCount: sessions.length,
+                  separatorBuilder: (_, __) =>
+                      const Divider(height: 1, indent: 56),
+                  itemBuilder: (context, index) {
+                    final session = sessions[index];
+                    final messageCount = session.messages.length;
+                    final timeAgo = _formatTimeAgo(session.createdAt);
+
+                    return Dismissible(
+                      key: Key(session.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        color: AppColors.error,
+                        child: const Icon(Icons.delete_rounded,
+                            color: Colors.white),
+                      ),
+                      onDismissed: (_) => onDeleteSession(session.id),
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color:
+                                AppColors.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(Icons.chat_rounded,
+                              size: 18, color: AppColors.primary),
+                        ),
+                        title: Text(
+                          session.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14),
+                        ),
+                        subtitle: Text(
+                          '$messageCount messages • $timeAgo',
+                          style: TextStyle(
+                              color: AppColors.textSecondary, fontSize: 12),
+                        ),
+                        onTap: () => onSessionTap(session),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatTimeAgo(DateTime dt) {
+    final diff = DateTime.now().difference(dt);
+    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    return '${dt.day}/${dt.month}/${dt.year}';
+  }
+}
+
+// ── Pulsing Dot ────────────────────────────────────────────────────
 
 class _PulsingDot extends StatefulWidget {
   final int delay;

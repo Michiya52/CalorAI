@@ -147,9 +147,34 @@ class _CalorAIAppState extends State<CalorAIApp> {
   }
 }
 
-class _StartupErrorScreen extends StatelessWidget {
+class _StartupErrorScreen extends StatefulWidget {
   final String message;
   const _StartupErrorScreen({required this.message});
+
+  @override
+  State<_StartupErrorScreen> createState() => _StartupErrorScreenState();
+}
+
+class _StartupErrorScreenState extends State<_StartupErrorScreen> {
+  bool _retrying = false;
+
+  Future<void> _retry() async {
+    setState(() => _retrying = true);
+    try {
+      await _initializeFirebaseWithRetry();
+      if (mounted) {
+        // Restart the entire app with a fresh widget tree
+        runApp(const CalorAIApp(firebaseReady: true));
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _retrying = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Retry failed: ${e.toString().split('\n').first}')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,13 +195,19 @@ class _StartupErrorScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                message,
+                widget.message,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => main(),
-                child: const Text('Retry'),
+                onPressed: _retrying ? null : _retry,
+                child: _retrying
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Retry'),
               ),
             ],
           ),

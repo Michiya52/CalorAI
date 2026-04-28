@@ -262,7 +262,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildHeader(BuildContext context, dynamic profile, int consumed,
+  Widget _buildHeader(BuildContext context, UserProfile profile, int consumed,
       int target, bool isDark) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),

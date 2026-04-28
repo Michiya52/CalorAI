@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/food_item.dart';
 
@@ -37,7 +38,7 @@ class IngredientLibraryService {
       _brandedCategorizedItems = _groupItems(_allBrandedItems);
       _isLoaded = true;
     } catch (e) {
-      print('Failed to load ingredient library: $e');
+      debugPrint('Failed to load ingredient library: $e');
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import '../models/meal_entry.dart';
 import '../services/firestore_service.dart';
 
@@ -23,9 +24,14 @@ class MealProvider extends ChangeNotifier {
   Future<void> loadMealsForDate(String uid, String date) async {
     _isLoading = true;
     notifyListeners();
-    _todaysMeals = await _firestore.getMealsForDate(uid, date);
-    _isLoading = false;
-    notifyListeners();
+    try {
+      _todaysMeals = await _firestore.getMealsForDate(uid, date);
+    } catch (e) {
+      debugPrint('Failed to load meals for $date: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> addMeal(MealEntry entry) async {
@@ -37,8 +43,13 @@ class MealProvider extends ChangeNotifier {
   Future<void> updateMeal(
       String uid, String mealId, Map<String, dynamic> data) async {
     await _firestore.updateMealEntry(uid, mealId, data);
-    final date = _todaysMeals.firstWhere((m) => m.id == mealId).date;
-    await loadMealsForDate(uid, date);
+    final meal = _todaysMeals.cast<MealEntry?>().firstWhere(
+          (m) => m?.id == mealId,
+          orElse: () => null,
+        );
+    if (meal != null) {
+      await loadMealsForDate(uid, meal.date);
+    }
   }
 
   Future<void> deleteMeal(String uid, String mealId) async {

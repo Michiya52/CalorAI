@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import '../models/user_profile.dart';
 import '../services/firestore_service.dart';
 import '../core/utils/calorie_calculator.dart';
@@ -15,18 +16,29 @@ class ProfileProvider extends ChangeNotifier {
   Future<void> loadProfile(String uid) async {
     _isLoading = true;
     notifyListeners();
-    _profile = await _firestore.getUserProfile(uid);
-    _isLoading = false;
-    notifyListeners();
+    try {
+      _profile = await _firestore.getUserProfile(uid);
+    } catch (e) {
+      debugPrint('Failed to load profile: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> createProfile(UserProfile profile) async {
     _isLoading = true;
     notifyListeners();
-    await _firestore.createUserProfile(profile);
-    _profile = profile;
-    _isLoading = false;
-    notifyListeners();
+    try {
+      await _firestore.createUserProfile(profile);
+      _profile = profile;
+    } catch (e) {
+      debugPrint('Failed to create profile: $e');
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> updateProfile(String uid, Map<String, dynamic> data) async {

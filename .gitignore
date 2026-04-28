@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .env
+
+# Ignored Scripts and Playgrounds
+ignored_scripts/

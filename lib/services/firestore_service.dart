@@ -10,6 +10,8 @@ import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 class FirestoreService {
   FirebaseFirestore get _firestore => FirebaseFirestore.instance;
   static List<_CachedFoodRecord>? _foodCache;
+  static DateTime? _foodCacheLoadedAt;
+  static const Duration _foodCacheTtl = Duration(minutes: 30);
 
   // Singleton
   static final FirestoreService _instance = FirestoreService._internal();
@@ -171,18 +173,10 @@ class FirestoreService {
 
       final foods = await _loadFoodCache();
       final scored = <_ScoredFood>[];
-      int count = 0;
-
       for (final record in foods) {
         final score = _scoreFoodMatch(q, record);
         if (score > 0) {
           scored.add(_ScoredFood(food: record.food, score: score));
-        }
-        
-        count++;
-        // Yield to the event loop every 250 items to keep UI completely buttery smooth
-        if (count % 250 == 0) {
-          await Future.delayed(Duration.zero);
         }
       }
 
@@ -212,7 +206,11 @@ class FirestoreService {
 
   Future<List<_CachedFoodRecord>> _loadFoodCache() async {
     final cache = _foodCache;
-    if (cache != null) return cache;
+    if (cache != null &&
+        _foodCacheLoadedAt != null &&
+        DateTime.now().difference(_foodCacheLoadedAt!) < _foodCacheTtl) {
+      return cache;
+    }
 
     final snapshot = await _firestore.collection('foods').get();
     final foods = snapshot.docs.map((doc) {
@@ -225,7 +223,14 @@ class FirestoreService {
     }).toList();
 
     _foodCache = foods;
+    _foodCacheLoadedAt = DateTime.now();
     return foods;
+  }
+
+  /// Forces the food cache to be reloaded on the next search.
+  void invalidateFoodCache() {
+    _foodCache = null;
+    _foodCacheLoadedAt = null;
   }
 
   int _scoreFoodMatch(String query, _CachedFoodRecord record) {
@@ -240,24 +245,23 @@ class FirestoreService {
     if (nameEn.startsWith(q) || nameMy.startsWith(q)) return 95;
 
     // 3. Whole Word Contains (Medium-High)
-    // Avoids "water" in "watermelon" matching "mineral water" too highly
-    final wordsEn = nameEn.split(RegExp(r'\s+'));
-    final wordsMy = nameMy.split(RegExp(r'\s+'));
-    if (wordsEn.contains(q) || wordsMy.contains(q)) return 90;
+    if (nameEn.split(RegExp(r'\s+')).contains(q) ||
+        nameMy.split(RegExp(r'\s+')).contains(q)) {
+      return 90;
+    }
 
-    // 4. Token Set Ratio
-    final tsScore = tokenSetRatio(q, nameEn) > tokenSetRatio(q, nameMy)
-        ? tokenSetRatio(q, nameEn)
-        : tokenSetRatio(q, nameMy);
+    // 4. Fuzzy matching — cache results to avoid double computation
+    final tsEn = tokenSetRatio(q, nameEn);
+    final tsMy = tokenSetRatio(q, nameMy);
+    final tsScore = tsEn > tsMy ? tsEn : tsMy;
 
-    // 5. Weighted Ratio (Broader fallback)
-    final wScore = weightedRatio(q, nameEn) > weightedRatio(q, nameMy)
-        ? weightedRatio(q, nameEn)
-        : weightedRatio(q, nameMy);
+    final wEn = weightedRatio(q, nameEn);
+    final wMy = weightedRatio(q, nameMy);
+    final wScore = wEn > wMy ? wEn : wMy;
 
     final finalScore = tsScore > wScore ? tsScore : wScore;
 
-    // Threshold Check: Lowered to 50 for better availability
+    // Threshold Check
     if (finalScore < 50) {
       for (final term in record.searchTerms) {
         if (term.toLowerCase().contains(q)) return 65;

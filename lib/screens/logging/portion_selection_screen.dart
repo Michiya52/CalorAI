@@ -182,7 +182,9 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Estimated portion: ${widget.suggestion.estimatedPortionGrams.toStringAsFixed(0)}g • AI confidence: ${widget.suggestion.effectiveConfidencePercent}%',
+              widget.suggestion.confidence.isNotEmpty
+                  ? 'Estimated portion: ${widget.suggestion.estimatedPortionGrams.toStringAsFixed(0)}g • AI confidence: ${widget.suggestion.effectiveConfidencePercent}%'
+                  : 'Estimated portion: ${widget.suggestion.estimatedPortionGrams.toStringAsFixed(0)}g',
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 12,
@@ -202,7 +204,26 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                 style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+            if (widget.suggestion.myfcdMatch?.ingredients.isNotEmpty == true) ...[
+              Text('Ingredients', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+              const SizedBox(height: 4),
+              Text(
+                widget.suggestion.myfcdMatch!.ingredients.join(', '),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+              ),
+              const SizedBox(height: 24),
+            ] else if (widget.suggestion.mainIngredients.isNotEmpty && !['General', 'Other'].contains(widget.suggestion.mainIngredients.first)) ...[
+              Text('Main Ingredients', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+              const SizedBox(height: 4),
+              Text(
+                widget.suggestion.mainIngredients.join(', '),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+              ),
+              const SizedBox(height: 24),
+            ] else ...[
+              const SizedBox(height: 8),
+            ],
 
             // Portion selector
             Text('Select Portion',

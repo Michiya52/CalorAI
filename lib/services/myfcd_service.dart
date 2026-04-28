@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import '../models/food_item.dart';
 import '../models/food_suggestion.dart';
 import 'firestore_service.dart';
 
@@ -8,17 +10,40 @@ class MyFCDService {
 
   Future<FoodSuggestion> crossReference(FoodSuggestion suggestion) async {
     try {
-      final candidateQueries = <String>{
+      // Phase 1: Search dish names in parallel (fast path)
+      final nameQueries = <String>{
         suggestion.dishNameEn,
         suggestion.dishNameMy,
-        ...suggestion.mainIngredients.take(3),
-      }.where((query) => query.trim().isNotEmpty);
+      }.where((q) => q.trim().isNotEmpty).toList();
 
-      final candidates = <String, dynamic>{};
-      for (final query in candidateQueries) {
-        final results = await _firestore.searchFoods(query);
-        for (final result in results) {
-          candidates[result.id] = result;
+      final nameResults = await Future.wait(
+        nameQueries.map((q) => _firestore.searchFoods(q, limit: 5)),
+      );
+
+      // Collect unique matches
+      final candidates = <String, FoodItem>{};
+      for (final results in nameResults) {
+        for (final item in results) {
+          candidates[item.id] = item;
+        }
+      }
+
+      // Phase 2: Only search ingredients if names didn't match
+      if (candidates.isEmpty) {
+        final ingredientQueries = suggestion.mainIngredients
+            .take(2)
+            .where((q) => q.trim().isNotEmpty)
+            .toList();
+
+        if (ingredientQueries.isNotEmpty) {
+          final ingredientResults = await Future.wait(
+            ingredientQueries.map((q) => _firestore.searchFoods(q, limit: 3)),
+          );
+          for (final results in ingredientResults) {
+            for (final item in results) {
+              candidates[item.id] = item;
+            }
+          }
         }
       }
 
@@ -35,7 +60,8 @@ class MyFCDService {
           source: 'MyFCD',
         );
       }
-    } catch (_) {
+    } catch (e) {
+      debugPrint('MyFCDService.crossReference failed: $e');
       // Fall through to AI estimate fallback when Firestore lookup fails.
     }
 
@@ -55,3 +81,4 @@ class MyFCDService {
           List<FoodSuggestion> suggestions) =>
       Future.wait(suggestions.map(crossReference));
 }
+

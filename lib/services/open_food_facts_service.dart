@@ -80,7 +80,7 @@ class OpenFoodFactsService {
     final kcal = (nutriments['energy-kcal_100g'] as num?)?.toDouble() ??
         ((nutriments['energy-kj_100g'] as num?)?.toDouble() ?? 0) / 4.184;
 
-    if (kcal <= 0) return null;
+    // Allow zero-calorie items (water, black coffee, tea, etc.)
 
     final id = 'off_${p['code'] ?? name.hashCode}';
     final servingSize =
@@ -101,6 +101,12 @@ class OpenFoodFactsService {
       fatsPer100g: (nutriments['fat_100g'] as num?)?.toDouble() ?? 0,
       sodiumPer100g: (nutriments['sodium_100g'] as num?)?.toDouble() ?? 0,
       sugarPer100g: (nutriments['sugars_100g'] as num?)?.toDouble() ?? 0,
+      ingredients: (p['ingredients_text'] as String?)
+              ?.split(',')
+              .map((i) => i.trim())
+              .where((i) => i.isNotEmpty)
+              .toList() ??
+          [],
       portionSizes: PortionSizes(
         smallGrams: (servingSize * 0.6).roundToDouble(),
         mediumGrams: servingSize.roundToDouble(),
