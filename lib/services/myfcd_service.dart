@@ -57,6 +57,8 @@ class MyFCDService {
           resolvedProteinG: match.proteinPer100g * factor,
           resolvedCarbsG: match.carbsPer100g * factor,
           resolvedFatsG: match.fatsPer100g * factor,
+          resolvedSodiumG: match.sodiumPer100g * factor,
+          resolvedSugarG: match.sugarPer100g * factor,
           source: 'MyFCD',
         );
       }

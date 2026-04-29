@@ -17,6 +17,8 @@ class FoodSuggestion {
   final double? resolvedProteinG;
   final double? resolvedCarbsG;
   final double? resolvedFatsG;
+  final double? resolvedSodiumG;
+  final double? resolvedSugarG;
   final String source; // 'MyFCD' | 'AI Estimate'
 
   const FoodSuggestion({
@@ -34,6 +36,8 @@ class FoodSuggestion {
     this.resolvedProteinG,
     this.resolvedCarbsG,
     this.resolvedFatsG,
+    this.resolvedSodiumG,
+    this.resolvedSugarG,
     this.source = 'AI Estimate',
   });
 
@@ -66,6 +70,8 @@ class FoodSuggestion {
     double? resolvedProteinG,
     double? resolvedCarbsG,
     double? resolvedFatsG,
+    double? resolvedSodiumG,
+    double? resolvedSugarG,
     String? source,
     int? confidencePercent,
     double? caloricDensity,
@@ -84,6 +90,8 @@ class FoodSuggestion {
       resolvedProteinG: resolvedProteinG ?? this.resolvedProteinG,
       resolvedCarbsG: resolvedCarbsG ?? this.resolvedCarbsG,
       resolvedFatsG: resolvedFatsG ?? this.resolvedFatsG,
+      resolvedSodiumG: resolvedSodiumG ?? this.resolvedSodiumG,
+      resolvedSugarG: resolvedSugarG ?? this.resolvedSugarG,
       source: source ?? this.source,
       caloricDensity: caloricDensity ?? this.caloricDensity,
     );

@@ -11,16 +11,67 @@ import 'providers/meal_provider.dart';
 import 'providers/chatbot_provider.dart';
 import 'providers/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_performance/firebase_performance.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 import 'theme.dart';
 import 'utils/seed_data.dart';
+ 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  debugPrint('Handling a background message: ${message.messageId}');
+}
 
-Future<void> _initializeFirebaseWithRetry({int maxAttempts = 3}) async {
+Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
   for (var attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      
+      // 1. Crashlytics - Fatal error reporting
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      
+      // 2. Performance Monitoring
+      await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
+      
+      // 3. App Check - Security (using debug provider for development)
+      await FirebaseAppCheck.instance.activate(
+        providerAndroid: AndroidDebugProvider(),
+        providerApple: AppleDebugProvider(),
+      );
+
+      // 4. Analytics - Engagement tracking
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+      await FirebaseAnalytics.instance.logAppOpen();
+
+      // 5. Messaging - Notification permissions & background handling
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      final messaging = FirebaseMessaging.instance;
+      await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        provisional: false,
+        sound: true,
+      );
+
+      // 6. Remote Config - OTA updates
+      final remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(minutes: 1),
+        minimumFetchInterval: const Duration(hours: 1),
+      ));
+      await remoteConfig.setDefaults(const {
+        'ai_confidence_threshold': 0.5,
+        'maintenance_mode': false,
+      });
+      await remoteConfig.fetchAndActivate();
+      
       return;
     } catch (e) {
       final message = e.toString();
@@ -31,8 +82,9 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 3}) async {
         rethrow;
       }
 
-      // Give desktop plugin channels a moment to settle before retrying.
-      await Future<void>.delayed(Duration(milliseconds: 200 * attempt));
+      debugPrint('Firebase init attempt $attempt failed (channel-error), retrying in ${500 * attempt}ms...');
+      // Give plugin channels time to settle — emulators can be very slow.
+      await Future<void>.delayed(Duration(milliseconds: 500 * attempt));
     }
   }
 }
@@ -92,21 +144,33 @@ class CalorAIApp extends StatefulWidget {
 }
 
 class _CalorAIAppState extends State<CalorAIApp> {
-  late final AuthProvider _authProvider;
-  late final GoRouter _router;
+  AuthProvider? _authProvider;
+  GoRouter? _router;
 
   @override
   void initState() {
     super.initState();
+    if (widget.firebaseReady) {
+      _initializeProviders();
+    }
+  }
+
+  @override
+  void didUpdateWidget(CalorAIApp oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.firebaseReady && !oldWidget.firebaseReady) {
+      _initializeProviders();
+    }
+  }
+
+  void _initializeProviders() {
     _authProvider = AuthProvider();
-    _router = AppRouter.create(_authProvider);
+    _router = AppRouter.create(_authProvider!);
   }
 
   @override
   void dispose() {
-    // Note: Do not dispose _authProvider here if it's managed by ChangeNotifierProvider.value?
-    // Actually ChangeNotifierProvider.value DOES NOT dispose. So we should dispose it.
-    _authProvider.dispose();
+    _authProvider?.dispose();
     super.dispose();
   }
 
@@ -125,7 +189,7 @@ class _CalorAIAppState extends State<CalorAIApp> {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: _authProvider),
+        ChangeNotifierProvider.value(value: _authProvider!),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => MealProvider()),

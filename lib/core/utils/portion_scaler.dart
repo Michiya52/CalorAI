@@ -19,6 +19,8 @@ class PortionScaler {
       'proteinG': food.proteinPer100g * factor,
       'carbsG': food.carbsPer100g * factor,
       'fatsG': food.fatsPer100g * factor,
+      'sodiumG': food.sodiumPer100g * factor,
+      'sugarG': food.sugarPer100g * factor,
       'portionGrams': grams,
     };
   }

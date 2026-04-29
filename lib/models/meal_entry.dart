@@ -7,6 +7,8 @@ class IngredientDetail {
   final double proteinG;
   final double carbsG;
   final double fatsG;
+  final double? sodiumG;
+  final double? sugarG;
   final String? sourceId;
 
   const IngredientDetail({
@@ -16,6 +18,8 @@ class IngredientDetail {
     required this.proteinG,
     required this.carbsG,
     required this.fatsG,
+    this.sodiumG,
+    this.sugarG,
     this.sourceId,
   });
 
@@ -27,6 +31,8 @@ class IngredientDetail {
       proteinG: (map['proteinG'] as num).toDouble(),
       carbsG: (map['carbsG'] as num).toDouble(),
       fatsG: (map['fatsG'] as num).toDouble(),
+      sodiumG: (map['sodiumG'] as num?)?.toDouble(),
+      sugarG: (map['sugarG'] as num?)?.toDouble(),
       sourceId: map['sourceId'] as String?,
     );
   }
@@ -39,6 +45,8 @@ class IngredientDetail {
       'proteinG': proteinG,
       'carbsG': carbsG,
       'fatsG': fatsG,
+      'sodiumG': sodiumG,
+      'sugarG': sugarG,
       'sourceId': sourceId,
     };
   }
@@ -57,6 +65,8 @@ class MealEntry {
   final double proteinG;
   final double carbsG;
   final double fatsG;
+  final double? sodiumG;
+  final double? sugarG;
   final String portionLabel; // 'Small' | 'Medium' | 'Large' | 'Custom'
   final double portionGrams;
   final String? aiConfidence; // 'low' | 'medium' | 'high' | null
@@ -77,6 +87,8 @@ class MealEntry {
     required this.proteinG,
     required this.carbsG,
     required this.fatsG,
+    this.sodiumG,
+    this.sugarG,
     required this.portionLabel,
     required this.portionGrams,
     this.aiConfidence,
@@ -103,6 +115,8 @@ class MealEntry {
         proteinG: (map['proteinG'] as num).toDouble(),
         carbsG: (map['carbsG'] as num).toDouble(),
         fatsG: (map['fatsG'] as num).toDouble(),
+        sodiumG: (map['sodiumG'] as num?)?.toDouble(),
+        sugarG: (map['sugarG'] as num?)?.toDouble(),
         portionLabel: map['portionLabel'] as String,
         portionGrams: (map['portionGrams'] as num).toDouble(),
         aiConfidence: map['aiConfidence'] as String?,
@@ -127,6 +141,8 @@ class MealEntry {
         'proteinG': proteinG,
         'carbsG': carbsG,
         'fatsG': fatsG,
+        'sodiumG': sodiumG,
+        'sugarG': sugarG,
         'portionLabel': portionLabel,
         'portionGrams': portionGrams,
         'aiConfidence': aiConfidence,
@@ -149,6 +165,8 @@ class MealEntry {
     double? proteinG,
     double? carbsG,
     double? fatsG,
+    double? sodiumG,
+    double? sugarG,
     String? portionLabel,
     double? portionGrams,
     String? aiConfidence,
@@ -169,6 +187,8 @@ class MealEntry {
         proteinG: proteinG ?? this.proteinG,
         carbsG: carbsG ?? this.carbsG,
         fatsG: fatsG ?? this.fatsG,
+        sodiumG: sodiumG ?? this.sodiumG,
+        sugarG: sugarG ?? this.sugarG,
         portionLabel: portionLabel ?? this.portionLabel,
         portionGrams: portionGrams ?? this.portionGrams,
         aiConfidence: aiConfidence ?? this.aiConfidence,

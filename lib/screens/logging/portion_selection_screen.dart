@@ -125,6 +125,8 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
       proteinG: _displayProtein,
       carbsG: _displayCarbs,
       fatsG: _displayFats,
+      sodiumG: _displaySodium,
+      sugarG: _displaySugar,
       portionLabel: _selectedPortion,
       portionGrams: _displayGrams,
       aiConfidence: widget.suggestion.confidence,

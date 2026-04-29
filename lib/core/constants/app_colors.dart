@@ -39,7 +39,7 @@ class AppColors {
   static const error = AppTheme.error;
 
   static const myfcdBadge = Color(0xFF3B82F6);
-  static const aiBadge = Color(0xFF8B5CF6);
+  static const aiBadge = AppTheme.tertiary;
 
   // ─── Gradient Helpers ────────────────────────────────────────────────
 

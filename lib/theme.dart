@@ -4,43 +4,43 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   // ─── "Forest & Aura" Color Palette ───────────────────────────────────
 
-  // Primary — Emerald Green
-  static const Color primary = Color(0xFF10B981);
+  // Primary — Vibrant Mint/Emerald
+  static const Color primary = Color(0xFF05CE91);
   static const Color onPrimary = Color(0xFFFFFFFF);
-  static const Color primaryContainer = Color(0xFF064E3B);
-  static const Color onPrimaryContainer = Color(0xFFD1FAE5);
-  static const Color primaryFixed = Color(0xFFA7F3D0);
-  static const Color onPrimaryFixed = Color(0xFF064E3B);
+  static const Color primaryContainer = Color(0xFF003824);
+  static const Color onPrimaryContainer = Color(0xFF8AF8D4);
+  static const Color primaryFixed = Color(0xFF8AF8D4);
+  static const Color onPrimaryFixed = Color(0xFF003824);
 
-  // Secondary — Warm Peach / Amber
-  static const Color secondary = Color(0xFFF59E0B);
+  // Secondary — Vibrant Coral/Orange
+  static const Color secondary = Color(0xFFFF6B4A);
   static const Color onSecondary = Color(0xFFFFFFFF);
-  static const Color secondaryContainer = Color(0xFFFEF3C7);
-  static const Color onSecondaryContainer = Color(0xFF78350F);
-  static const Color secondaryFixed = Color(0xFFFDE68A);
-  static const Color onSecondaryFixed = Color(0xFF451A03);
+  static const Color secondaryContainer = Color(0xFFFFDADA);
+  static const Color onSecondaryContainer = Color(0xFF410000);
+  static const Color secondaryFixed = Color(0xFFFFDADA);
+  static const Color onSecondaryFixed = Color(0xFF410000);
 
-  // Tertiary — Aura Violet
-  static const Color tertiary = Color(0xFF8B5CF6);
+  // Tertiary — Vibrant Blue
+  static const Color tertiary = Color(0xFF007BFF);
   static const Color onTertiary = Color(0xFFFFFFFF);
-  static const Color tertiaryContainer = Color(0xFFDDD6FE);
-  static const Color onTertiaryContainer = Color(0xFF4C1D95);
-  static const Color tertiaryFixed = Color(0xFFEDE9FE);
-  static const Color onTertiaryFixed = Color(0xFF1E1B4B);
+  static const Color tertiaryContainer = Color(0xFFCCE5FF);
+  static const Color onTertiaryContainer = Color(0xFF004085);
+  static const Color tertiaryFixed = Color(0xFFCCE5FF);
+  static const Color onTertiaryFixed = Color(0xFF004085);
 
-  // Surfaces — Warm Gray
-  static const Color surface = Color(0xFFF8FAFC);
-  static const Color onSurface = Color(0xFF0F172A);
-  static const Color onSurfaceVariant = Color(0xFF64748B);
+  // Surfaces — Subtle Light Mode
+  static const Color surface = Color(0xFFFAFCFB);
+  static const Color onSurface = Color(0xFF1C1D1D);
+  static const Color onSurfaceVariant = Color(0xFF6F7477);
   static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
-  static const Color surfaceContainerLow = Color(0xFFF1F5F9);
-  static const Color surfaceContainer = Color(0xFFE2E8F0);
-  static const Color surfaceContainerHigh = Color(0xFFCBD5E1);
-  static const Color surfaceContainerHighest = Color(0xFF94A3B8);
+  static const Color surfaceContainerLow = Color(0xFFF4F7F6);
+  static const Color surfaceContainer = Color(0xFFEDF1F0);
+  static const Color surfaceContainerHigh = Color(0xFFE7EBEA);
+  static const Color surfaceContainerHighest = Color(0xFFE1E5E4);
 
   // Outline
-  static const Color outline = Color(0xFF64748B);
-  static const Color outlineVariant = Color(0xFFE2E8F0);
+  static const Color outline = Color(0xFF757A79);
+  static const Color outlineVariant = Color(0xFFC3C8C7);
 
   // Error
   static const Color error = Color(0xFFEF4444);
@@ -50,27 +50,27 @@ class AppTheme {
 
   // ─── Dark Theme Palette ──────────────────────────────────────────────
 
-  static const Color darkPrimary = Color(0xFF34D399);
-  static const Color darkOnPrimary = Color(0xFF064E3B);
-  static const Color darkPrimaryContainer = Color(0xFF065F46);
-  static const Color darkOnPrimaryContainer = Color(0xFFD1FAE5);
+  static const Color darkPrimary = Color(0xFF26E0A6);
+  static const Color darkOnPrimary = Color(0xFF003824);
+  static const Color darkPrimaryContainer = Color(0xFF005236);
+  static const Color darkOnPrimaryContainer = Color(0xFF8AF8D4);
 
-  static const Color darkSecondary = Color(0xFFFBBF24);
-  static const Color darkOnSecondary = Color(0xFF451A03);
-  static const Color darkSecondaryContainer = Color(0xFF78350F);
-  static const Color darkOnSecondaryContainer = Color(0xFFFEF3C7);
+  static const Color darkSecondary = Color(0xFFFFB4A1);
+  static const Color darkOnSecondary = Color(0xFF5E1605);
+  static const Color darkSecondaryContainer = Color(0xFF7E2C19);
+  static const Color darkOnSecondaryContainer = Color(0xFFFFDADA);
 
-  static const Color darkTertiary = Color(0xFFA78BFA);
-  static const Color darkOnTertiary = Color(0xFF2E1065);
-  static const Color darkTertiaryContainer = Color(0xFF4C1D95);
-  static const Color darkOnTertiaryContainer = Color(0xFFDDD6FE);
+  static const Color darkTertiary = Color(0xFF66B2FF);
+  static const Color darkOnTertiary = Color(0xFF002752);
+  static const Color darkTertiaryContainer = Color(0xFF004085);
+  static const Color darkOnTertiaryContainer = Color(0xFFCCE5FF);
 
-  static const Color darkSurface = Color(0xFF0F172A);
-  static const Color darkOnSurface = Color(0xFFF1F5F9);
-  static const Color darkOnSurfaceVariant = Color(0xFF94A3B8);
+  static const Color darkSurface = Color(0xFF101413);
+  static const Color darkOnSurface = Color(0xFFE1E3E2);
+  static const Color darkOnSurfaceVariant = Color(0xFFBFC4C3);
 
-  static const Color darkOutline = Color(0xFF475569);
-  static const Color darkOutlineVariant = Color(0xFF1E293B);
+  static const Color darkOutline = Color(0xFF898E8D);
+  static const Color darkOutlineVariant = Color(0xFF3F4443);
 
   static const Color darkError = Color(0xFFF87171);
   static const Color darkOnError = Color(0xFF450A0A);
@@ -80,19 +80,19 @@ class AppTheme {
   // ─── Gradient helpers ────────────────────────────────────────────────
 
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFF10B981), Color(0xFF059669)],
+    colors: [Color(0xFF05CE91), Color(0xFF00A26F)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient auraGradient = LinearGradient(
-    colors: [Color(0xFF8B5CF6), Color(0xFF6366F1)],
+    colors: [Color(0xFF007BFF), Color(0xFFFF6B4A)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient darkPrimaryGradient = LinearGradient(
-    colors: [Color(0xFF34D399), Color(0xFF10B981)],
+    colors: [Color(0xFF26E0A6), Color(0xFF05CE91)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

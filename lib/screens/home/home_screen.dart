@@ -33,30 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBody: true,
       body: widget.child,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        width: 64,
-        height: 64,
-        decoration: BoxDecoration(
-          gradient: AppColors.primaryGradient,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.4),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: _showLogMenu,
-            customBorder: const CircleBorder(),
-            child: const Icon(Icons.add_rounded, color: Colors.white, size: 32),
-          ),
-        ),
-      ),
       bottomNavigationBar: _GlassBottomBar(
         selectedIndex: _selectedIndex,
         isDark: isDark,
@@ -64,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() => _selectedIndex = index);
           context.go(_routes[index]);
         },
+        onAddTap: _showLogMenu,
       ),
     );
   }
@@ -192,11 +169,13 @@ class _GlassBottomBar extends StatelessWidget {
   final int selectedIndex;
   final bool isDark;
   final ValueChanged<int> onTap;
+  final VoidCallback onAddTap;
 
   const _GlassBottomBar({
     required this.selectedIndex,
     required this.isDark,
     required this.onTap,
+    required this.onAddTap,
   });
 
   @override
@@ -241,7 +220,30 @@ class _GlassBottomBar extends StatelessWidget {
                   isDark: isDark,
                   onTap: () => onTap(1),
                 ),
-                const SizedBox(width: 48), // Padding for Floating FAB
+                // The Add Button
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.primaryGradient,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: onAddTap,
+                      customBorder: const CircleBorder(),
+                      child: const Icon(Icons.add_rounded, color: Colors.white, size: 30),
+                    ),
+                  ),
+                ),
                 _NavItem(
                   icon: Icons.auto_awesome_outlined,
                   activeIcon: Icons.auto_awesome,

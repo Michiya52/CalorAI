@@ -187,7 +187,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           // Input bar
           Consumer<ChatbotProvider>(
             builder: (context, chatbot, _) => Container(
-              margin: const EdgeInsets.only(bottom: 100), // Avoid Bottom Nav Bar
+              margin: const EdgeInsets.only(bottom: 110), // Clears 76px nav + 24px padding + 10px gap
               decoration: BoxDecoration(
                 color: isDark
                     ? const Color(0xFF1E293B).withValues(alpha: 0.9)
@@ -207,6 +207,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                   child: SafeArea(
                     top: false,
+                    bottom: false, // Don't double-pad with the margin
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                       child: Row(
@@ -550,7 +551,7 @@ class _ChatHistorySheet extends StatelessWidget {
 
                 return ListView.separated(
                   shrinkWrap: true,
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 120), // Avoid Bottom Nav Bar
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
                   itemCount: sessions.length,
                   separatorBuilder: (_, __) =>
                       const Divider(height: 1, indent: 56),
