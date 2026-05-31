@@ -47,3 +47,4 @@ app.*.map.json
 
 # Ignored Scripts and Playgrounds
 ignored_scripts/
+zzresource_build/
