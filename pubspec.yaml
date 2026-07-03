@@ -30,10 +30,8 @@ dependencies:
   image_picker: ^1.1.2
 
   # Charts
-  fl_chart: ^0.70.2
 
   # UI Utilities
-  lottie: ^3.3.0
   google_fonts: ^6.2.1
   cached_network_image: ^3.4.1
 
