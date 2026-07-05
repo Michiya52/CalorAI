@@ -1,6 +1,6 @@
 [
   {
-    "nameEn": "Apple (Raw)",
+    "nameEn": "Apple",
     "nameMy": "Epal",
     "foodGroup": "Fruits",
     "caloriesPer100g": 52.0,
@@ -21,7 +21,7 @@
     "myfcdCode": "CB001"
   },
   {
-    "nameEn": "Banana (Raw)",
+    "nameEn": "Banana",
     "nameMy": "Pisang",
     "foodGroup": "Fruits",
     "caloriesPer100g": 89.0,
@@ -42,7 +42,7 @@
     "myfcdCode": "CB002"
   },
   {
-    "nameEn": "Broccoli (Raw)",
+    "nameEn": "Broccoli",
     "nameMy": "Brokoli",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 34.0,
@@ -63,7 +63,7 @@
     "myfcdCode": "CB003"
   },
   {
-    "nameEn": "Chicken Breast (Raw, Skinless)",
+    "nameEn": "Chicken Breast",
     "nameMy": "Dada Ayam",
     "foodGroup": "Meats",
     "caloriesPer100g": 120.0,
@@ -84,7 +84,7 @@
     "myfcdCode": "CB004"
   },
   {
-    "nameEn": "Salmon (Raw, Atlantic)",
+    "nameEn": "Salmon",
     "nameMy": "Ikan Salmon",
     "foodGroup": "Seafood",
     "caloriesPer100g": 208.0,
@@ -105,7 +105,7 @@
     "myfcdCode": "CB005"
   },
   {
-    "nameEn": "Egg (Whole, Raw)",
+    "nameEn": "Egg",
     "nameMy": "Telur",
     "foodGroup": "Dairy & Eggs",
     "caloriesPer100g": 143.0,
@@ -126,7 +126,7 @@
     "myfcdCode": "CB006"
   },
   {
-    "nameEn": "Oats (Rolled, Raw)",
+    "nameEn": "Oats",
     "nameMy": "Oat",
     "foodGroup": "Cereals & Grains",
     "caloriesPer100g": 379.0,
@@ -147,7 +147,7 @@
     "myfcdCode": "CB007"
   },
   {
-    "nameEn": "Almonds (Raw)",
+    "nameEn": "Almonds",
     "nameMy": "Kacang Badam",
     "foodGroup": "Nuts & Seeds",
     "caloriesPer100g": 579.0,
@@ -168,7 +168,7 @@
     "myfcdCode": "CB008"
   },
   {
-    "nameEn": "Avocado (Raw)",
+    "nameEn": "Avocado",
     "nameMy": "Avokado",
     "foodGroup": "Fruits",
     "caloriesPer100g": 160.0,
@@ -189,7 +189,7 @@
     "myfcdCode": "CB009"
   },
   {
-    "nameEn": "Sweet Potato (Raw)",
+    "nameEn": "Sweet Potato",
     "nameMy": "Keledek",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 86.0,
@@ -210,7 +210,7 @@
     "myfcdCode": "CB010"
   },
   {
-    "nameEn": "Brown Rice (Cooked)",
+    "nameEn": "Brown Rice",
     "nameMy": "Nasi Perang",
     "foodGroup": "Rice Dishes",
     "caloriesPer100g": 112.0,
@@ -232,7 +232,7 @@
     "myfcdCode": "CB011"
   },
   {
-    "nameEn": "Lentils (Cooked)",
+    "nameEn": "Lentils",
     "nameMy": "Kacang Dal",
     "foodGroup": "Legumes",
     "caloriesPer100g": 116.0,
@@ -254,7 +254,7 @@
     "myfcdCode": "CB012"
   },
   {
-    "nameEn": "Spinach (Raw)",
+    "nameEn": "Spinach",
     "nameMy": "Bayam",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 23.0,
@@ -275,7 +275,7 @@
     "myfcdCode": "CB013"
   },
   {
-    "nameEn": "Tofu (Firm)",
+    "nameEn": "Tofu",
     "nameMy": "Tauhu",
     "foodGroup": "Legumes",
     "caloriesPer100g": 144.0,
@@ -298,7 +298,7 @@
     "myfcdCode": "CB014"
   },
   {
-    "nameEn": "Quinoa (Cooked)",
+    "nameEn": "Quinoa",
     "nameMy": "Quinoa",
     "foodGroup": "Cereals & Grains",
     "caloriesPer100g": 120.0,
@@ -320,7 +320,7 @@
     "myfcdCode": "CB015"
   },
   {
-    "nameEn": "Peanut Butter (Smooth)",
+    "nameEn": "Peanut Butter",
     "nameMy": "Mentega Kacang",
     "foodGroup": "Spreads",
     "caloriesPer100g": 588.0,
@@ -342,7 +342,7 @@
     "myfcdCode": "CB016"
   },
   {
-    "nameEn": "Greek Yogurt (Plain, Non-fat)",
+    "nameEn": "Greek Yogurt",
     "nameMy": "Yogurt Greek",
     "foodGroup": "Dairy & Eggs",
     "caloriesPer100g": 59.0,
@@ -364,7 +364,7 @@
     "myfcdCode": "CB017"
   },
   {
-    "nameEn": "Olive Oil (Extra Virgin)",
+    "nameEn": "Olive Oil",
     "nameMy": "Minyak Zaitun",
     "foodGroup": "Fats & Oils",
     "caloriesPer100g": 884.0,
@@ -385,7 +385,7 @@
     "myfcdCode": "CB018"
   },
   {
-    "nameEn": "Blueberries (Raw)",
+    "nameEn": "Blueberries",
     "nameMy": "Beri Biru",
     "foodGroup": "Fruits",
     "caloriesPer100g": 57.0,
@@ -406,7 +406,7 @@
     "myfcdCode": "CB019"
   },
   {
-    "nameEn": "Chia Seeds (Dried)",
+    "nameEn": "Chia Seeds",
     "nameMy": "Biji Chia",
     "foodGroup": "Nuts & Seeds",
     "caloriesPer100g": 486.0,
@@ -427,7 +427,7 @@
     "myfcdCode": "CB020"
   },
   {
-    "nameEn": "Edamame (Frozen, Prepared)",
+    "nameEn": "Edamame",
     "nameMy": "Edamame",
     "foodGroup": "Legumes",
     "caloriesPer100g": 121.0,
@@ -448,7 +448,7 @@
     "myfcdCode": "CB021"
   },
   {
-    "nameEn": "Chickpeas (Canned)",
+    "nameEn": "Chickpeas",
     "nameMy": "Kacang Kuda",
     "foodGroup": "Legumes",
     "caloriesPer100g": 139.0,
@@ -471,7 +471,7 @@
     "myfcdCode": "CB022"
   },
   {
-    "nameEn": "Cottage Cheese (2% Milkfat)",
+    "nameEn": "Cottage Cheese",
     "nameMy": "Keju Kotej",
     "foodGroup": "Dairy & Eggs",
     "caloriesPer100g": 86.0,
@@ -494,7 +494,7 @@
     "myfcdCode": "CB023"
   },
   {
-    "nameEn": "Carrots (Raw)",
+    "nameEn": "Carrots",
     "nameMy": "Lobak Merah",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 41.0,
@@ -515,7 +515,7 @@
     "myfcdCode": "CB024"
   },
   {
-    "nameEn": "Tomatoes (Raw)",
+    "nameEn": "Tomatoes",
     "nameMy": "Tomato",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 18.0,
@@ -536,7 +536,7 @@
     "myfcdCode": "CB025"
   },
   {
-    "nameEn": "Pork Chop (Raw, Lean)",
+    "nameEn": "Pork Chop",
     "nameMy": "Daging Babi",
     "foodGroup": "Meats",
     "caloriesPer100g": 130.0,
@@ -557,7 +557,7 @@
     "myfcdCode": "CB026"
   },
   {
-    "nameEn": "Shrimp (Raw)",
+    "nameEn": "Shrimp",
     "nameMy": "Udang",
     "foodGroup": "Seafood",
     "caloriesPer100g": 85.0,
@@ -578,7 +578,7 @@
     "myfcdCode": "CB027"
   },
   {
-    "nameEn": "Walnuts (Raw)",
+    "nameEn": "Walnuts",
     "nameMy": "Kacang Walnut",
     "foodGroup": "Nuts & Seeds",
     "caloriesPer100g": 654.0,
@@ -599,7 +599,7 @@
     "myfcdCode": "CB028"
   },
   {
-    "nameEn": "Strawberries (Raw)",
+    "nameEn": "Strawberries",
     "nameMy": "Strawberi",
     "foodGroup": "Fruits",
     "caloriesPer100g": 32.0,
@@ -620,7 +620,7 @@
     "myfcdCode": "CB029"
   },
   {
-    "nameEn": "Milk (Whole, 3.25%)",
+    "nameEn": "Milk",
     "nameMy": "Susu Lembu",
     "foodGroup": "Dairy & Eggs",
     "caloriesPer100g": 61.0,
@@ -662,7 +662,7 @@
     "myfcdCode": "CB031"
   },
   {
-    "nameEn": "Dark Chocolate (70-85%)",
+    "nameEn": "Dark Chocolate",
     "nameMy": "Coklat Gelap",
     "foodGroup": "Sugars & Sweets",
     "caloriesPer100g": 598.0,
@@ -685,7 +685,7 @@
     "myfcdCode": "CB032"
   },
   {
-    "nameEn": "Cabbage (Raw)",
+    "nameEn": "Cabbage",
     "nameMy": "Kobis",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 25.0,
@@ -706,7 +706,7 @@
     "myfcdCode": "CB033"
   },
   {
-    "nameEn": "Mushrooms (White, Raw)",
+    "nameEn": "Mushrooms",
     "nameMy": "Cendawan",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 22.0,
@@ -727,7 +727,7 @@
     "myfcdCode": "CB034"
   },
   {
-    "nameEn": "Pasta (Dry, Spaghetti)",
+    "nameEn": "Pasta",
     "nameMy": "Pasta",
     "foodGroup": "Cereals & Grains",
     "caloriesPer100g": 371.0,
@@ -748,7 +748,7 @@
     "myfcdCode": "CB035"
   },
   {
-    "nameEn": "Tuna (Canned in Water)",
+    "nameEn": "Tuna",
     "nameMy": "Tuna Tin",
     "foodGroup": "Seafood",
     "caloriesPer100g": 86.0,
@@ -771,7 +771,7 @@
     "myfcdCode": "CB036"
   },
   {
-    "nameEn": "Turkey Breast (Roasted)",
+    "nameEn": "Turkey Breast",
     "nameMy": "Dada Ayam Belanda",
     "foodGroup": "Meats",
     "caloriesPer100g": 135.0,
@@ -792,7 +792,7 @@
     "myfcdCode": "CB037"
   },
   {
-    "nameEn": "Potatoes (Baked, with skin)",
+    "nameEn": "Potatoes",
     "nameMy": "Kentang",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 93.0,
@@ -837,7 +837,7 @@
     "myfcdCode": "CB039"
   },
   {
-    "nameEn": "Beef (Ground, 90% Lean)",
+    "nameEn": "Beef",
     "nameMy": "Daging Kisar",
     "foodGroup": "Meats",
     "caloriesPer100g": 176.0,
@@ -858,7 +858,7 @@
     "myfcdCode": "CB040"
   },
   {
-    "nameEn": "Cucumber (Raw)",
+    "nameEn": "Cucumber",
     "nameMy": "Timun",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 15.0,
@@ -879,7 +879,7 @@
     "myfcdCode": "CB041"
   },
   {
-    "nameEn": "Watermelon (Raw)",
+    "nameEn": "Watermelon",
     "nameMy": "Tembikai",
     "foodGroup": "Fruits",
     "caloriesPer100g": 30.0,
@@ -900,7 +900,7 @@
     "myfcdCode": "CB042"
   },
   {
-    "nameEn": "Black Beans (Canned)",
+    "nameEn": "Black Beans",
     "nameMy": "Kacang Hitam",
     "foodGroup": "Legumes",
     "caloriesPer100g": 91.0,
@@ -923,7 +923,7 @@
     "myfcdCode": "CB043"
   },
   {
-    "nameEn": "Pineapple (Raw)",
+    "nameEn": "Pineapple",
     "nameMy": "Nanas",
     "foodGroup": "Fruits",
     "caloriesPer100g": 50.0,
@@ -944,7 +944,7 @@
     "myfcdCode": "CB044"
   },
   {
-    "nameEn": "Flour (All-purpose)",
+    "nameEn": "Flour",
     "nameMy": "Tepung Gandum",
     "foodGroup": "Cereals & Grains",
     "caloriesPer100g": 364.0,
@@ -965,7 +965,7 @@
     "myfcdCode": "CB045"
   },
   {
-    "nameEn": "Mango (Raw)",
+    "nameEn": "Mango",
     "nameMy": "Mangga",
     "foodGroup": "Fruits",
     "caloriesPer100g": 60.0,
@@ -986,7 +986,7 @@
     "myfcdCode": "CB046"
   },
   {
-    "nameEn": "Onions (Raw)",
+    "nameEn": "Onions",
     "nameMy": "Bawang",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 40.0,
@@ -1007,7 +1007,7 @@
     "myfcdCode": "CB047"
   },
   {
-    "nameEn": "Garlic (Raw)",
+    "nameEn": "Garlic",
     "nameMy": "Bawang Putih",
     "foodGroup": "Vegetables",
     "caloriesPer100g": 149.0,
@@ -1052,7 +1052,7 @@
     "myfcdCode": "CB049"
   },
   {
-    "nameEn": "Sugar (White, Granulated)",
+    "nameEn": "Sugar",
     "nameMy": "Gula Putih",
     "foodGroup": "Sugars & Sweets",
     "caloriesPer100g": 387.0,

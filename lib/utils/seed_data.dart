@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 /// Bump this when you update the food dataset to force a re-seed.
-const String _seedVersion = 'v16';
+const String _seedVersion = 'v17';
 const String _seedVersionKey = 'food_seed_version';
 
 Future<void> seedFoodsDatabase() async {
