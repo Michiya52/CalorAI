@@ -5,6 +5,8 @@ import '../../core/constants/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/meal_provider.dart';
+import '../../providers/chatbot_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,7 +26,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _loadProfile();
+      if (mounted) {
+        _loadProfile();
+        final uid = context.read<AuthProvider>().userId;
+        final profileProv = context.read<ProfileProvider>();
+        if (profileProv.profile == null && uid != null) {
+          profileProv.loadProfile(uid).then((_) {
+            if (mounted) _loadProfile();
+          });
+        }
+      }
     });
   }
 
@@ -184,6 +195,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (context, profileProv, _) {
           final profile = profileProv.profile;
           if (profile == null) {
+            if (profileProv.error != null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: const Icon(
+                          Icons.wifi_off_rounded,
+                          size: 48,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'Unable to connect',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          profileProv.error ?? 'Please check your connection and try again.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          final uid = context.read<AuthProvider>().userId;
+                          if (uid != null) {
+                            context.read<ProfileProvider>().loadProfile(uid).then((_) {
+                              if (mounted) _loadProfile();
+                            });
+                          }
+                        },
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: const Text('Try Again'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -392,6 +468,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 48,
                   child: OutlinedButton.icon(
                     onPressed: () async {
+                      context.read<ProfileProvider>().clear();
+                      context.read<MealProvider>().clear();
+                      context.read<ChatbotProvider>().clear();
+                      
                       await context.read<AuthProvider>().logout();
                       if (context.mounted) context.go('/login');
                     },

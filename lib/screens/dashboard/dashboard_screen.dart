@@ -58,11 +58,15 @@ class _DashboardScreenState extends State<DashboardScreen>
     if (uid == null) return;
 
     final profileProvider = context.read<ProfileProvider>();
-    if (profileProvider.profile == null) {
+    if (profileProvider.profile == null || profileProvider.profile!.uid != uid) {
       await profileProvider.loadProfile(uid);
     }
 
     if (mounted) {
+      if (profileProvider.profile == null && profileProvider.error == null) {
+        context.go('/setup');
+        return;
+      }
       final today = DateTime.now().toIso8601String().substring(0, 10);
       await context.read<MealProvider>().loadMealsForDate(uid, today);
     }
@@ -78,6 +82,71 @@ class _DashboardScreenState extends State<DashboardScreen>
         builder: (context, profileProv, mealProv, _) {
           final profile = profileProv.profile;
           if (profile == null) {
+            if (profileProv.error != null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: const Icon(
+                          Icons.wifi_off_rounded,
+                          size: 48,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'Unable to connect',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          profileProv.error ?? 'Please check your connection and try again.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      ElevatedButton.icon(
+                        onPressed: _loadData,
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: const Text('Try Again'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+            if (profileProv.hasLoaded && !profileProv.isLoading) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted && context.mounted) {
+                  context.go('/setup');
+                }
+              });
+            }
             return const Center(child: CircularProgressIndicator());
           }
 

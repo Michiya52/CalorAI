@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../core/constants/app_colors.dart';
 import '../../models/food_suggestion.dart';
-import '../../services/open_food_facts_service.dart';
+
 import '../../services/usda_service.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
@@ -22,14 +22,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      // 1. Try Open Food Facts
-      final offResult =
-          await OpenFoodFactsService.instance.getProductByBarcode(barcode);
 
-      if (offResult != null) {
-        _navigateToPortion(offResult);
-        return;
-      }
 
       // 2. Try USDA FDC
       final usdaResult =

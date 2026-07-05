@@ -16,7 +16,7 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
+// import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 import 'theme.dart';
 import 'utils/seed_data.dart';
@@ -35,23 +35,27 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
       );
       
       // 1. Crashlytics - Fatal error reporting
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      if (!kIsWeb) {
+        FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      }
       
       // 2. Performance Monitoring
       await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
       
       // 3. App Check - Security (using debug provider for development)
-      await FirebaseAppCheck.instance.activate(
-        providerAndroid: AndroidDebugProvider(),
-        providerApple: AppleDebugProvider(),
-      );
+      // await FirebaseAppCheck.instance.activate(
+      //   providerAndroid: AndroidDebugProvider(),
+      //   providerApple: AppleDebugProvider(),
+      // );
 
       // 4. Analytics - Engagement tracking
       await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
       await FirebaseAnalytics.instance.logAppOpen();
 
       // 5. Messaging - Notification permissions & background handling
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      if (!kIsWeb) {
+        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      }
       final messaging = FirebaseMessaging.instance;
       await messaging.requestPermission(
         alert: true,

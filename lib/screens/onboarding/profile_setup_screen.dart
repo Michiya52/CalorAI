@@ -6,6 +6,7 @@ import '../../core/utils/calorie_calculator.dart';
 import '../../models/user_profile.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/profile_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
   final UserProfile? initialProfile;
@@ -173,27 +174,47 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
       createdAt: existing?.createdAt ?? DateTime.now(),
     );
 
-    if (_isEditingExistingProfile) {
-      await profileProvider.updateProfile(uid, {
-        'name': profile.name,
-        'email': profile.email,
-        'heightCm': profile.heightCm,
-        'weightKg': profile.weightKg,
-        'age': profile.age,
-        'sex': profile.sex,
-        'activityLevel': profile.activityLevel,
-        'goal': profile.goal,
-        'calorieTarget': profile.calorieTarget,
-        'isCalorieTargetManual': profile.isCalorieTargetManual,
-        'isMacroTargetsManual': profile.isMacroTargetsManual,
-        'macroTargets': profile.macroTargets?.toMap(),
-      });
-      if (mounted) context.pop();
-      return;
-    }
+    try {
+      if (_isEditingExistingProfile) {
+        await profileProvider.updateProfile(uid, {
+          'name': profile.name,
+          'email': profile.email,
+          'heightCm': profile.heightCm,
+          'weightKg': profile.weightKg,
+          'age': profile.age,
+          'sex': profile.sex,
+          'activityLevel': profile.activityLevel,
+          'goal': profile.goal,
+          'calorieTarget': profile.calorieTarget,
+          'isCalorieTargetManual': profile.isCalorieTargetManual,
+          'isMacroTargetsManual': profile.isMacroTargetsManual,
+          'macroTargets': profile.macroTargets?.toMap(),
+        });
+        if (mounted) context.pop();
+        return;
+      }
 
-    await profileProvider.createProfile(profile);
-    if (mounted) context.go('/home');
+      await profileProvider.createProfile(profile);
+      if (mounted) context.go('/home');
+    } on FirebaseException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save profile: ${e.message ?? 'An error occurred'}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save profile: ${e.toString().split('\n').first}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -504,15 +525,29 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
                 flex: 2,
                 child: SizedBox(
                   height: 52,
-                  child: ElevatedButton(
-                    onPressed: _finish,
-                    child: Text(
-                      _isEditingExistingProfile
-                          ? 'Save Changes'
-                          : 'Finish Setup',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700),
-                    ),
+                  child: Consumer<ProfileProvider>(
+                    builder: (context, profileProv, _) {
+                      final isLoading = profileProv.isLoading;
+                      return ElevatedButton(
+                        onPressed: isLoading ? null : _finish,
+                        child: isLoading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                _isEditingExistingProfile
+                                    ? 'Save Changes'
+                                    : 'Finish Setup',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              ),
+                      );
+                    },
                   ),
                 ),
               ),

@@ -6,10 +6,10 @@ import '../../core/constants/app_colors.dart';
 import '../../models/food_item.dart';
 import '../../models/food_suggestion.dart';
 import '../../services/firestore_service.dart';
-import '../../services/open_food_facts_service.dart';
+
 import '../../services/usda_service.dart';
 
-enum _SearchSource { regional, openFoodFacts, usda }
+enum _SearchSource { regional, usda }
 
 class ManualSearchScreen extends StatefulWidget {
   const ManualSearchScreen({super.key});
@@ -21,7 +21,7 @@ class ManualSearchScreen extends StatefulWidget {
 class _ManualSearchScreenState extends State<ManualSearchScreen> {
   final _searchController = TextEditingController();
   final FirestoreService _firestore = FirestoreService();
-  final OpenFoodFactsService _off = OpenFoodFactsService.instance;
+
   final ScrollController _scrollController = ScrollController();
   Timer? _debounce;
   List<FoodItem> _results = [];
@@ -113,9 +113,6 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
           offset: fetchOffset,
           limit: _pageSize,
         );
-      } else if (_source == _SearchSource.openFoodFacts) {
-        final page = (fetchOffset / _pageSize).floor() + 1;
-        fetched = await _off.searchFoods(normalizedQuery, page: page);
       } else {
         fetched = await UsdaService.instance.searchFoods(normalizedQuery);
       }
@@ -206,10 +203,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                       value: _SearchSource.regional,
                       label: Text('MY+SG Database'),
                     ),
-                    ButtonSegment(
-                      value: _SearchSource.openFoodFacts,
-                      label: Text('Open Food Facts'),
-                    ),
+
                     ButtonSegment(
                       value: _SearchSource.usda,
                       label: Text('USDA (FOSS)'),
@@ -292,7 +286,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                     const SizedBox(height: 12),
                     Text(
                         _source == _SearchSource.regional
-                            ? 'No results in MY/SG data. Try Open Food Facts.'
+                            ? 'No results in MY/SG data. Try USDA.'
                             : 'No results found. Try another keyword.',
                         style: TextStyle(color: AppColors.textSecondary)),
                   ],
@@ -330,9 +324,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: food.source == 'OpenFoodFacts'
-                              ? AppColors.primary
-                              : AppColors.myfcdBadge,
+                          color: AppColors.myfcdBadge,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(_sourceLabel(food.source),
@@ -364,9 +356,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                           resolvedFatsG: food.fatsPer100g *
                               food.portionSizes.mediumGrams /
                               100,
-                          source: food.source == 'OpenFoodFacts'
-                              ? 'Open Food Facts'
-                              : 'MyFCD',
+                          source: food.source,
                         );
                         context.push('/log/portion', extra: suggestion);
                       },
@@ -381,7 +371,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
   }
 
   String _sourceLabel(String source) {
-    if (source == 'OpenFoodFacts') return 'Open Food Facts';
+
     if (source.startsWith('MyFCD')) return 'MyFCD';
     if (source.startsWith('USDA')) return 'USDA';
     if (source.startsWith('SG_')) return 'SG';

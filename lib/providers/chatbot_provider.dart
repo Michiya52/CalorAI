@@ -79,6 +79,7 @@ class ChatbotProvider extends ChangeNotifier {
   final List<Map<String, String>> _history = [];
   List<ChatSession> _savedSessions = [];
   String? _currentSessionId;
+  String? _currentUid;
   bool _isTyping = false;
 
   List<ChatMessage> get messages => List.unmodifiable(_messages);
@@ -86,9 +87,7 @@ class ChatbotProvider extends ChangeNotifier {
   bool get isTyping => _isTyping;
   bool get hasActiveChat => _messages.isNotEmpty;
 
-  ChatbotProvider() {
-    _loadSessions();
-  }
+  ChatbotProvider();
 
   // ── Memory / Summaries ──────────────────────────────────────────
 
@@ -110,8 +109,14 @@ class ChatbotProvider extends ChangeNotifier {
 ═══ PAST CONVERSATION MEMORY ═══
 The user has chatted before. Key points from recent conversations:
 $lines
-- Use this memory to provide continuity (e.g., "Last time you asked about..." or "You mentioned...")
-- Do NOT repeat this memory back to the user unless relevant to their question
+
+Memory usage rules:
+- Use this memory only when it helps provide continuity, personalization, or follow-up.
+- You may reference it naturally, for example: "Last time you mentioned..." or "You previously asked about..."
+- Do NOT repeat or summarize this memory unless it is relevant to the user's current question.
+- Do NOT treat memory as guaranteed current fact if the user may have changed their habits, meals, goals, or preferences.
+- If the current user message conflicts with memory, always prioritize the current message.
+- Do not invent details beyond what is written in this memory.
 ''';
   }
 
@@ -175,24 +180,32 @@ $lines
 
   // ── Persistence ──────────────────────────────────────────────────
 
-  Future<void> _loadSessions() async {
+  Future<void> loadUserSessions(String uid) async {
+    _currentUid = uid;
+    _messages.clear();
+    _history.clear();
+    _currentSessionId = null;
     try {
       final prefs = await SharedPreferences.getInstance();
-      final jsonStr = prefs.getString(_storageKey);
+      final jsonStr = prefs.getString('${_storageKey}_$uid');
       if (jsonStr != null) {
         final list = jsonDecode(jsonStr) as List;
         _savedSessions = list
             .map((e) => ChatSession.fromJson(e as Map<String, dynamic>))
             .toList();
         _savedSessions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        notifyListeners();
+      } else {
+        _savedSessions = [];
       }
+      notifyListeners();
     } catch (e) {
       debugPrint('Failed to load chat sessions: $e');
     }
   }
 
   Future<void> _saveSessions() async {
+    final uid = _currentUid;
+    if (uid == null) return;
     try {
       final prefs = await SharedPreferences.getInstance();
       // Enforce max sessions — oldest gets evicted, its memory is lost
@@ -201,10 +214,19 @@ $lines
       }
       final jsonStr =
           jsonEncode(_savedSessions.map((s) => s.toJson()).toList());
-      await prefs.setString(_storageKey, jsonStr);
+      await prefs.setString('${_storageKey}_$uid', jsonStr);
     } catch (e) {
       debugPrint('Failed to save chat sessions: $e');
     }
+  }
+
+  void clear() {
+    _messages.clear();
+    _history.clear();
+    _savedSessions = [];
+    _currentSessionId = null;
+    _currentUid = null;
+    notifyListeners();
   }
 
   Future<void> _autoSaveCurrentChat() async {
@@ -288,6 +310,7 @@ $lines
     required String uid,
     List<MealEntry> todaysMeals = const [],
   }) async {
+    _currentUid = uid;
     _messages.add(ChatMessage(text: text, isUser: true));
     _isTyping = true;
     notifyListeners();

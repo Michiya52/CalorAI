@@ -62,4 +62,9 @@ class MealProvider extends ChangeNotifier {
       String uid, String start, String end) async {
     return await _firestore.getMealsForDateRange(uid, start, end);
   }
+
+  void clear() {
+    _todaysMeals = [];
+    notifyListeners();
+  }
 }

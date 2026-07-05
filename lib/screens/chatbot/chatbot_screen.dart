@@ -20,6 +20,19 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   final _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final uid = context.read<AuthProvider>().userId;
+        if (uid != null) {
+          context.read<ChatbotProvider>().loadUserSessions(uid);
+        }
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
@@ -59,6 +72,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   void _showHistoryDrawer() {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (ctx) => _ChatHistorySheet(
