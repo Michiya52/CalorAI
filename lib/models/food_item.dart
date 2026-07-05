@@ -22,6 +22,10 @@ class PortionSizes {
       };
 }
 
+/// Represents a strict, immutable record straight from the local JSON/Firestore database.
+///
+/// Unlike [FoodSuggestion], which contains AI estimates and fuzzy guesses,
+/// a [FoodItem] is a ground-truth nutritional profile based on 100g servings.
 class FoodItem {
   final String id;
   final String nameEn;
@@ -69,8 +73,11 @@ class FoodItem {
         ingredients: (map['ingredients'] as List? ?? []).cast<String>(),
         portionSizes: map['portionSizes'] != null
             ? PortionSizes.fromMap(map['portionSizes'] as Map<String, dynamic>)
-            : const PortionSizes(smallGrams: 100, mediumGrams: 250, largeGrams: 400),
-        source: map['source'] as String? ?? 'Unknown',
+            : const PortionSizes(
+                smallGrams: 100, mediumGrams: 250, largeGrams: 400),
+        source: (map['myfcdCode'] as String? ?? '').startsWith('ESS')
+            ? 'Curated'
+            : (map['source'] as String? ?? 'MyFCD'),
         myfcdCode: map['myfcdCode'] as String? ?? '',
       );
 

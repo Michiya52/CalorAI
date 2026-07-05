@@ -6,6 +6,11 @@ import '../../services/firestore_service.dart';
 import '../../services/myfcd_service.dart';
 import '../../widgets/suggestion_card.dart';
 
+/// Displays the list of food guesses returned by the AI or database search.
+///
+/// When the user taps a specific card, this screen intercepts the tap and
+/// triggers the [MyFCDService.crossReference] method in the background to
+/// grab the exact nutritional data before pushing them to the portion selector.
 class SuggestionCardsScreen extends StatefulWidget {
   final List<FoodSuggestion> suggestions;
   const SuggestionCardsScreen({super.key, required this.suggestions});
@@ -23,16 +28,19 @@ class _SuggestionCardsScreenState extends State<SuggestionCardsScreen> {
 
     setState(() => _loadingIndex = index);
     try {
-      final enrichedSuggestion = await _referenceService.crossReference(
-        widget.suggestions[index],
-      );
+      final suggestion = widget.suggestions[index];
+      final enrichedSuggestion =
+          (suggestion.source == 'MyFCD' || suggestion.source == 'Curated')
+              ? suggestion
+              : await _referenceService.crossReference(suggestion);
       if (!mounted) return;
       context.push('/log/portion', extra: enrichedSuggestion);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Could not load food data: ${e.toString().split('\n').first}'),
+          content: Text(
+              'Could not load food data: ${e.toString().split('\n').first}'),
           action: SnackBarAction(
             label: 'Try again',
             onPressed: () => _onSuggestionTap(index),

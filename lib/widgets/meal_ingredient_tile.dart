@@ -24,7 +24,8 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.ingredient.grams.round().toString());
+    _controller =
+        TextEditingController(text: widget.ingredient.grams.round().toString());
   }
 
   @override
@@ -78,11 +79,18 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    _macroChip('🔥', '${widget.ingredient.calories} kcal', AppColors.primary),
+                    _macroChip('🔥', '${widget.ingredient.calories} kcal',
+                        AppColors.primary),
                     const SizedBox(width: 8),
-                    _macroChip('P', '${widget.ingredient.proteinG.toStringAsFixed(1)}g', Colors.blue),
+                    _macroChip(
+                        'P',
+                        '${widget.ingredient.proteinG.toStringAsFixed(1)}g',
+                        Colors.blue),
                     const SizedBox(width: 8),
-                    _macroChip('C', '${widget.ingredient.carbsG.toStringAsFixed(1)}g', AppColors.accent),
+                    _macroChip(
+                        'C',
+                        '${widget.ingredient.carbsG.toStringAsFixed(1)}g',
+                        AppColors.accent),
                   ],
                 ),
               ],
@@ -110,7 +118,8 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                         }
                       },
                       padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                      constraints:
+                          const BoxConstraints(minWidth: 32, minHeight: 32),
                     ),
                     SizedBox(
                       width: 45,
@@ -118,13 +127,17 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                         controller: _controller,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 13),
                         decoration: const InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.symmetric(vertical: 8),
                           border: InputBorder.none,
                           suffixText: 'g',
-                          suffixStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.normal, color: Colors.grey),
+                          suffixStyle: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey),
                         ),
                         onChanged: (val) {
                           final double? grams = double.tryParse(val);
@@ -136,9 +149,11 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.add, size: 16),
-                      onPressed: () => widget.onWeightChanged(widget.ingredient.grams + 10),
+                      onPressed: () =>
+                          widget.onWeightChanged(widget.ingredient.grams + 10),
                       padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                      constraints:
+                          const BoxConstraints(minWidth: 32, minHeight: 32),
                     ),
                   ],
                 ),
@@ -148,7 +163,10 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                 onTap: widget.onRemove,
                 child: const Text(
                   'Remove',
-                  style: TextStyle(color: AppColors.error, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: AppColors.error,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],

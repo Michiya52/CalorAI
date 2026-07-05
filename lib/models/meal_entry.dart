@@ -52,6 +52,11 @@ class IngredientDetail {
   }
 }
 
+/// Represents a single meal logged by the user.
+///
+/// This is the final, immutable record that gets saved to Firestore and tallied
+/// in the user's daily macro progress. It can represent a single food item OR
+/// a composite meal (using the [ingredients] list).
 class MealEntry {
   final String id;
   final String userId;
@@ -124,8 +129,7 @@ class MealEntry {
         caloricDensity: (map['caloricDensity'] as num?)?.toDouble(),
         ingredients: map['ingredients'] != null
             ? (map['ingredients'] as List)
-                .map((e) =>
-                    IngredientDetail.fromMap(e as Map<String, dynamic>))
+                .map((e) => IngredientDetail.fromMap(e as Map<String, dynamic>))
                 .toList()
             : null,
       );

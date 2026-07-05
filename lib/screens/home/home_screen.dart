@@ -59,13 +59,15 @@ class _LogMenuSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E293B).withValues(alpha: 0.95) : Colors.white.withValues(alpha: 0.95),
+          color: isDark
+              ? const Color(0xFF1E293B).withValues(alpha: 0.95)
+              : Colors.white.withValues(alpha: 0.95),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(
@@ -240,7 +242,8 @@ class _GlassBottomBar extends StatelessWidget {
                     child: InkWell(
                       onTap: onAddTap,
                       customBorder: const CircleBorder(),
-                      child: const Icon(Icons.add_rounded, color: Colors.white, size: 30),
+                      child: const Icon(Icons.add_rounded,
+                          color: Colors.white, size: 30),
                     ),
                   ),
                 ),
@@ -268,7 +271,6 @@ class _GlassBottomBar extends StatelessWidget {
     );
   }
 }
-
 
 class _NavItem extends StatelessWidget {
   final IconData icon;

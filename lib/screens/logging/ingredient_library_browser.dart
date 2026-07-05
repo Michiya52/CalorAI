@@ -13,11 +13,13 @@ class IngredientLibraryBrowser extends StatefulWidget {
   });
 
   @override
-  State<IngredientLibraryBrowser> createState() => _IngredientLibraryBrowserState();
+  State<IngredientLibraryBrowser> createState() =>
+      _IngredientLibraryBrowserState();
 }
 
 class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
-  final IngredientLibraryService _libraryService = IngredientLibraryService.instance;
+  final IngredientLibraryService _libraryService =
+      IngredientLibraryService.instance;
   bool _isLoading = true;
   String _searchQuery = '';
   late TextEditingController _searchController;
@@ -49,7 +51,8 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(title: const Text('Ingredient Library')),
-        body: const Center(child: CircularProgressIndicator(color: AppColors.primary)),
+        body: const Center(
+            child: CircularProgressIndicator(color: AppColors.primary)),
       );
     }
 
@@ -113,9 +116,12 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
 
   Widget _buildTabContent({required bool isBranded}) {
     if (_searchQuery.trim().isNotEmpty) {
-      final searchResults = _libraryService.searchLibrary(_searchQuery, isBranded: isBranded);
+      final searchResults =
+          _libraryService.searchLibrary(_searchQuery, isBranded: isBranded);
       if (searchResults.isEmpty) {
-        return const Center(child: Text('No matching items found.', style: TextStyle(color: Colors.grey)));
+        return const Center(
+            child: Text('No matching items found.',
+                style: TextStyle(color: Colors.grey)));
       }
       return ListView.separated(
         padding: const EdgeInsets.all(16),
@@ -125,10 +131,10 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
       );
     }
 
-    final sourceMap = isBranded 
-        ? _libraryService.brandedCategorizedItems 
+    final sourceMap = isBranded
+        ? _libraryService.brandedCategorizedItems
         : _libraryService.rawCategorizedItems;
-        
+
     final categories = sourceMap.keys.toList()..sort();
 
     return ListView.builder(
@@ -140,13 +146,15 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
 
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
               title: Text(
                 category,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               subtitle: Text(
                 '${items.length} items',
@@ -158,8 +166,10 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: items.length,
-                    separatorBuilder: (context, idx) => const Divider(height: 1),
-                    itemBuilder: (context, itemIndex) => _buildItemTile(items[itemIndex]),
+                    separatorBuilder: (context, idx) =>
+                        const Divider(height: 1),
+                    itemBuilder: (context, itemIndex) =>
+                        _buildItemTile(items[itemIndex]),
                   ),
                 ),
               ],

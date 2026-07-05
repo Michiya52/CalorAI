@@ -37,6 +37,7 @@ class ChatSession {
   final String title;
   final DateTime createdAt;
   final List<ChatMessage> messages;
+
   /// Compressed bullet-point summary of the conversation for AI memory.
   final String summary;
 
@@ -67,6 +68,11 @@ class ChatSession {
       );
 }
 
+/// Manages the state and history of AI chat sessions.
+///
+/// This provider coordinates between the UI and the AI services ([OpenRouterService]
+/// and [GeminiService]). It handles message history formatting, memory compression
+/// (summarizing old chats), and saving sessions persistently to [SharedPreferences].
 class ChatbotProvider extends ChangeNotifier {
   final OpenRouterService _openRouter = OpenRouterService();
   final GeminiService _gemini = GeminiService();
@@ -143,16 +149,19 @@ Memory usage rules:
       final text = msg.text;
 
       // Extract calorie mentions (e.g., "300-500 kcal")
-      final calMatch = RegExp(r'(\d{2,4})\s*(?:kcal|calories)', caseSensitive: false)
-          .firstMatch(text);
+      final calMatch =
+          RegExp(r'(\d{2,4})\s*(?:kcal|calories)', caseSensitive: false)
+              .firstMatch(text);
       if (calMatch != null) {
         // Get surrounding context (the sentence containing the calorie info)
         final start = text.lastIndexOf(RegExp(r'[.!?\n]'), calMatch.start);
         final end = text.indexOf(RegExp(r'[.!?\n]'), calMatch.end);
-        final sentence = text.substring(
-          start == -1 ? 0 : start + 1,
-          end == -1 ? text.length : end,
-        ).trim();
+        final sentence = text
+            .substring(
+              start == -1 ? 0 : start + 1,
+              end == -1 ? text.length : end,
+            )
+            .trim();
         if (sentence.length <= 80) {
           points.add('Info: $sentence');
         }

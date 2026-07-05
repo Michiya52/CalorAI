@@ -109,7 +109,8 @@ class SuggestionCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: suggestion.source == 'MyFCD'
+                        color: (suggestion.source == 'MyFCD' ||
+                                suggestion.source == 'Curated')
                             ? AppColors.myfcdBadge
                             : AppColors.aiBadge,
                         borderRadius: BorderRadius.circular(8),

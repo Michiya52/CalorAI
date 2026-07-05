@@ -22,8 +22,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     setState(() => _isProcessing = true);
 
     try {
-
-
       // 2. Try USDA FDC
       final usdaResult =
           await UsdaService.instance.getProductByBarcode(barcode);
@@ -52,6 +50,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       dishNameMy: food.nameMy,
       mainIngredients: [food.foodGroup],
       estimatedPortionGrams: food.portionSizes.mediumGrams,
+      estimatedCalories: 0,
+      estimatedProteinG: 0.0,
+      estimatedCarbsG: 0.0,
+      estimatedFatsG: 0.0,
+      estimatedSodiumG: 0.0,
+      estimatedSugarG: 0.0,
       confidence: '', // Scanner is certain
       cookingMethod: '',
       myfcdMatch: food,

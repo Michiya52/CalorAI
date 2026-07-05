@@ -10,7 +10,7 @@ import '../models/meal_entry.dart';
 /// GeminiService — connects to Google Gemini API for food identification
 /// (vision) and nutritional chatbot (text).
 class GeminiService {
-  static const String _modelName = 'gemini-2.5-flash';
+  static const String _modelName = 'gemini-3.5-flash';
   static GenerativeModel? _visionModel;
   static GenerativeModel? _chatModel;
 
@@ -136,6 +136,12 @@ Return a JSON array of EXACTLY 4 objects, ranked from most likely to least likel
     "dishNameMy": "Mee Udang",
     "mainIngredients": ["yellow noodles", "prawns", "prawn broth", "hard-boiled egg", "kangkung"],
     "estimatedPortionGrams": 450,
+    "estimatedCalories": 520,
+    "estimatedProteinG": 32.5,
+    "estimatedCarbsG": 65.0,
+    "estimatedFatsG": 14.0,
+    "estimatedSodiumG": 1200.0,
+    "estimatedSugarG": 3.5,
     "confidence": "high",
     "confidencePercent": 88,
     "cookingMethod": "boiled noodles in prawn head broth",
@@ -156,6 +162,8 @@ CRITICAL RULES:
   - 50-79 if likely but not certain
   - 1-49 if the image is ambiguous or low quality
 - 'estimatedPortionGrams' must reflect the visible portion only.
+- 'estimatedCalories', 'estimatedProteinG', 'estimatedCarbsG', 'estimatedFatsG', 'estimatedSodiumG' (in mg), and 'estimatedSugarG' must reflect realistically calculated macros for the estimated portion.
+- Ensure that the sum of protein, carbs, and fats in grams does not exceed the estimatedPortionGrams.
 - 'mainIngredients' should list only the most likely core ingredients.
 - 'visualEvidence' must describe the visible features that support that specific guess.
 - Do not claim ingredients, garnishes, or side dishes unless they are visible or strongly implied by the dish's core identity.
@@ -167,17 +175,67 @@ CRITICAL RULES:
       DataPart('image/jpeg', imageBytes),
     ]);
 
-    final GenerateContentResponse response;
-    try {
-      response = await _visionModel!.generateContent([content]);
-    } on GenerativeAIException catch (e) {
-      if (e.message.contains('503') || e.message.contains('high demand')) {
+    GenerateContentResponse? response;
+    GenerativeAIException? lastError;
+
+    // Define the fallback chain: Start with the most capable model (3.5 Flash),
+    // and gracefully degrade to older/more available models if quotas are hit.
+    final modelsToTry = [
+      'gemini-3.5-flash',
+      'gemini-3.0-flash',
+      'gemini-2.5-flash'
+    ];
+
+    // Attempt generation across the fallback chain
+    for (final modelId in modelsToTry) {
+      try {
+        final apiKey = dotenv.env['GEMINI_API_KEY'];
+        final tempModel = GenerativeModel(
+          model: modelId,
+          apiKey: apiKey!,
+          generationConfig: GenerationConfig(
+            temperature: 0.4,
+            maxOutputTokens: 4096,
+            responseMimeType: 'application/json',
+          ),
+        );
+
+        response = await tempModel.generateContent([content]);
+        AppLogger.instance.log('Gemini vision success using model: $modelId');
+        break; // Success, exit the fallback loop
+      } on GenerativeAIException catch (e) {
+        lastError = e;
+        final msg = e.message.toLowerCase();
+
+        // If the error is a rate limit, quota exhaustion, or high demand,
+        // we swallow the error and allow the loop to try the next model.
+        if (msg.contains('429') ||
+            msg.contains('quota') ||
+            msg.contains('limit') ||
+            msg.contains('503') ||
+            msg.contains('high demand') ||
+            msg.contains('not found')) {
+          AppLogger.instance
+              .log('Gemini model $modelId failed ($msg). Falling back...');
+          continue; // Try next model in the chain
+        }
+
+        // If it's a fatal error (like invalid API key), crash immediately
+        rethrow;
+      }
+    }
+
+    // If all models failed, surface the most relevant error to the user
+    if (response == null && lastError != null) {
+      if (lastError.message.contains('503') ||
+          lastError.message.contains('high demand')) {
         throw Exception(
             'The AI is currently busy (high demand). Please try again in a few seconds.');
       }
-      rethrow;
+      throw lastError;
     }
-    final text = response.text;
+
+    final text = response?.text;
 
     _logResponse('Gemini vision raw response', text);
 
@@ -365,6 +423,18 @@ CRITICAL RULES:
       rank = int.tryParse(rankRaw) ?? defaultRank;
     }
 
+    final estimatedCalories = (map['estimatedCalories'] as num?)?.toInt() ??
+        (estimatedPortionGrams * 1.5).round();
+    final estimatedProteinG = (map['estimatedProteinG'] as num?)?.toDouble() ??
+        (estimatedPortionGrams * 0.1);
+    final estimatedCarbsG = (map['estimatedCarbsG'] as num?)?.toDouble() ??
+        (estimatedPortionGrams * 0.5);
+    final estimatedFatsG = (map['estimatedFatsG'] as num?)?.toDouble() ??
+        (estimatedPortionGrams * 0.15);
+    final estimatedSodiumG =
+        (map['estimatedSodiumG'] as num?)?.toDouble() ?? 0.0;
+    final estimatedSugarG = (map['estimatedSugarG'] as num?)?.toDouble() ?? 0.0;
+
     return <String, dynamic>{
       'rank': rank,
       'dishNameEn': dishNameEn,
@@ -374,6 +444,12 @@ CRITICAL RULES:
       'confidence': confidence,
       'confidencePercent': confidencePercent,
       'cookingMethod': cookingMethod,
+      'estimatedCalories': estimatedCalories,
+      'estimatedProteinG': estimatedProteinG,
+      'estimatedCarbsG': estimatedCarbsG,
+      'estimatedFatsG': estimatedFatsG,
+      'estimatedSodiumG': estimatedSodiumG,
+      'estimatedSugarG': estimatedSugarG,
     };
   }
 
@@ -497,6 +573,12 @@ CRITICAL RULES:
         dishNameMy: dishNameMy,
         mainIngredients: [dishNameEn],
         estimatedPortionGrams: 300,
+        estimatedCalories: 450,
+        estimatedProteinG: 30.0,
+        estimatedCarbsG: 150.0,
+        estimatedFatsG: 45.0,
+        estimatedSodiumG: 0.0,
+        estimatedSugarG: 0.0,
         confidence: 'medium',
         confidencePercent: 60,
         cookingMethod: 'Estimated from image',
@@ -531,15 +613,15 @@ You are **CalorAI**, a friendly, knowledgeable, and practical Malaysian nutritio
 You help users estimate calories and macros, track their diet, and make healthier food choices, with strong familiarity with Malaysian cuisine and everyday local eating habits.
 
 User Profile:
-- Name: \${profile.name}
-- Goal: \${profile.goal.replaceAll('_', ' ')}
-- Daily calorie target: \${profile.calorieTarget} kcal
-- Age: \${profile.age}, Sex: \${profile.sex}
-- Height: \${profile.heightCm} cm, Weight: \${profile.weightKg} kg
-- Activity level: \${profile.activityLevel.replaceAll('_', ' ')}
+- Name: ${profile.name}
+- Goal: ${profile.goal.replaceAll('_', ' ')}
+- Daily calorie target: ${profile.calorieTarget} kcal
+- Age: ${profile.age}, Sex: ${profile.sex}
+- Height: ${profile.heightCm} cm, Weight: ${profile.weightKg} kg
+- Activity level: ${profile.activityLevel.replaceAll('_', ' ')}
 
 Recent meals (last 7 days):
-\$mealSummary
+$mealSummary
 
 Guidelines:
 - Answer the user's question directly first.
@@ -567,17 +649,16 @@ Guidelines:
 - If the estimate depends heavily on missing details, ask one short clarifying question; otherwise give the best estimate possible with clear assumptions.
 ''';
 
-    // A per-call model is necessary here because the system instruction
-    // includes dynamic user profile and meal context that changes each call.
-    final chatModel = GenerativeModel(
-      model: _modelName,
-      apiKey: apiKey,
-      systemInstruction: Content.system(systemPrompt),
-      generationConfig: GenerationConfig(
-        temperature: 0.7,
-        maxOutputTokens: 2048,
-      ),
-    );
+    // Define the fallback chain for the chatbot.
+    // Matches the vision fallback chain to ensure high availability.
+    final modelsToTry = [
+      'gemini-3.5-flash',
+      'gemini-3.0-flash',
+      'gemini-2.5-flash'
+    ];
+
+    GenerateContentResponse? response;
+    GenerativeAIException? lastError;
 
     // Build conversation history for multi-turn chat
     final contents = <Content>[];
@@ -596,8 +677,48 @@ Guidelines:
     // Add the current user message
     contents.add(Content.text(userMessage));
 
-    final response = await chatModel.generateContent(contents);
-    final text = response.text;
+    for (final modelId in modelsToTry) {
+      try {
+        final chatModel = GenerativeModel(
+          model: modelId,
+          apiKey: apiKey,
+          systemInstruction: Content.system(systemPrompt),
+          generationConfig: GenerationConfig(
+            temperature: 0.7,
+            maxOutputTokens: 2048,
+          ),
+        );
+        response = await chatModel.generateContent(contents);
+        AppLogger.instance.log('Gemini chat success using model: $modelId');
+        break; // Success, exit the fallback loop
+      } on GenerativeAIException catch (e) {
+        lastError = e;
+        final msg = e.message.toLowerCase();
+
+        // If the error is a rate limit, quota exhaustion, or high demand,
+        // we swallow the error and allow the loop to try the next model.
+        if (msg.contains('429') ||
+            msg.contains('quota') ||
+            msg.contains('limit') ||
+            msg.contains('503') ||
+            msg.contains('high demand') ||
+            msg.contains('not found')) {
+          AppLogger.instance
+              .log('Gemini chat model $modelId failed ($msg). Falling back...');
+          continue; // Try next model in the chain
+        }
+
+        // If it's a fatal error (like invalid API key), crash immediately
+        rethrow;
+      }
+    }
+
+    // If all models failed, surface the most relevant error to the user
+    if (response == null && lastError != null) {
+      throw lastError;
+    }
+
+    final text = response?.text;
 
     if (text == null || text.isEmpty) {
       return 'Sorry, I couldn\'t generate a response. Please try again.';

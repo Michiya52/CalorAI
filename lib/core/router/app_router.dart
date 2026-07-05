@@ -30,7 +30,8 @@ class AppRouter {
             state.matchedLocation.startsWith('/register');
         final isSetupRoute = state.matchedLocation.startsWith('/setup');
 
-        if (state.matchedLocation == '/') return isLoggedIn ? '/home' : '/login';
+        if (state.matchedLocation == '/')
+          return isLoggedIn ? '/home' : '/login';
         if (!isLoggedIn && !isAuthRoute && !isSetupRoute) return '/login';
         if (isLoggedIn && isAuthRoute) return '/home';
         return null;

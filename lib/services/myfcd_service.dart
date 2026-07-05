@@ -3,11 +3,23 @@ import '../models/food_item.dart';
 import '../models/food_suggestion.dart';
 import 'firestore_service.dart';
 
-/// Cross-references Gemini suggestions against government-backed food data.
+/// A service responsible for taking raw AI food suggestions and matching them
+/// against the local database to obtain highly accurate, verified macro profiles.
+///
+/// This acts as the bridge between the generative AI estimates and the
+/// ground-truth database records (like MyFCD and Curated entries).
 class MyFCDService {
   final FirestoreService _firestore;
   MyFCDService(this._firestore);
 
+  /// Attempts to find a perfect database match for an AI-generated [FoodSuggestion].
+  ///
+  /// [Strategy]:
+  /// 1. Searches the database using both the English and Malay dish names.
+  /// 2. If no name matches are found, it falls back to searching by main ingredients.
+  /// 3. If a match is found, it scales the database's 100g nutritional profile
+  ///    to the AI's estimated portion size (grams) and overwrites the AI's guesses.
+  /// 4. If no match is found, it retains the AI's original estimates.
   Future<FoodSuggestion> crossReference(FoodSuggestion suggestion) async {
     try {
       // Phase 1: Search dish names in parallel (fast path)
@@ -67,14 +79,15 @@ class MyFCDService {
       // Fall through to AI estimate fallback when Firestore lookup fails.
     }
 
-    // No MyFCD match or lookup error - keep AI best guess with rough macros.
-    final grams = suggestion.estimatedPortionGrams;
+    // No MyFCD match or lookup error - use Gemini's estimated macros.
     return suggestion.copyWith(
       source: 'AI Estimate',
-      resolvedCalories: (grams * 1.5).round(),
-      resolvedProteinG: grams * 0.1,
-      resolvedCarbsG: grams * 0.5,
-      resolvedFatsG: grams * 0.15,
+      resolvedCalories: suggestion.estimatedCalories,
+      resolvedProteinG: suggestion.estimatedProteinG,
+      resolvedCarbsG: suggestion.estimatedCarbsG,
+      resolvedFatsG: suggestion.estimatedFatsG,
+      resolvedSodiumG: suggestion.estimatedSodiumG,
+      resolvedSugarG: suggestion.estimatedSugarG,
     );
   }
 
@@ -83,4 +96,3 @@ class MyFCDService {
           List<FoodSuggestion> suggestions) =>
       Future.wait(suggestions.map(crossReference));
 }
-

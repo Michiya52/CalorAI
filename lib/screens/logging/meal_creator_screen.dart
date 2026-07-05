@@ -41,7 +41,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
     setState(() {
       _ingredients.add(detail);
     });
-    // Don't auto-pop if we want them to pick multiples in the library, 
+    // Don't auto-pop if we want them to pick multiples in the library,
     // but the library is currently popping. This is fine.
   }
 
@@ -49,7 +49,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
     if (newWeight <= 0) return;
     final item = _ingredients[index];
     final ratio = newWeight / item.grams;
-    
+
     setState(() {
       _ingredients[index] = IngredientDetail(
         name: item.name,
@@ -71,8 +71,8 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
       return;
     }
 
-    final name = _mealNameController.text.trim().isEmpty 
-        ? 'Homecooked Meal' 
+    final name = _mealNameController.text.trim().isEmpty
+        ? 'Homecooked Meal'
         : _mealNameController.text.trim();
 
     setState(() => _isSaving = true);
@@ -99,7 +99,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
       await context.read<MealProvider>().addMeal(newMeal);
     }
     setState(() => _isSaving = false);
-    
+
     if (mounted) {
       context.go('/home'); // Return to dashboard
     }
@@ -124,7 +124,8 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
                     controller: _mealNameController,
                     decoration: InputDecoration(
                       labelText: 'Meal Name (e.g. My Chicken Rice)',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       filled: true,
                       fillColor: Colors.grey.withValues(alpha: 0.1),
                     ),
@@ -135,7 +136,8 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
                     children: [
                       const Text(
                         'Ingredients',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       TextButton.icon(
                         onPressed: () {
@@ -148,8 +150,10 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.add_circle, color: AppColors.primary),
-                        label: const Text('Browse Library', style: TextStyle(color: AppColors.primary)),
+                        icon: const Icon(Icons.add_circle,
+                            color: AppColors.primary),
+                        label: const Text('Browse Library',
+                            style: TextStyle(color: AppColors.primary)),
                       ),
                     ],
                   ),
@@ -171,8 +175,10 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
                       final item = entry.value;
                       return MealIngredientTile(
                         ingredient: item,
-                        onWeightChanged: (newGrams) => _updateIngredientWeight(idx, newGrams),
-                        onRemove: () => setState(() => _ingredients.removeAt(idx)),
+                        onWeightChanged: (newGrams) =>
+                            _updateIngredientWeight(idx, newGrams),
+                        onRemove: () =>
+                            setState(() => _ingredients.removeAt(idx)),
                       );
                     }),
                 ],
@@ -215,7 +221,8 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          Text('Total Weight: ${_totalWeight.toStringAsFixed(0)}g', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          Text('Total Weight: ${_totalWeight.toStringAsFixed(0)}g',
+              style: const TextStyle(color: Colors.grey, fontSize: 12)),
         ],
       ),
     );
@@ -224,7 +231,9 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
   Widget _macroStat(String label, double val, Color color) {
     return Column(
       children: [
-        Text('${val.toStringAsFixed(1)}g', style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16)),
+        Text('${val.toStringAsFixed(1)}g',
+            style: TextStyle(
+                color: color, fontWeight: FontWeight.bold, fontSize: 16)),
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
       ],
     );
@@ -236,7 +245,10 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, -5)),
+          BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5)),
         ],
       ),
       child: SizedBox(
@@ -247,11 +259,13 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
           child: _isSaving
               ? const CircularProgressIndicator(color: Colors.white)
-              : const Text('Cook & Log Meal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              : const Text('Cook & Log Meal',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
       ),
     );

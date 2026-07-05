@@ -199,33 +199,32 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                   width: double.infinity,
                   child: SegmentedButton<_SearchSource>(
                     segments: const [
-                    ButtonSegment(
-                      value: _SearchSource.regional,
-                      label: Text('MY+SG Database'),
-                    ),
-
-                    ButtonSegment(
-                      value: _SearchSource.usda,
-                      label: Text('USDA (FOSS)'),
-                    ),
-                  ],
-                  showSelectedIcon: false,
-                  selected: {_source},
-                  onSelectionChanged: (selection) {
-                    setState(() {
-                      _source = selection.first;
-                      _results = [];
-                      _offset = 0;
-                      _hasMore = true;
-                      _searchError = null;
-                    });
-                    if (_query.trim().isNotEmpty) {
-                      _performSearch(_query, reset: true);
-                    }
-                  },
+                      ButtonSegment(
+                        value: _SearchSource.regional,
+                        label: Text('MY+SG Database'),
+                      ),
+                      ButtonSegment(
+                        value: _SearchSource.usda,
+                        label: Text('USDA (FOSS)'),
+                      ),
+                    ],
+                    showSelectedIcon: false,
+                    selected: {_source},
+                    onSelectionChanged: (selection) {
+                      setState(() {
+                        _source = selection.first;
+                        _results = [];
+                        _offset = 0;
+                        _hasMore = true;
+                        _searchError = null;
+                      });
+                      if (_query.trim().isNotEmpty) {
+                        _performSearch(_query, reset: true);
+                      }
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
+                const SizedBox(height: 12),
                 TextField(
                   controller: _searchController,
                   autofocus: true,
@@ -339,6 +338,12 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                           dishNameMy: food.nameMy,
                           mainIngredients: [food.foodGroup],
                           estimatedPortionGrams: food.portionSizes.mediumGrams,
+                          estimatedCalories: 0,
+                          estimatedProteinG: 0.0,
+                          estimatedCarbsG: 0.0,
+                          estimatedFatsG: 0.0,
+                          estimatedSodiumG: 0.0,
+                          estimatedSugarG: 0.0,
                           confidence: '',
                           confidencePercent: null,
                           cookingMethod: '',
@@ -371,7 +376,6 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
   }
 
   String _sourceLabel(String source) {
-
     if (source.startsWith('MyFCD')) return 'MyFCD';
     if (source.startsWith('USDA')) return 'USDA';
     if (source.startsWith('SG_')) return 'SG';

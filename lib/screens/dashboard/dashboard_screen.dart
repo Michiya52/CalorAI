@@ -6,6 +6,7 @@ import '../../models/user_profile.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../providers/meal_provider.dart';
+import '../../providers/theme_provider.dart';
 import '../../widgets/calorie_ring.dart';
 import '../../widgets/macro_bar.dart';
 import '../../widgets/meal_card.dart';
@@ -58,7 +59,8 @@ class _DashboardScreenState extends State<DashboardScreen>
     if (uid == null) return;
 
     final profileProvider = context.read<ProfileProvider>();
-    if (profileProvider.profile == null || profileProvider.profile!.uid != uid) {
+    if (profileProvider.profile == null ||
+        profileProvider.profile!.uid != uid) {
       await profileProvider.loadProfile(uid);
     }
 
@@ -74,6 +76,8 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Force rebuild on theme change to pick up AppColors static getters
+    context.watch<ThemeProvider>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -112,7 +116,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          profileProv.error ?? 'Please check your connection and try again.',
+                          profileProv.error ??
+                              'Please check your connection and try again.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColors.textSecondary,
@@ -215,21 +220,21 @@ class _DashboardScreenState extends State<DashboardScreen>
                             label: 'Protein',
                             current: macros['proteinG']!,
                             target: targetMacros.proteinG.toDouble(),
-                            color: const Color(0xFF3B82F6),
+                            color: const Color(0xFF8B5CF6), // Distinct Purple
                           ),
                           const SizedBox(height: 8),
                           MacroBar(
                             label: 'Carbs',
                             current: macros['carbsG']!,
                             target: targetMacros.carbsG.toDouble(),
-                            color: AppColors.accent,
+                            color: AppColors.accent, // Orange
                           ),
                           const SizedBox(height: 8),
                           MacroBar(
                             label: 'Fats',
                             current: macros['fatsG']!,
                             target: targetMacros.fatsG.toDouble(),
-                            color: AppColors.aura,
+                            color: AppColors.aura, // Blue
                           ),
                         ],
                       ),

@@ -156,6 +156,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Force rebuild on theme change
+    context.watch<ThemeProvider>();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -225,7 +227,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          profileProv.error ?? 'Please check your connection and try again.',
+                          profileProv.error ??
+                              'Please check your connection and try again.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColors.textSecondary,
@@ -238,7 +241,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () {
                           final uid = context.read<AuthProvider>().userId;
                           if (uid != null) {
-                            context.read<ProfileProvider>().loadProfile(uid).then((_) {
+                            context
+                                .read<ProfileProvider>()
+                                .loadProfile(uid)
+                                .then((_) {
                               if (mounted) _loadProfile();
                             });
                           }
@@ -471,7 +477,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       context.read<ProfileProvider>().clear();
                       context.read<MealProvider>().clear();
                       context.read<ChatbotProvider>().clear();
-                      
+
                       await context.read<AuthProvider>().logout();
                       if (context.mounted) context.go('/login');
                     },

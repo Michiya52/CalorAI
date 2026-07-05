@@ -5,7 +5,8 @@ import '../models/food_item.dart';
 
 class IngredientLibraryService {
   IngredientLibraryService._private();
-  static final IngredientLibraryService instance = IngredientLibraryService._private();
+  static final IngredientLibraryService instance =
+      IngredientLibraryService._private();
 
   bool _isLoaded = false;
   List<FoodItem> _allRawItems = [];
@@ -15,7 +16,8 @@ class IngredientLibraryService {
 
   bool get isLoaded => _isLoaded;
   Map<String, List<FoodItem>> get rawCategorizedItems => _rawCategorizedItems;
-  Map<String, List<FoodItem>> get brandedCategorizedItems => _brandedCategorizedItems;
+  Map<String, List<FoodItem>> get brandedCategorizedItems =>
+      _brandedCategorizedItems;
   List<FoodItem> get allRawItems => _allRawItems;
   List<FoodItem> get allBrandedItems => _allBrandedItems;
 
@@ -23,7 +25,8 @@ class IngredientLibraryService {
     if (_isLoaded) return;
 
     try {
-      final jsonString = await rootBundle.loadString('assets/data/myfcd_full.json');
+      final jsonString =
+          await rootBundle.loadString('assets/data/myfcd_full.json');
       final List<dynamic> jsonList = jsonDecode(jsonString);
 
       final allParsed = jsonList.map((map) {
@@ -31,8 +34,10 @@ class IngredientLibraryService {
         return FoodItem.fromMap(m['myfcdCode'] as String, m);
       }).toList();
 
-      _allBrandedItems = allParsed.where((i) => i.source == 'MyFCD_Industry').toList();
-      _allRawItems = allParsed.where((i) => i.source != 'MyFCD_Industry').toList();
+      _allBrandedItems =
+          allParsed.where((i) => i.source == 'MyFCD_Industry').toList();
+      _allRawItems =
+          allParsed.where((i) => i.source != 'MyFCD_Industry').toList();
 
       _rawCategorizedItems = _groupItems(_allRawItems);
       _brandedCategorizedItems = _groupItems(_allBrandedItems);
@@ -69,10 +74,10 @@ class IngredientLibraryService {
 
   String _simplifyName(String name) {
     if (name.isEmpty) return name;
-    
+
     // Split by commas
     final parts = name.split(',').map((p) => p.trim()).toList();
-    
+
     // If it's something like "CHICKEN, BREAST, RAW" -> "Chicken Breast, Raw"
     final cleanParts = parts.map((p) {
       if (p.isEmpty) return p;
@@ -92,7 +97,9 @@ class IngredientLibraryService {
   String _mapGroupToCategory(String groupId) {
     if (groupId.startsWith('Group 1.') || groupId == 'Group 1') {
       return 'Grains, Noodles & Starches';
-    } else if (groupId.startsWith('Group 2.') || groupId == 'Group 2' || groupId == 'Group 4') {
+    } else if (groupId.startsWith('Group 2.') ||
+        groupId == 'Group 2' ||
+        groupId == 'Group 4') {
       return 'Vegetables & Legumes';
     } else if (groupId == 'Group 3') {
       return 'Fruits';
@@ -108,7 +115,10 @@ class IngredientLibraryService {
       return 'Beverages';
     } else if (groupId == 'Group 13') {
       return 'Spices, Condiments & Sauces';
-    } else if (groupId == 'Group 11' || groupId.startsWith('Group 23') || groupId.startsWith('Group 24') || groupId.startsWith('Group 25')) {
+    } else if (groupId == 'Group 11' ||
+        groupId.startsWith('Group 23') ||
+        groupId.startsWith('Group 24') ||
+        groupId.startsWith('Group 25')) {
       return 'Desserts & Sweets';
     } else {
       return 'Other / Miscellaneous';
@@ -119,11 +129,14 @@ class IngredientLibraryService {
     if (query.trim().isEmpty) return [];
     final searchTerms = query.toLowerCase().split(' ');
     final items = isBranded ? _allBrandedItems : _allRawItems;
-    
-    return items.where((item) {
-      final nameStr = '${item.nameEn} ${item.nameMy}'.toLowerCase();
-      // Simple AND matching
-      return searchTerms.every((term) => nameStr.contains(term));
-    }).take(30).toList();
+
+    return items
+        .where((item) {
+          final nameStr = '${item.nameEn} ${item.nameMy}'.toLowerCase();
+          // Simple AND matching
+          return searchTerms.every((term) => nameStr.contains(term));
+        })
+        .take(30)
+        .toList();
   }
 }

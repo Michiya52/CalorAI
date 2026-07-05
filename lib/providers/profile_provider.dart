@@ -4,6 +4,11 @@ import '../models/user_profile.dart';
 import '../services/firestore_service.dart';
 import '../core/utils/calorie_calculator.dart';
 
+/// Manages the state of the user's personal profile and macro targets.
+///
+/// This provider handles loading and saving the [UserProfile] from Firestore,
+/// automatically recalculating daily calorie goals (using [CalorieCalculator])
+/// when the user's weight or activity level changes.
 class ProfileProvider extends ChangeNotifier {
   final FirestoreService _firestore = FirestoreService();
 

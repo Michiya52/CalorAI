@@ -207,20 +207,31 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            if (widget.suggestion.myfcdMatch?.ingredients.isNotEmpty == true) ...[
-              Text('Ingredients', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+            if (widget.suggestion.myfcdMatch?.ingredients.isNotEmpty ==
+                true) ...[
+              Text('Ingredients',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textSecondary)),
               const SizedBox(height: 4),
               Text(
                 widget.suggestion.myfcdMatch!.ingredients.join(', '),
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+                style: TextStyle(
+                    color: AppColors.textSecondary, fontSize: 12, height: 1.4),
               ),
               const SizedBox(height: 24),
-            ] else if (widget.suggestion.mainIngredients.isNotEmpty && !['General', 'Other'].contains(widget.suggestion.mainIngredients.first)) ...[
-              Text('Main Ingredients', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+            ] else if (widget.suggestion.mainIngredients.isNotEmpty &&
+                !['General', 'Other']
+                    .contains(widget.suggestion.mainIngredients.first)) ...[
+              Text('Main Ingredients',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textSecondary)),
               const SizedBox(height: 4),
               Text(
                 widget.suggestion.mainIngredients.join(', '),
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+                style: TextStyle(
+                    color: AppColors.textSecondary, fontSize: 12, height: 1.4),
               ),
               const SizedBox(height: 24),
             ] else ...[
@@ -407,8 +418,12 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
   }
 
   Widget _buildMacroBar() {
-    final total = _displayProtein + _displayCarbs + _displayFats;
-    if (total == 0) return const SizedBox.shrink();
+    final proteinCals = _displayProtein * 4.0;
+    final carbsCals = _displayCarbs * 4.0;
+    final fatsCals = _displayFats * 9.0;
+
+    final totalCals = proteinCals + carbsCals + fatsCals;
+    if (totalCals == 0) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,15 +449,15 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
             child: Row(
               children: [
                 Expanded(
-                  flex: (_displayProtein * 10).round(),
+                  flex: (proteinCals * 10).round(),
                   child: Container(color: const Color(0xFF42A5F5)),
                 ),
                 Expanded(
-                  flex: (_displayCarbs * 10).round(),
+                  flex: (carbsCals * 10).round(),
                   child: Container(color: AppColors.accent),
                 ),
                 Expanded(
-                  flex: (_displayFats * 10).round(),
+                  flex: (fatsCals * 10).round(),
                   child: Container(color: AppColors.warning),
                 ),
               ],

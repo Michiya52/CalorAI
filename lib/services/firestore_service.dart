@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import '../models/user_profile.dart';
 import '../models/meal_entry.dart';
 import '../models/food_item.dart';
@@ -10,8 +13,6 @@ import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 class FirestoreService {
   FirebaseFirestore get _firestore => FirebaseFirestore.instance;
   static List<_CachedFoodRecord>? _foodCache;
-  static DateTime? _foodCacheLoadedAt;
-  static const Duration _foodCacheTtl = Duration(minutes: 30);
 
   // Singleton
   static final FirestoreService _instance = FirestoreService._internal();
@@ -87,14 +88,17 @@ class FirestoreService {
           .orderBy('timestamp', descending: false)
           .get();
 
-      return snapshot.docs.map((doc) {
-        try {
-          return MealEntry.fromMap(doc.id, uid, doc.data());
-        } catch (e) {
-          debugPrint('Error parsing meal ${doc.id}: $e');
-          return null;
-        }
-      }).whereType<MealEntry>().toList();
+      return snapshot.docs
+          .map((doc) {
+            try {
+              return MealEntry.fromMap(doc.id, uid, doc.data());
+            } catch (e) {
+              debugPrint('Error parsing meal ${doc.id}: $e');
+              return null;
+            }
+          })
+          .whereType<MealEntry>()
+          .toList();
     } catch (e, stack) {
       debugPrint('Firestore Error [getMealsForDate]: $e');
       debugPrint(stack.toString());
@@ -114,14 +118,17 @@ class FirestoreService {
           .orderBy('date', descending: true)
           .get();
 
-      return snapshot.docs.map((doc) {
-        try {
-          return MealEntry.fromMap(doc.id, uid, doc.data());
-        } catch (e) {
-          debugPrint('Error parsing meal range ${doc.id}: $e');
-          return null;
-        }
-      }).whereType<MealEntry>().toList();
+      return snapshot.docs
+          .map((doc) {
+            try {
+              return MealEntry.fromMap(doc.id, uid, doc.data());
+            } catch (e) {
+              debugPrint('Error parsing meal range ${doc.id}: $e');
+              return null;
+            }
+          })
+          .whereType<MealEntry>()
+          .toList();
     } catch (e, stack) {
       debugPrint('Firestore Error [getMealsForDateRange]: $e');
       debugPrint(stack.toString());
@@ -172,19 +179,15 @@ class FirestoreService {
       if (q.isEmpty) return [];
 
       final foods = await _loadFoodCache();
-      final scored = <_ScoredFood>[];
-      for (final record in foods) {
-        final score = _scoreFoodMatch(q, record);
-        if (score > 0) {
-          scored.add(_ScoredFood(food: record.food, score: score));
-        }
-      }
+
+      // Run the heavy fuzzywuzzy math on a background isolate to prevent UI freezing
+      final scored = await Isolate.run(() => _runFuzzySearch(q, foods));
 
       scored.sort((a, b) {
-          final scoreComparison = b.score.compareTo(a.score);
-          if (scoreComparison != 0) return scoreComparison;
-          return a.food.nameEn.compareTo(b.food.nameEn);
-        });
+        final scoreComparison = b.score.compareTo(a.score);
+        if (scoreComparison != 0) return scoreComparison;
+        return a.food.nameEn.compareTo(b.food.nameEn);
+      });
 
       if (limit <= 0) return [];
       final safeOffset = offset < 0 ? 0 : offset;
@@ -206,70 +209,37 @@ class FirestoreService {
 
   Future<List<_CachedFoodRecord>> _loadFoodCache() async {
     final cache = _foodCache;
-    if (cache != null &&
-        _foodCacheLoadedAt != null &&
-        DateTime.now().difference(_foodCacheLoadedAt!) < _foodCacheTtl) {
-      return cache;
+    // Keep in memory indefinitely to avoid redundant asset parsing
+    if (cache != null) return cache;
+
+    try {
+      // Load bundled dataset instead of expensive Firestore reads
+      final jsonString =
+          await rootBundle.loadString('assets/data/myfcd_full.json');
+      final List<dynamic> jsonList = jsonDecode(jsonString);
+
+      final foods = jsonList.map((data) {
+        final map = data as Map<String, dynamic>;
+        final id = map['myfcdCode']?.toString() ?? map['id']?.toString() ?? '';
+        return _CachedFoodRecord(
+          food: FoodItem.fromMap(id, map),
+          searchTerms:
+              List<String>.from(map['searchTerms'] as List? ?? const []),
+        );
+      }).toList();
+
+      _foodCache = foods;
+      return foods;
+    } catch (e, stack) {
+      debugPrint('Error loading local JSON cache: $e');
+      debugPrint(stack.toString());
+      return [];
     }
-
-    final snapshot = await _firestore.collection('foods').get();
-    final foods = snapshot.docs.map((doc) {
-      final data = doc.data();
-      return _CachedFoodRecord(
-        food: FoodItem.fromMap(doc.id, data),
-        searchTerms:
-            List<String>.from(data['searchTerms'] as List? ?? const []),
-      );
-    }).toList();
-
-    _foodCache = foods;
-    _foodCacheLoadedAt = DateTime.now();
-    return foods;
   }
 
   /// Forces the food cache to be reloaded on the next search.
   void invalidateFoodCache() {
     _foodCache = null;
-    _foodCacheLoadedAt = null;
-  }
-
-  int _scoreFoodMatch(String query, _CachedFoodRecord record) {
-    final nameEn = record.food.nameEn.toLowerCase();
-    final nameMy = record.food.nameMy.toLowerCase();
-    final q = query.toLowerCase().trim();
-
-    // 1. Exact Match (Highest)
-    if (nameEn == q || nameMy == q) return 100;
-
-    // 2. Prefix Match (High)
-    if (nameEn.startsWith(q) || nameMy.startsWith(q)) return 95;
-
-    // 3. Whole Word Contains (Medium-High)
-    if (nameEn.split(RegExp(r'\s+')).contains(q) ||
-        nameMy.split(RegExp(r'\s+')).contains(q)) {
-      return 90;
-    }
-
-    // 4. Fuzzy matching — cache results to avoid double computation
-    final tsEn = tokenSetRatio(q, nameEn);
-    final tsMy = tokenSetRatio(q, nameMy);
-    final tsScore = tsEn > tsMy ? tsEn : tsMy;
-
-    final wEn = weightedRatio(q, nameEn);
-    final wMy = weightedRatio(q, nameMy);
-    final wScore = wEn > wMy ? wEn : wMy;
-
-    final finalScore = tsScore > wScore ? tsScore : wScore;
-
-    // Threshold Check
-    if (finalScore < 50) {
-      for (final term in record.searchTerms) {
-        if (term.toLowerCase().contains(q)) return 65;
-      }
-      return 0;
-    }
-
-    return finalScore;
   }
 
   Future<FoodItem?> getFoodById(String foodId) async {
@@ -373,4 +343,63 @@ class _ScoredFood {
   final int score;
 
   const _ScoredFood({required this.food, required this.score});
+}
+
+// ── Background Isolate Handlers ─────────────────────────────────
+
+List<_ScoredFood> _runFuzzySearch(String query, List<_CachedFoodRecord> foods) {
+  final scored = <_ScoredFood>[];
+  for (final record in foods) {
+    final score = _scoreFoodMatchStatic(query, record);
+    if (score > 0) {
+      scored.add(_ScoredFood(food: record.food, score: score));
+    }
+  }
+  return scored;
+}
+
+// Normalizes strings by stripping all punctuation and special characters.
+// This prevents fuzzy matching failures when the AI outputs "(Maggi Goreng)"
+// but the database contains "Maggi Goreng".
+String _normalize(String s) {
+  return s.toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '').trim();
+}
+
+int _scoreFoodMatchStatic(String query, _CachedFoodRecord record) {
+  final nameEn = _normalize(record.food.nameEn);
+  final nameMy = _normalize(record.food.nameMy);
+  final q = _normalize(query);
+
+  // 1. Exact Match (Highest)
+  if (nameEn == q || nameMy == q) return 100;
+
+  // 2. Prefix Match (High)
+  if (nameEn.startsWith(q) || nameMy.startsWith(q)) return 95;
+
+  // 3. Whole Word Contains (Medium-High)
+  if (nameEn.split(RegExp(r'\s+')).contains(q) ||
+      nameMy.split(RegExp(r'\s+')).contains(q)) {
+    return 90;
+  }
+
+  // 4. Fuzzy matching
+  final tsEn = tokenSetRatio(q, nameEn);
+  final tsMy = tokenSetRatio(q, nameMy);
+  final tsScore = tsEn > tsMy ? tsEn : tsMy;
+
+  final wEn = weightedRatio(q, nameEn);
+  final wMy = weightedRatio(q, nameMy);
+  final wScore = wEn > wMy ? wEn : wMy;
+
+  final finalScore = tsScore > wScore ? tsScore : wScore;
+
+  // Threshold Check
+  if (finalScore < 50) {
+    for (final term in record.searchTerms) {
+      if (term.toLowerCase().contains(q)) return 65;
+    }
+    return 0;
+  }
+
+  return finalScore;
 }

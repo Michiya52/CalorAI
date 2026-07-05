@@ -20,7 +20,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'firebase_options.dart';
 import 'theme.dart';
 import 'utils/seed_data.dart';
- 
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -33,15 +33,16 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      
+
       // 1. Crashlytics - Fatal error reporting
       if (!kIsWeb) {
-        FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+        FlutterError.onError =
+            FirebaseCrashlytics.instance.recordFlutterFatalError;
       }
-      
+
       // 2. Performance Monitoring
       await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
-      
+
       // 3. App Check - Security (using debug provider for development)
       // await FirebaseAppCheck.instance.activate(
       //   providerAndroid: AndroidDebugProvider(),
@@ -54,7 +55,8 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
 
       // 5. Messaging - Notification permissions & background handling
       if (!kIsWeb) {
-        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+        FirebaseMessaging.onBackgroundMessage(
+            _firebaseMessagingBackgroundHandler);
       }
       final messaging = FirebaseMessaging.instance;
       await messaging.requestPermission(
@@ -75,7 +77,7 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
         'maintenance_mode': false,
       });
       await remoteConfig.fetchAndActivate();
-      
+
       return;
     } catch (e) {
       final message = e.toString();
@@ -86,7 +88,8 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
         rethrow;
       }
 
-      debugPrint('Firebase init attempt $attempt failed (channel-error), retrying in ${500 * attempt}ms...');
+      debugPrint(
+          'Firebase init attempt $attempt failed (channel-error), retrying in ${500 * attempt}ms...');
       // Give plugin channels time to settle — emulators can be very slow.
       await Future<void>.delayed(Duration(milliseconds: 500 * attempt));
     }
@@ -238,7 +241,8 @@ class _StartupErrorScreenState extends State<_StartupErrorScreen> {
       if (mounted) {
         setState(() => _retrying = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Retry failed: ${e.toString().split('\n').first}')),
+          SnackBar(
+              content: Text('Retry failed: ${e.toString().split('\n').first}')),
         );
       }
     }

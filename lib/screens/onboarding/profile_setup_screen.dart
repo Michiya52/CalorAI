@@ -200,7 +200,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save profile: ${e.message ?? 'An error occurred'}'),
+            content: Text(
+                'Failed to save profile: ${e.message ?? 'An error occurred'}'),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -209,7 +210,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save profile: ${e.toString().split('\n').first}'),
+            content: Text(
+                'Failed to save profile: ${e.toString().split('\n').first}'),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
@@ -417,7 +419,10 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             ),
             child: Column(
               children: [
-                Text(_useCustomCalories || _useCustomMacros ? 'Custom Goal' : 'Recommended',
+                Text(
+                    _useCustomCalories || _useCustomMacros
+                        ? 'Custom Goal'
+                        : 'Recommended',
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 13)),

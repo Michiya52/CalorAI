@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +7,15 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/app_logger.dart';
 import '../../services/gemini_service.dart';
+import '../../services/firestore_service.dart';
+import '../../models/food_suggestion.dart';
 
+/// The initial entry point for logging a meal via the camera or gallery.
+///
+/// This screen handles picking the image, converting it to bytes, and sending it
+/// to the [GeminiService]. Once the AI returns its top guesses, this screen also
+/// queries the [FirestoreService] for any exact database matches to present
+/// side-by-side with the AI guesses before routing to the Suggestion Cards.
 class PhotoLoggingScreen extends StatefulWidget {
   const PhotoLoggingScreen({super.key});
 
@@ -39,33 +49,71 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
     try {
       final gemini = GeminiService();
 
-      final suggestions = await gemini.identifyFoodFromImage(_imageBytes!);
+      final aiSuggestions = await gemini.identifyFoodFromImage(_imageBytes!);
       AppLogger.instance.log(
-          'PhotoLoggingScreen: suggestions returned = ${suggestions.length}');
+          'PhotoLoggingScreen: suggestions returned = ${aiSuggestions.length}');
 
       if (!mounted) return;
-      if (suggestions.isEmpty) {
+      if (aiSuggestions.isEmpty) {
         AppLogger.instance.log(
             'PhotoLoggingScreen: suggestions empty, routing to manual search');
         context.push('/log/search');
         return;
       }
+
+      final top3Ai = aiSuggestions.take(3).toList();
+
+      final firestore = FirestoreService();
+      final dbMatches =
+          await firestore.searchFoods(top3Ai.first.dishNameEn, limit: 2);
+
+      final dbSuggestions = dbMatches.map((food) {
+        final factor = top3Ai.first.estimatedPortionGrams / 100.0;
+        return FoodSuggestion(
+          rank: 4,
+          dishNameEn: food.nameEn,
+          dishNameMy: food.nameMy,
+          mainIngredients: [food.foodGroup],
+          estimatedPortionGrams: top3Ai.first.estimatedPortionGrams,
+          estimatedCalories: (food.caloriesPer100g * factor).round(),
+          estimatedProteinG: food.proteinPer100g * factor,
+          estimatedCarbsG: food.carbsPer100g * factor,
+          estimatedFatsG: food.fatsPer100g * factor,
+          estimatedSodiumG: food.sodiumPer100g * factor,
+          estimatedSugarG: food.sugarPer100g * factor,
+          confidence: 'high',
+          confidencePercent: 100,
+          cookingMethod: 'Database Match',
+          myfcdMatch: food,
+          resolvedCalories: (food.caloriesPer100g * factor).round(),
+          resolvedProteinG: food.proteinPer100g * factor,
+          resolvedCarbsG: food.carbsPer100g * factor,
+          resolvedFatsG: food.fatsPer100g * factor,
+          resolvedSodiumG: food.sodiumPer100g * factor,
+          resolvedSugarG: food.sugarPer100g * factor,
+          source: food.source,
+        );
+      }).toList();
+
+      final finalSuggestions = [...top3Ai, ...dbSuggestions];
+
       AppLogger.instance.log(
-          'PhotoLoggingScreen: first suggestion = ${suggestions.first.dishNameEn}');
-      context.push('/log/suggestions', extra: suggestions);
+          'PhotoLoggingScreen: first suggestion = ${finalSuggestions.first.dishNameEn}');
+      context.push('/log/suggestions', extra: finalSuggestions);
     } catch (e) {
       AppLogger.instance
           .log('PhotoLoggingScreen: image identification failed: $e');
+
       if (mounted) {
+        final isOffline = e is SocketException || e is TimeoutException;
+        final errorMessage = isOffline
+            ? 'Network too weak for AI Vision. Please use manual search.'
+            : 'Could not identify food. Try again or search manually.';
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 5),
-            content: const Text(
-                'Could not identify food. Try again or search manually.'),
-            action: SnackBarAction(
-              label: 'Search',
-              onPressed: () => context.push('/log/search'),
-            ),
+            content: Text(errorMessage),
           ),
         );
       }

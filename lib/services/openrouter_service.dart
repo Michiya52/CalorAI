@@ -10,8 +10,13 @@ import '../core/utils/app_logger.dart';
 ///
 /// Vision is NOT supported on the free tier; image recognition stays on
 /// Gemini (see [GeminiService]).
+/// A service that interfaces with the OpenRouter API to power the CalorAI chatbot.
+///
+/// This service acts as the primary AI endpoint for conversational features. It builds
+/// dynamic context (user profile, recent meals) and securely manages API communication.
 class OpenRouterService {
-  static const String _baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
+  static const String _baseUrl =
+      'https://openrouter.ai/api/v1/chat/completions';
 
   /// Primary model — use a capable free model.
   /// Falls back to auto-routing if the free model is unavailable.
@@ -28,9 +33,13 @@ class OpenRouterService {
 
   String get _apiKey => dotenv.env['OPENROUTER_API_KEY'] ?? '';
 
+  /// Checks if the user has provided a valid OpenRouter API key in their .env file.
   bool get isConfigured => _apiKey.isNotEmpty;
 
-  /// Build the full system prompt with enriched context.
+  /// Builds the extensive system prompt that dictates the AI's persona, rules, and context.
+  ///
+  /// Injects real-time user data like daily calorie targets, macro remaining, and
+  /// their last 7 days of eating history so the AI can provide personalized advice.
   String buildSystemPrompt({
     required UserProfile profile,
     required List<MealEntry> recentMeals,
@@ -44,8 +53,8 @@ class OpenRouterService {
     final todayFats = todaysMeals.fold<double>(0, (s, m) => s + m.fatsG);
     final remaining = profile.calorieTarget - todayCalories;
 
-    final macroTargets =
-        profile.macroTargets ?? MacroTargets.fromCalories(profile.calorieTarget);
+    final macroTargets = profile.macroTargets ??
+        MacroTargets.fromCalories(profile.calorieTarget);
 
     // ── Weekly stats ──────────────────────────────────────────────
     final weeklyCalories = <int>[];
@@ -61,7 +70,8 @@ class OpenRouterService {
 
     final topFoods = foodFrequency.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    final top3 = topFoods.take(3).map((e) => '${e.key} (×${e.value})').join(', ');
+    final top3 =
+        topFoods.take(3).map((e) => '${e.key} (×${e.value})').join(', ');
 
     // ── BMI ───────────────────────────────────────────────────────
     final heightM = profile.heightCm / 100;
@@ -106,28 +116,28 @@ You are **CalorAI**, a friendly, knowledgeable, and practical Malaysian nutritio
 Your main job is to help users make the most accurate possible calorie and macro estimates from the information available, while giving realistic, helpful advice for Malaysian and Southeast Asian eating habits.
 
 ═══ USER PROFILE ═══
-Name: \${profile.name}
-Goal: \${profile.goal.replaceAll('_', ' ')}
-Daily calorie target: \${profile.calorieTarget} kcal
-Age: \${profile.age} | Sex: \${profile.sex}
-Height: \${profile.heightCm} cm | Weight: \${profile.weightKg} kg
-BMI: \${bmi.toStringAsFixed(1)} (\$bmiCategory)
-Activity level: \${profile.activityLevel.replaceAll('_', ' ')}
+Name: ${profile.name}
+Goal: ${profile.goal.replaceAll('_', ' ')}
+Daily calorie target: ${profile.calorieTarget} kcal
+Age: ${profile.age} | Sex: ${profile.sex}
+Height: ${profile.heightCm} cm | Weight: ${profile.weightKg} kg
+BMI: ${bmi.toStringAsFixed(1)} ($bmiCategory)
+Activity level: ${profile.activityLevel.replaceAll('_', ' ')}
 
 ═══ TODAY'S PROGRESS ═══
-Calories: \$todayCalories / \${profile.calorieTarget} kcal (\$remaining remaining)
-Protein: \${todayProtein.toStringAsFixed(0)}g / \${macroTargets.proteinG}g — \$proteinNote
-Carbs: \${todayCarbs.toStringAsFixed(0)}g / \${macroTargets.carbsG}g — \$carbsNote
-Fats: \${todayFats.toStringAsFixed(0)}g / \${macroTargets.fatsG}g — \$fatsNote
-Meals logged today: \${todaysMeals.length}
+Calories: $todayCalories / ${profile.calorieTarget} kcal ($remaining remaining)
+Protein: ${todayProtein.toStringAsFixed(0)}g / ${macroTargets.proteinG}g — $proteinNote
+Carbs: ${todayCarbs.toStringAsFixed(0)}g / ${macroTargets.carbsG}g — $carbsNote
+Fats: ${todayFats.toStringAsFixed(0)}g / ${macroTargets.fatsG}g — $fatsNote
+Meals logged today: ${todaysMeals.length}
 
 ═══ WEEKLY OVERVIEW (7 days) ═══
-Average daily intake: \$avgDailyCalories kcal
-Most eaten foods: \${top3.isEmpty ? 'None' : top3}
-Total meals this week: \${recentMeals.length}
+Average daily intake: $avgDailyCalories kcal
+Most eaten foods: ${top3.isEmpty ? 'None' : top3}
+Total meals this week: ${recentMeals.length}
 
 ═══ RECENT MEALS ═══
-\$mealLog
+$mealLog
 
 ═══ CORE BEHAVIOR ═══
 - Answer the user's question directly first.
@@ -175,7 +185,7 @@ Total meals this week: \${recentMeals.length}
 ═══ PROGRESS AWARENESS ═══
 - When relevant, connect your answer to the user's current progress.
 - If the user is over or under on calories or macros, mention it briefly only when helpful.
-- If the user still has room left for the day, you may reference it naturally, for example: "You've still got \$remaining kcal left today."
+- If the user still has room left for the day, you may reference it naturally, for example: "You've still got $remaining kcal left today."
 - Focus on useful next steps, not judgment.
 
 ═══ SAFETY GUIDELINES ═══
@@ -183,12 +193,17 @@ Total meals this week: \${recentMeals.length}
 - If asked about medical conditions, symptoms, treatment, or disease-specific nutrition advice, provide only general wellness guidance and recommend consulting a doctor or registered dietitian.
 - Do not invent personal history, symptoms, meal logs, or habits that are not provided.
 
-\${conversationMemory.isNotEmpty ? conversationMemory : ''}
+${conversationMemory.isNotEmpty ? conversationMemory : ''}
 ''';
   }
 
-  /// Sends a chat message via OpenRouter.
-  /// Strategy: free model → paid auto-route → Gemini (last resort).
+  /// Sends a conversational message to the OpenRouter API.
+  ///
+  /// [Strategy]:
+  /// 1. Tries the free default model (`meta-llama/llama-3-8b-instruct:free`).
+  /// 2. If it fails (e.g., rate limit), it degrades to the fallback OpenRouter model.
+  /// 3. If OpenRouter completely fails or lacks a key, it invokes `fallbackChat`
+  ///    to route the request to the Gemini API (`gemini_service.dart`).
   Future<String> chat({
     required String userMessage,
     required UserProfile profile,
@@ -222,7 +237,8 @@ Total meals this week: \${recentMeals.length}
     final recentHistory =
         history.length > 6 ? history.sublist(history.length - 6) : history;
     for (final msg in recentHistory) {
-      final role = msg['role'] == 'model' ? 'assistant' : (msg['role'] ?? 'user');
+      final role =
+          msg['role'] == 'model' ? 'assistant' : (msg['role'] ?? 'user');
       messages.add({
         'role': role,
         'content': msg['text'] ?? '',
@@ -259,8 +275,7 @@ Total meals this week: \${recentMeals.length}
       return fallbackChat();
     }
 
-    throw Exception(
-        'Could not get a response. Please try again in a moment.');
+    throw Exception('Could not get a response. Please try again in a moment.');
   }
 
   /// Low-level call to OpenRouter API.
@@ -295,8 +310,8 @@ Total meals this week: \${recentMeals.length}
     }
 
     final statusCode = response.statusCode;
-    AppLogger.instance
-        .log('OpenRouter [$model] returned $statusCode: ${response.body.take(200)}');
+    AppLogger.instance.log(
+        'OpenRouter [$model] returned $statusCode: ${response.body.take(200)}');
 
     if (statusCode == 429) {
       // Rate limited on this model — let caller try next

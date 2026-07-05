@@ -147,8 +147,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             child: IconButton(
               icon: Icon(Icons.add_comment_outlined,
                   size: 18, color: AppColors.textSecondary),
-              onPressed: () =>
-                  context.read<ChatbotProvider>().startNewChat(),
+              onPressed: () => context.read<ChatbotProvider>().startNewChat(),
               tooltip: 'New chat',
               padding: EdgeInsets.zero,
             ),
@@ -201,12 +200,14 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           // Input bar
           Consumer<ChatbotProvider>(
             builder: (context, chatbot, _) => Container(
-              margin: const EdgeInsets.only(bottom: 110), // Clears 76px nav + 24px padding + 10px gap
+              margin: const EdgeInsets.only(
+                  bottom: 110), // Clears 76px nav + 24px padding + 10px gap
               decoration: BoxDecoration(
                 color: isDark
                     ? const Color(0xFF1E293B).withValues(alpha: 0.9)
                     : Colors.white.withValues(alpha: 0.9),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
                 border: Border(
                   top: BorderSide(
                     color: isDark
@@ -216,7 +217,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 ),
               ),
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
                   child: SafeArea(
@@ -590,8 +592,7 @@ class _ChatHistorySheet extends StatelessWidget {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color:
-                                AppColors.primary.withValues(alpha: 0.1),
+                            color: AppColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(Icons.chat_rounded,

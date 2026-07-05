@@ -3,6 +3,11 @@ import 'package:flutter/widgets.dart';
 import '../models/meal_entry.dart';
 import '../services/firestore_service.dart';
 
+/// Manages the state of the user's daily meals.
+///
+/// This provider fetches the meals for a specific date from [FirestoreService],
+/// tallies the total calories and macros, and automatically notifies the UI
+/// (like the Dashboard) whenever a meal is added, updated, or deleted.
 class MealProvider extends ChangeNotifier {
   final FirestoreService _firestore = FirestoreService();
 
@@ -15,12 +20,14 @@ class MealProvider extends ChangeNotifier {
   int get totalCaloriesToday =>
       _todaysMeals.fold(0, (sum, m) => sum + m.calories);
 
+  /// Calculates the total combined macros for all meals eaten on this date.
   Map<String, double> get totalMacrosToday => {
         'proteinG': _todaysMeals.fold(0.0, (s, m) => s + m.proteinG),
         'carbsG': _todaysMeals.fold(0.0, (s, m) => s + m.carbsG),
         'fatsG': _todaysMeals.fold(0.0, (s, m) => s + m.fatsG),
       };
 
+  /// Fetches the meal history for a specific date (YYYY-MM-DD) from Firestore.
   Future<void> loadMealsForDate(String uid, String date) async {
     _isLoading = true;
     notifyListeners();

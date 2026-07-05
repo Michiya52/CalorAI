@@ -12,7 +12,7 @@ void main() {
   group('Provider State Cleanup Tests', () {
     test('ProfileProvider clear resets profile and error', () {
       final provider = ProfileProvider();
-      
+
       final profile = UserProfile(
         uid: 'test_uid',
         name: 'Test User',
@@ -28,11 +28,11 @@ void main() {
         isMacroTargetsManual: false,
         createdAt: DateTime.now(),
       );
-      
+
       provider.setProfile(profile);
       expect(provider.profile, isNotNull);
       expect(provider.profile!.uid, 'test_uid');
-      
+
       provider.clear();
       expect(provider.profile, isNull);
       expect(provider.error, isNull);
@@ -41,7 +41,7 @@ void main() {
     test('MealProvider clear resets todaysMeals', () {
       final provider = MealProvider();
       expect(provider.todaysMeals, isEmpty);
-      
+
       provider.clear();
       expect(provider.todaysMeals, isEmpty);
     });
@@ -50,7 +50,7 @@ void main() {
       final provider = ChatbotProvider();
       expect(provider.messages, isEmpty);
       expect(provider.savedSessions, isEmpty);
-      
+
       provider.clear();
       expect(provider.messages, isEmpty);
       expect(provider.savedSessions, isEmpty);
