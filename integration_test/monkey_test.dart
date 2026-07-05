@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:calor_ai/main.dart' as app;
 
 void main() {
@@ -33,6 +34,25 @@ void main() {
           password: 'qweasdzxc',
         );
       }
+    }
+
+    // 2.5 Ensure the profile exists to skip the Profile Setup screen
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': 'Monkey Tester',
+        'email': 'zhengyao.chan1@gmail.com',
+        'weightKg': 70.0,
+        'heightCm': 175.0,
+        'age': 25,
+        'sex': 'male',
+        'activityLevel': 'sedentary',
+        'goal': 'maintain',
+        'dailyTargetCalories': 2000,
+        'dailyTargetProteinG': 150,
+        'dailyTargetCarbsG': 200,
+        'dailyTargetFatsG': 65,
+      }, SetOptions(merge: true));
     }
 
     // Wait for auth to propagate and app to navigate to Dashboard
