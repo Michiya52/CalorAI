@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 /// Bump this when you update the food dataset to force a re-seed.
-const String _seedVersion = 'v15';
+const String _seedVersion = 'v16';
 const String _seedVersionKey = 'food_seed_version';
 
 Future<void> seedFoodsDatabase() async {
@@ -2503,8 +2503,9 @@ Future<void> seedFoodsDatabase() async {
   final myfcdRaw = await _loadFoodAsset('assets/data/myfcd_full.json');
   final sgfocosRaw = await _loadFoodAsset('assets/data/sgfocos_full.json');
   final backedRaw = await _loadFoodAsset('assets/data/backed_foods.json');
+  final backedMyRaw = await _loadFoodAsset('assets/data/backed_my_foods.json');
 
-  final allSourceFoods = [...myfcdRaw, ...sgfocosRaw, ...backedRaw];
+  final allSourceFoods = [...myfcdRaw, ...sgfocosRaw, ...backedRaw, ...backedMyRaw];
   final mergedFoods = <String, Map<String, dynamic>>{};
 
   /// Sanitizes food data (handles outliers and name cleaning)

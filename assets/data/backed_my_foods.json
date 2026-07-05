@@ -1,0 +1,1212 @@
+[
+  {
+    "nameEn": "Nasi Lemak (with Sambal, Egg, Anchovies)",
+    "nameMy": "Nasi Lemak Biasa",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 185.0,
+    "proteinPer100g": 4.5,
+    "carbsPer100g": 25.0,
+    "fatsPer100g": 7.5,
+    "sodiumPer100g": 210.0,
+    "sugarPer100g": 1.5,
+    "ingredients": [
+      "Coconut Rice",
+      "Sambal",
+      "Boiled Egg",
+      "Fried Anchovies",
+      "Peanuts",
+      "Cucumber"
+    ],
+    "portionSizes": {
+      "smallGrams": 150,
+      "mediumGrams": 250,
+      "largeGrams": 350
+    },
+    "source": "MYFCD ID: Q001",
+    "myfcdCode": "MB001"
+  },
+  {
+    "nameEn": "Nasi Goreng Kampung",
+    "nameMy": "Nasi Goreng Kampung",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 172.0,
+    "proteinPer100g": 5.2,
+    "carbsPer100g": 22.1,
+    "fatsPer100g": 7.1,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 0.8,
+    "ingredients": [
+      "Rice",
+      "Anchovies",
+      "Water Spinach (Kangkung)",
+      "Chili",
+      "Shrimp Paste"
+    ],
+    "portionSizes": {
+      "smallGrams": 200,
+      "mediumGrams": 300,
+      "largeGrams": 450
+    },
+    "source": "MYFCD ID: Q002",
+    "myfcdCode": "MB002"
+  },
+  {
+    "nameEn": "Nasi Kandar (Mixed Rice with Curries)",
+    "nameMy": "Nasi Kandar",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 160.0,
+    "proteinPer100g": 5.5,
+    "carbsPer100g": 21.0,
+    "fatsPer100g": 6.0,
+    "sodiumPer100g": 290.0,
+    "sugarPer100g": 1.2,
+    "ingredients": [
+      "White Rice",
+      "Mixed Curries",
+      "Fried Chicken/Beef",
+      "Vegetables"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 450,
+      "largeGrams": 650
+    },
+    "source": "MYFCD ID: Q003",
+    "myfcdCode": "MB003"
+  },
+  {
+    "nameEn": "Roti Telur",
+    "nameMy": "Roti Telur",
+    "foodGroup": "Breads",
+    "caloriesPer100g": 275.0,
+    "proteinPer100g": 8.5,
+    "carbsPer100g": 36.0,
+    "fatsPer100g": 10.5,
+    "sodiumPer100g": 400.0,
+    "sugarPer100g": 2.0,
+    "ingredients": [
+      "Wheat Flour",
+      "Egg",
+      "Ghee",
+      "Onion"
+    ],
+    "portionSizes": {
+      "smallGrams": 100,
+      "mediumGrams": 140,
+      "largeGrams": 200
+    },
+    "source": "MYFCD ID: Q004",
+    "myfcdCode": "MB004"
+  },
+  {
+    "nameEn": "Murtabak (Chicken/Beef)",
+    "nameMy": "Murtabak",
+    "foodGroup": "Breads",
+    "caloriesPer100g": 240.0,
+    "proteinPer100g": 11.0,
+    "carbsPer100g": 24.5,
+    "fatsPer100g": 10.8,
+    "sodiumPer100g": 450.0,
+    "sugarPer100g": 2.5,
+    "ingredients": [
+      "Wheat Flour",
+      "Minced Meat",
+      "Egg",
+      "Onion",
+      "Spices"
+    ],
+    "portionSizes": {
+      "smallGrams": 200,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q005",
+    "myfcdCode": "MB005"
+  },
+  {
+    "nameEn": "Nasi Briyani (with Chicken)",
+    "nameMy": "Nasi Briyani Ayam",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 175.0,
+    "proteinPer100g": 8.0,
+    "carbsPer100g": 22.0,
+    "fatsPer100g": 6.2,
+    "sodiumPer100g": 320.0,
+    "sugarPer100g": 1.0,
+    "ingredients": [
+      "Basmati Rice",
+      "Chicken",
+      "Ghee",
+      "Spices"
+    ],
+    "portionSizes": {
+      "smallGrams": 300,
+      "mediumGrams": 450,
+      "largeGrams": 600
+    },
+    "source": "SG FOCOS ID: 153",
+    "myfcdCode": "MB006"
+  },
+  {
+    "nameEn": "Maggi Goreng",
+    "nameMy": "Maggi Goreng",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 210.0,
+    "proteinPer100g": 6.0,
+    "carbsPer100g": 27.5,
+    "fatsPer100g": 8.5,
+    "sodiumPer100g": 600.0,
+    "sugarPer100g": 3.0,
+    "ingredients": [
+      "Instant Noodles",
+      "Egg",
+      "Tofu",
+      "Vegetables",
+      "Soy Sauce"
+    ],
+    "portionSizes": {
+      "smallGrams": 200,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q007",
+    "myfcdCode": "MB007"
+  },
+  {
+    "nameEn": "Curry Laksa",
+    "nameMy": "Kari Laksa",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 125.0,
+    "proteinPer100g": 5.0,
+    "carbsPer100g": 13.0,
+    "fatsPer100g": 5.8,
+    "sodiumPer100g": 310.0,
+    "sugarPer100g": 2.2,
+    "ingredients": [
+      "Yellow Noodles",
+      "Coconut Milk Broth",
+      "Tofu Puffs",
+      "Chicken",
+      "Bean Sprouts"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "MYFCD ID: Q008",
+    "myfcdCode": "MB008"
+  },
+  {
+    "nameEn": "Sarawak Laksa",
+    "nameMy": "Laksa Sarawak",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 110.0,
+    "proteinPer100g": 6.5,
+    "carbsPer100g": 12.0,
+    "fatsPer100g": 4.0,
+    "sodiumPer100g": 350.0,
+    "sugarPer100g": 1.8,
+    "ingredients": [
+      "Vermicelli",
+      "Sambal Belacan Broth",
+      "Prawns",
+      "Shredded Chicken",
+      "Omelette Strips"
+    ],
+    "portionSizes": {
+      "smallGrams": 300,
+      "mediumGrams": 450,
+      "largeGrams": 600
+    },
+    "source": "MYFCD ID: Q009",
+    "myfcdCode": "MB009"
+  },
+  {
+    "nameEn": "Laksam",
+    "nameMy": "Laksam",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 115.0,
+    "proteinPer100g": 4.5,
+    "carbsPer100g": 17.0,
+    "fatsPer100g": 3.2,
+    "sodiumPer100g": 210.0,
+    "sugarPer100g": 2.0,
+    "ingredients": [
+      "Flat Rice Noodle Rolls",
+      "Fish Gravy",
+      "Coconut Milk",
+      "Ulam (Herbs)"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 400,
+      "largeGrams": 550
+    },
+    "source": "MYFCD ID: Q010",
+    "myfcdCode": "MB010"
+  },
+  {
+    "nameEn": "Mee Rebus",
+    "nameMy": "Mee Rebus",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 135.0,
+    "proteinPer100g": 4.8,
+    "carbsPer100g": 22.0,
+    "fatsPer100g": 3.1,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 4.5,
+    "ingredients": [
+      "Yellow Noodles",
+      "Sweet Potato Gravy",
+      "Boiled Egg",
+      "Fried Shallots"
+    ],
+    "portionSizes": {
+      "smallGrams": 300,
+      "mediumGrams": 450,
+      "largeGrams": 600
+    },
+    "source": "MYFCD ID: Q011",
+    "myfcdCode": "MB011"
+  },
+  {
+    "nameEn": "Mee Siam (Dry)",
+    "nameMy": "Mee Siam Goreng",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 165.0,
+    "proteinPer100g": 5.0,
+    "carbsPer100g": 26.0,
+    "fatsPer100g": 4.5,
+    "sodiumPer100g": 420.0,
+    "sugarPer100g": 3.5,
+    "ingredients": [
+      "Vermicelli",
+      "Tamarind",
+      "Chili Paste",
+      "Egg",
+      "Chives"
+    ],
+    "portionSizes": {
+      "smallGrams": 200,
+      "mediumGrams": 300,
+      "largeGrams": 450
+    },
+    "source": "SG FOCOS ID: 211",
+    "myfcdCode": "MB012"
+  },
+  {
+    "nameEn": "Mee Soto",
+    "nameMy": "Mee Soto",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 105.0,
+    "proteinPer100g": 6.2,
+    "carbsPer100g": 14.5,
+    "fatsPer100g": 2.5,
+    "sodiumPer100g": 360.0,
+    "sugarPer100g": 1.0,
+    "ingredients": [
+      "Yellow Noodles",
+      "Chicken Broth",
+      "Shredded Chicken",
+      "Bean Sprouts"
+    ],
+    "portionSizes": {
+      "smallGrams": 300,
+      "mediumGrams": 450,
+      "largeGrams": 650
+    },
+    "source": "MYFCD ID: Q013",
+    "myfcdCode": "MB013"
+  },
+  {
+    "nameEn": "Wonton Mee (Dry)",
+    "nameMy": "Wantan Mee (Kering)",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 190.0,
+    "proteinPer100g": 7.5,
+    "carbsPer100g": 28.0,
+    "fatsPer100g": 5.5,
+    "sodiumPer100g": 490.0,
+    "sugarPer100g": 2.8,
+    "ingredients": [
+      "Egg Noodles",
+      "Dark Soy Sauce",
+      "Char Siew",
+      "Wontons",
+      "Choy Sum"
+    ],
+    "portionSizes": {
+      "smallGrams": 200,
+      "mediumGrams": 300,
+      "largeGrams": 450
+    },
+    "source": "SG FOCOS ID: 243",
+    "myfcdCode": "MB014"
+  },
+  {
+    "nameEn": "Wonton Mee (Soup)",
+    "nameMy": "Wantan Mee (Sup)",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 110.0,
+    "proteinPer100g": 5.8,
+    "carbsPer100g": 16.0,
+    "fatsPer100g": 2.5,
+    "sodiumPer100g": 420.0,
+    "sugarPer100g": 1.2,
+    "ingredients": [
+      "Egg Noodles",
+      "Clear Broth",
+      "Wontons",
+      "Choy Sum"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "SG FOCOS ID: 244",
+    "myfcdCode": "MB015"
+  },
+  {
+    "nameEn": "Pan Mee (Dry)",
+    "nameMy": "Pan Mee (Kering)",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 185.0,
+    "proteinPer100g": 8.0,
+    "carbsPer100g": 26.5,
+    "fatsPer100g": 5.2,
+    "sodiumPer100g": 470.0,
+    "sugarPer100g": 2.0,
+    "ingredients": [
+      "Flat Flour Noodles",
+      "Minced Pork",
+      "Anchovies",
+      "Fried Onions",
+      "Dark Soy Sauce"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q016",
+    "myfcdCode": "MB016"
+  },
+  {
+    "nameEn": "Pan Mee (Soup)",
+    "nameMy": "Pan Mee (Sup)",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 120.0,
+    "proteinPer100g": 6.5,
+    "carbsPer100g": 18.0,
+    "fatsPer100g": 2.5,
+    "sodiumPer100g": 410.0,
+    "sugarPer100g": 1.0,
+    "ingredients": [
+      "Flat Flour Noodles",
+      "Anchovy Broth",
+      "Minced Pork",
+      "Sweet Leaf (Mani Chai)"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "MYFCD ID: Q017",
+    "myfcdCode": "MB017"
+  },
+  {
+    "nameEn": "Nasi Kerabu",
+    "nameMy": "Nasi Kerabu",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 155.0,
+    "proteinPer100g": 5.0,
+    "carbsPer100g": 24.0,
+    "fatsPer100g": 4.2,
+    "sodiumPer100g": 280.0,
+    "sugarPer100g": 2.5,
+    "ingredients": [
+      "Blue Butterfly Pea Rice",
+      "Ulam (Herbs)",
+      "Fish Crackers",
+      "Sambal Kelapa",
+      "Budu"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q018",
+    "myfcdCode": "MB018"
+  },
+  {
+    "nameEn": "Nasi Dagang",
+    "nameMy": "Nasi Dagang",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 180.0,
+    "proteinPer100g": 6.5,
+    "carbsPer100g": 22.0,
+    "fatsPer100g": 7.2,
+    "sodiumPer100g": 250.0,
+    "sugarPer100g": 2.0,
+    "ingredients": [
+      "Fenugreek Rice",
+      "Tuna Curry (Gulai Ikan Tongkol)",
+      "Pickled Vegetables"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 400,
+      "largeGrams": 550
+    },
+    "source": "MYFCD ID: Q019",
+    "myfcdCode": "MB019"
+  },
+  {
+    "nameEn": "Sate Ayam (Chicken Satay)",
+    "nameMy": "Sate Ayam",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 210.0,
+    "proteinPer100g": 18.5,
+    "carbsPer100g": 8.5,
+    "fatsPer100g": 11.2,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 6.5,
+    "ingredients": [
+      "Chicken",
+      "Turmeric",
+      "Lemongrass",
+      "Sugar",
+      "Peanut Sauce"
+    ],
+    "portionSizes": {
+      "smallGrams": 50,
+      "mediumGrams": 100,
+      "largeGrams": 200
+    },
+    "source": "MYFCD ID: Q020",
+    "myfcdCode": "MB020"
+  },
+  {
+    "nameEn": "Sate Daging (Beef Satay)",
+    "nameMy": "Sate Daging",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 225.0,
+    "proteinPer100g": 20.0,
+    "carbsPer100g": 7.5,
+    "fatsPer100g": 12.8,
+    "sodiumPer100g": 360.0,
+    "sugarPer100g": 5.5,
+    "ingredients": [
+      "Beef",
+      "Spices",
+      "Sugar",
+      "Peanut Sauce"
+    ],
+    "portionSizes": {
+      "smallGrams": 50,
+      "mediumGrams": 100,
+      "largeGrams": 200
+    },
+    "source": "MYFCD ID: Q021",
+    "myfcdCode": "MB021"
+  },
+  {
+    "nameEn": "Otak-otak",
+    "nameMy": "Otak-otak",
+    "foodGroup": "Seafood",
+    "caloriesPer100g": 165.0,
+    "proteinPer100g": 12.5,
+    "carbsPer100g": 8.0,
+    "fatsPer100g": 9.2,
+    "sodiumPer100g": 450.0,
+    "sugarPer100g": 2.5,
+    "ingredients": [
+      "Fish Paste",
+      "Coconut Milk",
+      "Chili Paste",
+      "Spices"
+    ],
+    "portionSizes": {
+      "smallGrams": 40,
+      "mediumGrams": 80,
+      "largeGrams": 160
+    },
+    "source": "MYFCD ID: Q022",
+    "myfcdCode": "MB022"
+  },
+  {
+    "nameEn": "Ikan Bakar (Grilled Fish with Sambal)",
+    "nameMy": "Ikan Bakar",
+    "foodGroup": "Seafood",
+    "caloriesPer100g": 145.0,
+    "proteinPer100g": 21.0,
+    "carbsPer100g": 3.5,
+    "fatsPer100g": 5.2,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 1.5,
+    "ingredients": [
+      "Stingray/Mackerel",
+      "Sambal Paste",
+      "Banana Leaf"
+    ],
+    "portionSizes": {
+      "smallGrams": 150,
+      "mediumGrams": 250,
+      "largeGrams": 400
+    },
+    "source": "MYFCD ID: Q023",
+    "myfcdCode": "MB023"
+  },
+  {
+    "nameEn": "Ayam Goreng Berempah",
+    "nameMy": "Ayam Goreng Berempah",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 280.0,
+    "proteinPer100g": 23.5,
+    "carbsPer100g": 6.5,
+    "fatsPer100g": 17.5,
+    "sodiumPer100g": 410.0,
+    "sugarPer100g": 1.0,
+    "ingredients": [
+      "Chicken",
+      "Lemongrass",
+      "Coriander",
+      "Fennel",
+      "Oil"
+    ],
+    "portionSizes": {
+      "smallGrams": 120,
+      "mediumGrams": 180,
+      "largeGrams": 250
+    },
+    "source": "MYFCD ID: Q024",
+    "myfcdCode": "MB024"
+  },
+  {
+    "nameEn": "Ayam Masak Merah",
+    "nameMy": "Ayam Masak Merah",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 195.0,
+    "proteinPer100g": 15.0,
+    "carbsPer100g": 8.5,
+    "fatsPer100g": 11.2,
+    "sodiumPer100g": 360.0,
+    "sugarPer100g": 4.5,
+    "ingredients": [
+      "Chicken",
+      "Tomato Paste",
+      "Chili Paste",
+      "Onion",
+      "Peas"
+    ],
+    "portionSizes": {
+      "smallGrams": 150,
+      "mediumGrams": 250,
+      "largeGrams": 350
+    },
+    "source": "MYFCD ID: Q025",
+    "myfcdCode": "MB025"
+  },
+  {
+    "nameEn": "Chicken Rendang",
+    "nameMy": "Rendang Ayam",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 185.0,
+    "proteinPer100g": 16.5,
+    "carbsPer100g": 7.5,
+    "fatsPer100g": 10.0,
+    "sodiumPer100g": 320.0,
+    "sugarPer100g": 2.8,
+    "ingredients": [
+      "Chicken",
+      "Coconut Milk",
+      "Lemongrass",
+      "Galangal",
+      "Kerisik"
+    ],
+    "portionSizes": {
+      "smallGrams": 120,
+      "mediumGrams": 200,
+      "largeGrams": 300
+    },
+    "source": "MYFCD ID: Q026",
+    "myfcdCode": "MB026"
+  },
+  {
+    "nameEn": "Mutton Curry",
+    "nameMy": "Kari Kambing",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 210.0,
+    "proteinPer100g": 14.5,
+    "carbsPer100g": 5.5,
+    "fatsPer100g": 14.5,
+    "sodiumPer100g": 410.0,
+    "sugarPer100g": 1.5,
+    "ingredients": [
+      "Mutton/Lamb",
+      "Curry Powder",
+      "Coconut Milk",
+      "Potatoes"
+    ],
+    "portionSizes": {
+      "smallGrams": 150,
+      "mediumGrams": 250,
+      "largeGrams": 400
+    },
+    "source": "MYFCD ID: Q027",
+    "myfcdCode": "MB027"
+  },
+  {
+    "nameEn": "Yong Tau Foo (Soup)",
+    "nameMy": "Yong Tau Foo (Sup)",
+    "foodGroup": "Soups",
+    "caloriesPer100g": 85.0,
+    "proteinPer100g": 7.5,
+    "carbsPer100g": 5.0,
+    "fatsPer100g": 3.8,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 1.2,
+    "ingredients": [
+      "Tofu",
+      "Fish Paste",
+      "Vegetables",
+      "Clear Broth"
+    ],
+    "portionSizes": {
+      "smallGrams": 300,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "SG FOCOS ID: 285",
+    "myfcdCode": "MB028"
+  },
+  {
+    "nameEn": "Popiah (Non-fried)",
+    "nameMy": "Popiah Basah",
+    "foodGroup": "Snacks",
+    "caloriesPer100g": 120.0,
+    "proteinPer100g": 4.5,
+    "carbsPer100g": 16.5,
+    "fatsPer100g": 3.5,
+    "sodiumPer100g": 290.0,
+    "sugarPer100g": 4.5,
+    "ingredients": [
+      "Popiah Skin",
+      "Jicama (Sengkuang)",
+      "Egg",
+      "Peanuts",
+      "Sweet Sauce"
+    ],
+    "portionSizes": {
+      "smallGrams": 80,
+      "mediumGrams": 160,
+      "largeGrams": 240
+    },
+    "source": "MYFCD ID: Q029",
+    "myfcdCode": "MB029"
+  },
+  {
+    "nameEn": "Curry Puff (Karipap)",
+    "nameMy": "Karipap",
+    "foodGroup": "Snacks",
+    "caloriesPer100g": 310.0,
+    "proteinPer100g": 5.2,
+    "carbsPer100g": 35.5,
+    "fatsPer100g": 16.2,
+    "sodiumPer100g": 280.0,
+    "sugarPer100g": 2.0,
+    "ingredients": [
+      "Flour Dough",
+      "Potatoes",
+      "Curry Powder",
+      "Chicken/Sardine",
+      "Oil"
+    ],
+    "portionSizes": {
+      "smallGrams": 40,
+      "mediumGrams": 80,
+      "largeGrams": 120
+    },
+    "source": "MYFCD ID: Q030",
+    "myfcdCode": "MB030"
+  },
+  {
+    "nameEn": "Pisang Goreng (Banana Fritter)",
+    "nameMy": "Pisang Goreng",
+    "foodGroup": "Snacks",
+    "caloriesPer100g": 265.0,
+    "proteinPer100g": 2.5,
+    "carbsPer100g": 38.0,
+    "fatsPer100g": 11.5,
+    "sodiumPer100g": 85.0,
+    "sugarPer100g": 14.5,
+    "ingredients": [
+      "Banana",
+      "Flour Batter",
+      "Oil"
+    ],
+    "portionSizes": {
+      "smallGrams": 60,
+      "mediumGrams": 120,
+      "largeGrams": 180
+    },
+    "source": "MYFCD ID: Q031",
+    "myfcdCode": "MB031"
+  },
+  {
+    "nameEn": "Cekodok Pisang",
+    "nameMy": "Cekodok Pisang",
+    "foodGroup": "Snacks",
+    "caloriesPer100g": 285.0,
+    "proteinPer100g": 4.0,
+    "carbsPer100g": 45.0,
+    "fatsPer100g": 9.5,
+    "sodiumPer100g": 120.0,
+    "sugarPer100g": 22.0,
+    "ingredients": [
+      "Mashed Banana",
+      "Flour",
+      "Sugar",
+      "Oil"
+    ],
+    "portionSizes": {
+      "smallGrams": 40,
+      "mediumGrams": 80,
+      "largeGrams": 160
+    },
+    "source": "MYFCD ID: Q032",
+    "myfcdCode": "MB032"
+  },
+  {
+    "nameEn": "Keropok Lekor (Fried)",
+    "nameMy": "Keropok Lekor Goreng",
+    "foodGroup": "Snacks",
+    "caloriesPer100g": 295.0,
+    "proteinPer100g": 14.5,
+    "carbsPer100g": 40.0,
+    "fatsPer100g": 8.5,
+    "sodiumPer100g": 480.0,
+    "sugarPer100g": 1.5,
+    "ingredients": [
+      "Fish Meat",
+      "Sago Flour",
+      "Salt",
+      "Oil"
+    ],
+    "portionSizes": {
+      "smallGrams": 50,
+      "mediumGrams": 100,
+      "largeGrams": 200
+    },
+    "source": "MYFCD ID: Q033",
+    "myfcdCode": "MB033"
+  },
+  {
+    "nameEn": "Kuih Lapis",
+    "nameMy": "Kuih Lapis",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 215.0,
+    "proteinPer100g": 1.5,
+    "carbsPer100g": 46.5,
+    "fatsPer100g": 2.5,
+    "sodiumPer100g": 60.0,
+    "sugarPer100g": 28.5,
+    "ingredients": [
+      "Rice Flour",
+      "Tapioca Flour",
+      "Coconut Milk",
+      "Sugar"
+    ],
+    "portionSizes": {
+      "smallGrams": 50,
+      "mediumGrams": 100,
+      "largeGrams": 150
+    },
+    "source": "MYFCD ID: Q034",
+    "myfcdCode": "MB034"
+  },
+  {
+    "nameEn": "Kuih Dadar (Ketayap)",
+    "nameMy": "Kuih Ketayap",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 240.0,
+    "proteinPer100g": 3.2,
+    "carbsPer100g": 48.0,
+    "fatsPer100g": 3.5,
+    "sodiumPer100g": 85.0,
+    "sugarPer100g": 30.0,
+    "ingredients": [
+      "Pandan Crepe",
+      "Grated Coconut",
+      "Palm Sugar (Gula Melaka)"
+    ],
+    "portionSizes": {
+      "smallGrams": 60,
+      "mediumGrams": 120,
+      "largeGrams": 180
+    },
+    "source": "MYFCD ID: Q035",
+    "myfcdCode": "MB035"
+  },
+  {
+    "nameEn": "Onde-Onde (Buah Melaka)",
+    "nameMy": "Onde-Onde",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 255.0,
+    "proteinPer100g": 2.5,
+    "carbsPer100g": 50.0,
+    "fatsPer100g": 4.5,
+    "sodiumPer100g": 45.0,
+    "sugarPer100g": 25.0,
+    "ingredients": [
+      "Glutinous Rice Flour",
+      "Pandan Juice",
+      "Palm Sugar",
+      "Grated Coconut"
+    ],
+    "portionSizes": {
+      "smallGrams": 45,
+      "mediumGrams": 90,
+      "largeGrams": 135
+    },
+    "source": "MYFCD ID: Q036",
+    "myfcdCode": "MB036"
+  },
+  {
+    "nameEn": "Seri Muka",
+    "nameMy": "Kuih Seri Muka",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 230.0,
+    "proteinPer100g": 3.5,
+    "carbsPer100g": 42.0,
+    "fatsPer100g": 4.8,
+    "sodiumPer100g": 90.0,
+    "sugarPer100g": 22.0,
+    "ingredients": [
+      "Glutinous Rice",
+      "Coconut Milk",
+      "Pandan Custard",
+      "Sugar"
+    ],
+    "portionSizes": {
+      "smallGrams": 60,
+      "mediumGrams": 120,
+      "largeGrams": 180
+    },
+    "source": "MYFCD ID: Q037",
+    "myfcdCode": "MB037"
+  },
+  {
+    "nameEn": "Bingka Ubi",
+    "nameMy": "Bingka Ubi Kayu",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 245.0,
+    "proteinPer100g": 1.8,
+    "carbsPer100g": 48.5,
+    "fatsPer100g": 4.5,
+    "sodiumPer100g": 50.0,
+    "sugarPer100g": 24.0,
+    "ingredients": [
+      "Grated Tapioca",
+      "Coconut Milk",
+      "Sugar",
+      "Egg"
+    ],
+    "portionSizes": {
+      "smallGrams": 60,
+      "mediumGrams": 120,
+      "largeGrams": 180
+    },
+    "source": "MYFCD ID: Q038",
+    "myfcdCode": "MB038"
+  },
+  {
+    "nameEn": "Cendol",
+    "nameMy": "Cendol",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 115.0,
+    "proteinPer100g": 1.2,
+    "carbsPer100g": 18.5,
+    "fatsPer100g": 3.8,
+    "sodiumPer100g": 40.0,
+    "sugarPer100g": 14.5,
+    "ingredients": [
+      "Shaved Ice",
+      "Coconut Milk",
+      "Palm Sugar Syrup",
+      "Green Rice Flour Jelly",
+      "Red Beans"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q039",
+    "myfcdCode": "MB039"
+  },
+  {
+    "nameEn": "Ais Kacang (ABC)",
+    "nameMy": "Ais Kacang",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 95.0,
+    "proteinPer100g": 1.5,
+    "carbsPer100g": 20.0,
+    "fatsPer100g": 0.8,
+    "sodiumPer100g": 35.0,
+    "sugarPer100g": 16.0,
+    "ingredients": [
+      "Shaved Ice",
+      "Red Beans",
+      "Sweet Corn",
+      "Grass Jelly",
+      "Syrup",
+      "Evaporated Milk"
+    ],
+    "portionSizes": {
+      "smallGrams": 300,
+      "mediumGrams": 450,
+      "largeGrams": 600
+    },
+    "source": "MYFCD ID: Q040",
+    "myfcdCode": "MB040"
+  },
+  {
+    "nameEn": "Teh O Ais Limau",
+    "nameMy": "Teh O Ais Limau",
+    "foodGroup": "Beverages",
+    "caloriesPer100g": 35.0,
+    "proteinPer100g": 0.1,
+    "carbsPer100g": 8.5,
+    "fatsPer100g": 0.0,
+    "sodiumPer100g": 5.0,
+    "sugarPer100g": 8.0,
+    "ingredients": [
+      "Black Tea",
+      "Calamansi Lime",
+      "Sugar",
+      "Ice"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q041",
+    "myfcdCode": "MB041"
+  },
+  {
+    "nameEn": "Milo Ais",
+    "nameMy": "Milo Ais",
+    "foodGroup": "Beverages",
+    "caloriesPer100g": 75.0,
+    "proteinPer100g": 1.8,
+    "carbsPer100g": 12.5,
+    "fatsPer100g": 1.5,
+    "sodiumPer100g": 45.0,
+    "sugarPer100g": 9.5,
+    "ingredients": [
+      "Milo Powder",
+      "Condensed Milk",
+      "Ice"
+    ],
+    "portionSizes": {
+      "smallGrams": 250,
+      "mediumGrams": 350,
+      "largeGrams": 500
+    },
+    "source": "MYFCD ID: Q042",
+    "myfcdCode": "MB042"
+  },
+  {
+    "nameEn": "Nasi Campur (Mixed Rice with 1 Meat 2 Veg)",
+    "nameMy": "Nasi Campur",
+    "foodGroup": "Rice Dishes",
+    "caloriesPer100g": 140.0,
+    "proteinPer100g": 6.5,
+    "carbsPer100g": 18.0,
+    "fatsPer100g": 4.5,
+    "sodiumPer100g": 210.0,
+    "sugarPer100g": 1.0,
+    "ingredients": [
+      "White Rice",
+      "Meat Dish",
+      "Vegetable Dishes",
+      "Gravy"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "MYFCD ID: Q043",
+    "myfcdCode": "MB043"
+  },
+  {
+    "nameEn": "Mee Sup",
+    "nameMy": "Mee Sup",
+    "foodGroup": "Noodle Dishes",
+    "caloriesPer100g": 95.0,
+    "proteinPer100g": 5.0,
+    "carbsPer100g": 14.5,
+    "fatsPer100g": 1.8,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 0.8,
+    "ingredients": [
+      "Yellow Noodles",
+      "Clear Chicken Broth",
+      "Chicken Slices",
+      "Vegetables"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "MYFCD ID: Q044",
+    "myfcdCode": "MB044"
+  },
+  {
+    "nameEn": "Roti Jala (with Chicken Curry)",
+    "nameMy": "Roti Jala",
+    "foodGroup": "Breads",
+    "caloriesPer100g": 195.0,
+    "proteinPer100g": 6.8,
+    "carbsPer100g": 22.0,
+    "fatsPer100g": 8.5,
+    "sodiumPer100g": 310.0,
+    "sugarPer100g": 2.0,
+    "ingredients": [
+      "Flour Net Crepe",
+      "Chicken Curry"
+    ],
+    "portionSizes": {
+      "smallGrams": 150,
+      "mediumGrams": 250,
+      "largeGrams": 350
+    },
+    "source": "MYFCD ID: Q045",
+    "myfcdCode": "MB045"
+  },
+  {
+    "nameEn": "Putu Mayam",
+    "nameMy": "Putu Mayam",
+    "foodGroup": "Desserts",
+    "caloriesPer100g": 180.0,
+    "proteinPer100g": 2.5,
+    "carbsPer100g": 38.0,
+    "fatsPer100g": 2.0,
+    "sodiumPer100g": 40.0,
+    "sugarPer100g": 14.0,
+    "ingredients": [
+      "Rice Flour Vermicelli",
+      "Grated Coconut",
+      "Palm Sugar"
+    ],
+    "portionSizes": {
+      "smallGrams": 100,
+      "mediumGrams": 200,
+      "largeGrams": 300
+    },
+    "source": "MYFCD ID: Q046",
+    "myfcdCode": "MB046"
+  },
+  {
+    "nameEn": "Soto Ayam",
+    "nameMy": "Soto Ayam",
+    "foodGroup": "Soups",
+    "caloriesPer100g": 105.0,
+    "proteinPer100g": 6.5,
+    "carbsPer100g": 12.0,
+    "fatsPer100g": 3.5,
+    "sodiumPer100g": 420.0,
+    "sugarPer100g": 1.2,
+    "ingredients": [
+      "Rice Cakes (Nasi Impit)",
+      "Spiced Chicken Broth",
+      "Shredded Chicken",
+      "Peanuts"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "MYFCD ID: Q047",
+    "myfcdCode": "MB047"
+  },
+  {
+    "nameEn": "Lontong",
+    "nameMy": "Lontong / Sayur Lodeh",
+    "foodGroup": "Soups",
+    "caloriesPer100g": 125.0,
+    "proteinPer100g": 3.8,
+    "carbsPer100g": 15.5,
+    "fatsPer100g": 5.5,
+    "sodiumPer100g": 340.0,
+    "sugarPer100g": 2.5,
+    "ingredients": [
+      "Rice Cakes",
+      "Coconut Milk Broth",
+      "Cabbage",
+      "Long Beans",
+      "Tofu"
+    ],
+    "portionSizes": {
+      "smallGrams": 350,
+      "mediumGrams": 500,
+      "largeGrams": 700
+    },
+    "source": "MYFCD ID: Q048",
+    "myfcdCode": "MB048"
+  },
+  {
+    "nameEn": "Tandoori Chicken",
+    "nameMy": "Ayam Tandoori",
+    "foodGroup": "Meats",
+    "caloriesPer100g": 155.0,
+    "proteinPer100g": 22.0,
+    "carbsPer100g": 3.5,
+    "fatsPer100g": 5.5,
+    "sodiumPer100g": 380.0,
+    "sugarPer100g": 1.0,
+    "ingredients": [
+      "Chicken",
+      "Yogurt",
+      "Tandoori Spices"
+    ],
+    "portionSizes": {
+      "smallGrams": 150,
+      "mediumGrams": 250,
+      "largeGrams": 400
+    },
+    "source": "MYFCD ID: Q049",
+    "myfcdCode": "MB049"
+  },
+  {
+    "nameEn": "Tosai (Dosa)",
+    "nameMy": "Tosai",
+    "foodGroup": "Breads",
+    "caloriesPer100g": 165.0,
+    "proteinPer100g": 4.5,
+    "carbsPer100g": 32.0,
+    "fatsPer100g": 1.5,
+    "sodiumPer100g": 210.0,
+    "sugarPer100g": 0.5,
+    "ingredients": [
+      "Fermented Rice Batter",
+      "Lentils"
+    ],
+    "portionSizes": {
+      "smallGrams": 100,
+      "mediumGrams": 150,
+      "largeGrams": 250
+    },
+    "source": "MYFCD ID: Q050",
+    "myfcdCode": "MB050"
+  }
+]

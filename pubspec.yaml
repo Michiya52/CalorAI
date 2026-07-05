@@ -69,6 +69,7 @@ flutter:
     - assets/data/myfcd_full.json
     - assets/data/sgfocos_full.json
     - assets/data/backed_foods.json
+    - assets/data/backed_my_foods.json
     - assets/animations/loading.json
 
 flutter_launcher_icons:
