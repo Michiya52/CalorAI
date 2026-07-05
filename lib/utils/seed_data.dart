@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 /// Bump this when you update the food dataset to force a re-seed.
-const String _seedVersion = 'v13';
+const String _seedVersion = 'v14';
 const String _seedVersionKey = 'food_seed_version';
 
 Future<void> seedFoodsDatabase() async {
@@ -57,6 +57,123 @@ Future<void> seedFoodsDatabase() async {
   // ── 1. Malaysian & Singaporean Essentials (Hawker & Packaged) ──
   // Hand-curated list with precise local portion sizes and ingredients.
   final List<Map<String, dynamic>> curatedEssentials = [
+    {
+      "nameEn": "Beef Rendang",
+      "nameMy": "Rendang Daging",
+      "foodGroup": "Meat Dishes",
+      "caloriesPer100g": 195.0,
+      "proteinPer100g": 14.0,
+      "carbsPer100g": 8.0,
+      "fatsPer100g": 11.5,
+      "sodiumPer100g": 340.0,
+      "sugarPer100g": 3.0,
+      "ingredients": [
+        "Beef chunks",
+        "Coconut milk",
+        "Lemongrass",
+        "Galangal",
+        "Kerisik",
+        "Chili paste"
+      ],
+      "portionSizes": {
+        "smallGrams": 100,
+        "mediumGrams": 150,
+        "largeGrams": 250
+      },
+      "source": "Curated",
+      "myfcdCode": "ESS031"
+    },
+    {
+      "nameEn": "Kaya Toast",
+      "nameMy": "Roti Bakar Kaya",
+      "foodGroup": "Breads",
+      "caloriesPer100g": 380.0,
+      "proteinPer100g": 7.0,
+      "carbsPer100g": 52.0,
+      "fatsPer100g": 16.0,
+      "sodiumPer100g": 420.0,
+      "sugarPer100g": 18.0,
+      "ingredients": ["White Bread", "Butter", "Kaya (Coconut Jam)"],
+      "portionSizes": {"smallGrams": 50, "mediumGrams": 100, "largeGrams": 150},
+      "source": "Curated",
+      "myfcdCode": "ESS032"
+    },
+    {
+      "nameEn": "Teh Tarik",
+      "nameMy": "Teh Tarik",
+      "foodGroup": "Beverages",
+      "caloriesPer100g": 65.0,
+      "proteinPer100g": 1.5,
+      "carbsPer100g": 11.0,
+      "fatsPer100g": 1.8,
+      "sodiumPer100g": 45.0,
+      "sugarPer100g": 10.5,
+      "ingredients": [
+        "Black Tea",
+        "Condensed Milk",
+        "Evaporated Milk",
+        "Hot Water"
+      ],
+      "portionSizes": {
+        "smallGrams": 200,
+        "mediumGrams": 300,
+        "largeGrams": 450
+      },
+      "source": "Curated",
+      "myfcdCode": "ESS033"
+    },
+    {
+      "nameEn": "Ayam Penyet",
+      "nameMy": "Ayam Penyet",
+      "foodGroup": "Meat Dishes",
+      "caloriesPer100g": 265.0,
+      "proteinPer100g": 18.5,
+      "carbsPer100g": 10.0,
+      "fatsPer100g": 16.5,
+      "sodiumPer100g": 510.0,
+      "sugarPer100g": 1.5,
+      "ingredients": [
+        "Chicken piece",
+        "Spices",
+        "Sambal",
+        "Tempeh",
+        "Tofu",
+        "Cabbage",
+        "Cooking Oil"
+      ],
+      "portionSizes": {
+        "smallGrams": 200,
+        "mediumGrams": 350,
+        "largeGrams": 500
+      },
+      "source": "Curated",
+      "myfcdCode": "ESS034"
+    },
+    {
+      "nameEn": "Bak Kut Teh",
+      "nameMy": "Bak Kut Teh",
+      "foodGroup": "Soups",
+      "caloriesPer100g": 115.0,
+      "proteinPer100g": 10.5,
+      "carbsPer100g": 4.0,
+      "fatsPer100g": 6.5,
+      "sodiumPer100g": 420.0,
+      "sugarPer100g": 0.5,
+      "ingredients": [
+        "Pork Ribs",
+        "Herbal Broth",
+        "Garlic",
+        "Tofu Puffs",
+        "Enoki Mushrooms"
+      ],
+      "portionSizes": {
+        "smallGrams": 300,
+        "mediumGrams": 500,
+        "largeGrams": 750
+      },
+      "source": "Curated",
+      "myfcdCode": "ESS035"
+    },
     {
       "nameEn": "Chicken Rice (Steamed/Roasted)",
       "nameMy": "Nasi Ayam",
