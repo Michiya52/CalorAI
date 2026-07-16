@@ -49,10 +49,11 @@ class SuggestionCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ConfidenceBadge(
-                      level: suggestion.confidence,
-                      percent: suggestion.effectiveConfidencePercent,
-                    ),
+                    if (suggestion.source == 'AI Estimate')
+                      ConfidenceBadge(
+                        level: suggestion.confidence,
+                        percent: suggestion.effectiveConfidencePercent,
+                      ),
                   ],
                 ),
                 const SizedBox(height: 6),

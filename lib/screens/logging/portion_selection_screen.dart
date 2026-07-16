@@ -358,7 +358,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                     children: [
                       _detailTile(
                           'Sodium',
-                          '${(_displaySodium * 1000).toStringAsFixed(0)}mg',
+                          '${_displaySodium.toStringAsFixed(0)}mg',
                           Icons.waves_rounded),
                       _detailTile(
                           'Sugar',

@@ -19,7 +19,7 @@ lib/
 ├── providers/                     # ChangeNotifiers for state (See Section 3)
 ├── screens/                       # UI Views
 │   ├── dashboard/                 # Home screen, progress rings
-│   ├── logging/                   # Manual search, Barcode scanner, Camera/Portion UI
+│   ├── logging/                   # Manual search, Barcode scanner, Camera/Portion UI, Composite meal creator
 │   ├── chatbot/                   # Chat interface
 │   ├── profile/                   # Settings, Goal adjustment
 │   └── onboarding/                # Initial setup flow
@@ -53,7 +53,7 @@ Represents the authenticated user's physical profile and nutritional targets.
   - `UserProfile copyWith(...)`
 
 ### `MealEntry` (`meal_entry.dart`)
-Represents a logged consumption instance.
+Represents a logged consumption instance. Supports standard items or complex recipes with multiple sub-ingredients.
 - **Properties**:
   - `String id` (UUID v4)
   - `String userId`
@@ -62,10 +62,15 @@ Represents a logged consumption instance.
   - `double proteinG`, `double carbsG`, `double fatsG`
   - `DateTime timestamp`
   - `String source` ('MyFCD', 'USDA', 'AI Estimate', 'Manual')
-  - `String? imageUrl`
+  - `bool imageDeleted` (Always true. The identification photo is never persisted to disk or Firebase Storage.)
+  - `List<IngredientDetail>? ingredients` (Nested details for composite custom recipes)
 - **Methods**:
   - `factory MealEntry.fromJson(Map<String, dynamic> json)`
   - `Map<String, dynamic> toJson()`
+
+### `IngredientDetail` (`meal_entry.dart` / `ingredient_detail.dart`)
+Nested inside `MealEntry` for custom homecooked recipes via the Meal Creator.
+- **Properties**: Contains scaling factors, names, and macro fractions tied back to a base `FoodItem`.
 
 ### `FoodItem` (`food_item.dart`)
 Represents a raw entry from a food composition database (MyFCD/USDA).
@@ -98,11 +103,7 @@ Wrapper used primarily for AI image identification results.
 
 ### `WeightLog` (`weight_log.dart`)
 Tracks historical weight changes over time.
-- **Properties**:
-  - `String id`
-  - `String userId`
-  - `double weightKg`
-  - `DateTime date`
+- **Status Gap**: The data model and Firestore operations exist in the backend layer, but no active frontend UI integrates or uses them currently. 
 
 ---
 
@@ -125,7 +126,7 @@ CalorAI uses `ChangeNotifier` combined with `provider` for global state.
   - `int get totalCaloriesToday`
   - `double get totalProteinToday`, `double get totalCarbsToday`, `double get totalFatsToday`
 - **Key Methods**:
-  - `fetchTodayMeals(String uid)`: Queries Firestore for entries between 00:00 and 23:59 today.
+  - `fetchTodayMeals(String uid)`: Queries Firestore for entries for the current day.
   - `addMeal(MealEntry meal)`: Saves to Firestore and updates local list.
   - `deleteMeal(String mealId)`: Removes from Firestore and local list.
   - `clear()`: Resets state on logout.
@@ -180,45 +181,91 @@ Handles standard text-based conversational AI.
 ### `MyfcdService` & `UsdaService`
 Food composition database handlers.
 - **Key Methods**:
-  - `Future<List<FoodItem>> searchFoods(String query)`: Uses `fuzzywuzzy` for string matching against local JSON assets (`assets/data/myfcd_full.json`, `assets/data/sgfocos_full.json`) or via REST for USDA.
-
-### `AuthService`
-- Wrapper for `FirebaseAuth.instance.signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, and Google Sign-in.
+  - `Future<List<FoodItem>> searchFoods(String query)`: Uses `fuzzywuzzy` for string matching.
 
 ---
 
 ## 5. UI & Flow Mappings (`lib/screens/`)
 
-### Logging Flow
+### Image-based Food Logging Flow
 1. **Camera/Image Picker** (`logging/camera_screen.dart`): User captures an image.
 2. **AI Processing**: Image is sent to `GeminiService`.
-3. **Suggestion Selection**: UI displays the 4 `FoodSuggestion` items. User taps one.
-4. **Portion Adjustment** (`logging/portion_screen.dart`): A slider (e.g., 0.5x to 2.0x of base portion) dynamically updates `resolvedCalories` and macros on screen.
-5. **Save**: Tapping "Log" triggers `MealProvider.addMeal()`.
+3. **Suggestion Selection**: UI displays 4 `FoodSuggestion` items. User taps one.
+4. **Portion Adjustment** (`logging/portion_screen.dart`): A slider scales `resolvedCalories` and macros. Density logic (`core/constants/app_colors.dart`) displays Low/Med/High UI indicators.
+5. **Save**: Tapping "Log" triggers `MealProvider.addMeal()`. The created meal can then be viewed on `MealDetailScreen`.
+
+### Composite Meal Builder Flow
+1. **Meal Creator UI** (`logging/meal_creator_screen.dart`): Navigates to a "kitchen workspace".
+2. **Ingredient Addition**: The user browses `ingredient_library_browser.dart` and adds items, rendered as `meal_ingredient_tile.dart` components.
+3. **Portion Scaling**: Each ingredient's individual weight is modified, which recalculates the composite total.
+4. **Save**: The aggregated recipe is saved as a single `MealEntry` encapsulating `IngredientDetail`s.
 
 ### Manual Search Flow
 1. **Search UI** (`logging/manual_search_screen.dart`): User types a string.
-2. **Database Toggle**: A `SegmentedButton` toggles between `regional` (MyFCD/SG) and `usda` (FOSS). *(Note: Open Food Facts was removed)*.
-3. **Processing**: Calls `MyfcdService` or `UsdaService`.
-4. **Selection & Save**: Transitions to `portion_screen.dart` identical to the Image workflow.
+2. **Database Toggle**: Toggles between `regional` and `usda`. 
+3. **Processing**: Calls Firestore or the USDA API.
+4. **Selection & Save**: Transitions to `portion_screen.dart`.
 
 ### Chatbot Integration
-- **Component** (`chatbot/chatbot_screen.dart`): Implemented as a persistent sheet or full screen.
+- **Component** (`chatbot/chatbot_screen.dart`): Showcased as a modal bottom sheet.
 - **Z-Index Fix**: Triggered via `showModalBottomSheet(useRootNavigator: true)` to ensure it renders above the main `BottomNavigationBar`.
 
 ---
 
-## 6. Global Configuration
+## 6. Routing Table (`lib/core/router/app_router.dart`)
 
-### `pubspec.yaml` Keys
-- State: `provider`, `go_router`
-- Firebase: `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_crashlytics`, `firebase_analytics`, `firebase_messaging`
-- AI: `google_generative_ai`
-- Utility: `http`, `shared_preferences`, `flutter_dotenv`, `fuzzywuzzy`, `mobile_scanner`, `image_picker`
+| Route | View |
+| :--- | :--- |
+| `/login` | `LoginScreen` |
+| `/register` | `RegisterScreen` |
+| `/setup` | `ProfileSetupScreen` |
+| `/home` | `DashboardScreen` (ShellRoute child) |
+| `/history` | `MealHistoryScreen` (ShellRoute child) |
+| `/chatbot` | `ChatbotScreen` (ShellRoute child) |
+| `/profile` | `ProfileScreen` (ShellRoute child) |
+| `/log/photo` | `PhotoLoggingScreen` |
+| `/log/suggestions` | `SuggestionCardsScreen` |
+| `/log/portion` | `PortionSelectionScreen` |
+| `/log/search` | `ManualSearchScreen` |
+| `/log/barcode` | `BarcodeScannerScreen` |
+| `/log/create-meal` | `MealCreatorScreen` |
+| `/meal-detail` | `MealDetailScreen` |
 
-### Build Config (`android/app/build.gradle.kts`)
-- `minSdk = 24`
-- MultiDex enabled.
+---
+
+## 7. Data Access & Security
+
+The Firebase Firestore instance is protected by Security Rules (`firestore.rules`). 
+- User Profiles, Meals, and Weight Logs are strictly scoped to the `request.auth.uid`.
+- **Global `/foods` Collection:** Access is permissive. `allow read: if true;` and `allow write: if isAuthenticated();`. This is a known limitation relying on convention, meaning any logged-in user can theoretically overwrite global food entries. 
+
+### Database Seeding Workflow
+The app performs global food database population at launch (if version increments) using `lib/utils/seed_data.dart`. 
+It reads local JSON files (`assets/data/myfcd_full.json`, `sgfocos_full.json`, etc.), sanitizes and merges the records using a slugified ID (`nameEnLower` string replacements), and performs batched Firestore deletes and updates to prevent duplicates. Live search queries are run against Firestore, not the local JSON.
+
+---
+
+## 8. Global Configuration
+
+### `pubspec.yaml` & `main.dart` Setup
+- **State/UI**: `provider`, `go_router`
+- **Firebase Core**: `firebase_core`, `firebase_auth`, `cloud_firestore`
+- **Firebase Telemetry**: `firebase_crashlytics`, `firebase_performance`. Both are initialized globally with `recordFlutterFatalError` and `setPerformanceCollectionEnabled(true)`. No custom traces exist.
+- **Firebase Security/Config**: 
+  - `firebase_remote_config` is used in `main.dart` to fetch remote values for `ai_confidence_threshold` and `maintenance_mode`.
+  - `firebase_app_check` is declared in `pubspec.yaml` but its activation code in `main.dart` is currently commented out. 
+- **AI**: `google_generative_ai`
+
+### Build Config
+- **Android (`android/app/build.gradle.kts`)**: `minSdk = 26`, MultiDex enabled.
+- **iOS (`ios/Runner.xcodeproj`)**: `IPHONEOS_DEPLOYMENT_TARGET = 13.0`.
+
+---
+
+## 9. Known Technical Limitations
+- **Weight Tracking UI**: Full backend logic is present for `WeightLog`, but there is no UI element connected to read or write this data.
+- **Food DB Write Rules**: As outlined in Section 7, the `firestore.rules` for `/foods` allow write operations for any authenticated user.
+- **App Check Inactive**: App Check is included as a dependency but initialization is disabled. 
 
 ---
 *End of Complete Architecture Documentation.*

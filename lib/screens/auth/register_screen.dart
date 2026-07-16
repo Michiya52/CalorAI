@@ -155,8 +155,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   if (v == null || v.isEmpty) {
                                     return 'Email is required';
                                   }
-                                  if (!v.contains('@')) {
-                                    return 'Enter a valid email';
+                                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim())) {
+                                    return 'Enter a valid email address';
                                   }
                                   return null;
                                 },

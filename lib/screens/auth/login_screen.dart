@@ -61,6 +61,97 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
+  Future<void> _showForgotPasswordDialog() async {
+    final emailController = TextEditingController(text: _emailController.text);
+    final dialogFormKey = GlobalKey<FormState>();
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Reset Password'),
+          content: Form(
+            key: dialogFormKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Enter your email address and we will send you a link to reset your password.',
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    hintText: 'Enter your registered email',
+                    prefixIcon: Icon(Icons.email_outlined, size: 20),
+                  ),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return 'Email is required';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim())) {
+                      return 'Enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            Consumer<AuthProvider>(
+              builder: (context, auth, _) {
+                return ElevatedButton(
+                  onPressed: auth.isLoading
+                      ? null
+                      : () async {
+                          if (!dialogFormKey.currentState!.validate()) return;
+                          final email = emailController.text.trim();
+                          final success = await auth.sendPasswordResetEmail(email);
+                          
+                          if (context.mounted) {
+                            if (success) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Password reset email sent successfully!'),
+                                  backgroundColor: AppColors.success,
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(auth.error ?? 'Failed to send reset email.'),
+                                  backgroundColor: AppColors.error,
+                                ),
+                              );
+                              auth.clearError();
+                            }
+                          }
+                        },
+                  child: auth.isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Text('Send Reset Link'),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -159,8 +250,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   if (v == null || v.isEmpty) {
                                     return 'Email is required';
                                   }
-                                  if (!v.contains('@')) {
-                                    return 'Enter a valid email';
+                                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim())) {
+                                    return 'Enter a valid email address';
                                   }
                                   return null;
                                 },
@@ -216,6 +307,17 @@ class _LoginScreenState extends State<LoginScreen>
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w700)),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              TextButton(
+                                onPressed: _showForgotPasswordDialog,
+                                child: Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),

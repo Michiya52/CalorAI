@@ -43,7 +43,21 @@ class UsdaService {
   Future<FoodItem?> getProductByBarcode(String barcode) async {
     // USDA search can take a GTIN/UPC directly in the query.
     final results = await searchFoods(barcode);
-    return results.isNotEmpty ? results.first : null;
+    if (results.isNotEmpty) return results.first;
+
+    // Try prepending a leading '0' if barcode is 12 digits (UPC-A) to match 13-digit GTIN formats in USDA
+    if (barcode.length == 12) {
+      final paddedResults = await searchFoods('0$barcode');
+      if (paddedResults.isNotEmpty) return paddedResults.first;
+    }
+
+    // Try removing a leading '0' if barcode is 13 digits to match 12-digit UPCs in USDA
+    if (barcode.length == 13 && barcode.startsWith('0')) {
+      final strippedResults = await searchFoods(barcode.substring(1));
+      if (strippedResults.isNotEmpty) return strippedResults.first;
+    }
+
+    return null;
   }
 
   FoodItem? _mapUsdaToFoodItem(Map<String, dynamic> f) {
