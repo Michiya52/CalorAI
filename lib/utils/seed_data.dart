@@ -285,8 +285,8 @@ Future<void> seedFoodsDatabase() async {
       "myfcdCode": "ESS025"
     },
     {
-      "nameEn": "Hokkien Mee (KL)",
-      "nameMy": "Hokkien Mee",
+      "nameEn": "Prawn Mee (Penang)",
+      "nameMy": "Mee Udang",
       "foodGroup": "Noodle Dishes",
       "caloriesPer100g": 185.0,
       "proteinPer100g": 7.0,
@@ -1446,8 +1446,8 @@ Future<void> seedFoodsDatabase() async {
       "myfcdCode": "ESS008"
     },
     {
-      "nameEn": "Hokkien Mee (KL)",
-      "nameMy": "Hokkien Mee",
+      "nameEn": "Prawn Mee (Penang)",
+      "nameMy": "Mee Udang",
       "foodGroup": "Noodle Dishes",
       "caloriesPer100g": 190.0,
       "proteinPer100g": 6.0,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants/app_colors.dart';
 import '../../models/food_suggestion.dart';
 
@@ -16,6 +17,24 @@ class BarcodeScannerScreen extends StatefulWidget {
 class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   final MobileScannerController controller = MobileScannerController();
   bool _isProcessing = false;
+  bool _hasPermission = false;
+  bool _isCheckingPermission = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    final status = await Permission.camera.request();
+    if (mounted) {
+      setState(() {
+        _hasPermission = status.isGranted;
+        _isCheckingPermission = false;
+      });
+    }
+  }
 
   Future<void> _handleBarcode(String barcode) async {
     if (_isProcessing) return;
@@ -80,6 +99,53 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isCheckingPermission) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.black,
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
+        body: const Center(child: CircularProgressIndicator(color: Colors.white)),
+      );
+    }
+
+    if (!_hasPermission) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.black,
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.camera_alt_rounded, color: Colors.white54, size: 64),
+              const SizedBox(height: 16),
+              const Text(
+                'Camera permission is required',
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Please enable camera access in settings\nto scan barcodes.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white70),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => openAppSettings(),
+                child: const Text('Open Settings'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(

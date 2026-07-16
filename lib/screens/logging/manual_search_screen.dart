@@ -296,6 +296,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: _results.length + (_isLoadingMore ? 1 : 0),
                 itemBuilder: (context, index) {

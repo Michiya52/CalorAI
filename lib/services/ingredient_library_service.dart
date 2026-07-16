@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import '../services/logger_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/food_item.dart';
 
@@ -42,8 +42,8 @@ class IngredientLibraryService {
       _rawCategorizedItems = _groupItems(_allRawItems);
       _brandedCategorizedItems = _groupItems(_allBrandedItems);
       _isLoaded = true;
-    } catch (e) {
-      debugPrint('Failed to load ingredient library: $e');
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Failed to load ingredient library');
     }
   }
 

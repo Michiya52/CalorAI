@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
+import 'dart:ui';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,8 @@ import 'firebase_options.dart';
 import 'theme.dart';
 import 'utils/seed_data.dart';
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -38,6 +41,10 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
       if (!kIsWeb) {
         FlutterError.onError =
             FirebaseCrashlytics.instance.recordFlutterFatalError;
+        PlatformDispatcher.instance.onError = (error, stack) {
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+          return true;
+        };
       }
 
       // 2. Performance Monitoring
@@ -206,6 +213,7 @@ class _CalorAIAppState extends State<CalorAIApp> {
         builder: (context, themeProvider, _) {
           return MaterialApp.router(
             title: 'CalorAI',
+            scaffoldMessengerKey: scaffoldMessengerKey,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

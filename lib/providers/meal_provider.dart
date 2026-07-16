@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../services/logger_service.dart';
 import 'package:flutter/widgets.dart';
 import '../models/meal_entry.dart';
 import '../services/firestore_service.dart';
@@ -33,8 +34,8 @@ class MealProvider extends ChangeNotifier {
     notifyListeners();
     try {
       _todaysMeals = await _firestore.getMealsForDate(uid, date);
-    } catch (e) {
-      debugPrint('Failed to load meals for $date: $e');
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Failed to load meals for $date');
     } finally {
       _isLoading = false;
       notifyListeners();

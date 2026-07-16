@@ -101,8 +101,7 @@ Use these visual differentiators:
 - Mee Goreng: fried yellow noodles, often reddish from chili sauce, tofu and potato cubes common
 - Roti Canai: flaky layered flatbread, golden-brown, usually served with dhal or curry
 - Chapati: thinner, more uniform, less flaky, whole-wheat appearance
-- Hokkien Mee (KL): dark soy-braised thick yellow noodles with dark glossy sauce
-- Hokkien Mee (Penang): prawn-based soup with yellow noodles and rice vermicelli in clearer reddish broth
+- Prawn Mee: prawn-based soup with yellow noodles and rice vermicelli in clearer reddish broth
 - Wan Tan Mee: yellow noodles, char siu, wontons, often dry dark soy style or served with light soup
 - Bak Kut Teh: herbal pork rib soup, dark herbal broth, often in claypot
 - Rendang: dry dark brown curry coating, thick caramelized coconut-spice paste, usually beef or chicken
@@ -541,7 +540,7 @@ CRITICAL RULES:
       ('bak kut teh', 'Pork Rib Soup', 'Bak Kut Teh'),
       ('wan tan mee', 'Wanton Noodles', 'Wan Tan Mee'),
       ('wonton', 'Wanton Noodles', 'Wan Tan Mee'),
-      ('hokkien mee', 'Hokkien Noodles', 'Hokkien Mee'),
+      ('hokkien mee', 'Prawn Noodle Soup', 'Mee Udang'),
       ('teh tarik', 'Pulled Milk Tea', 'Teh Tarik'),
       ('cendol', 'Cendol', 'Cendol'),
       ('rojak', 'Rojak', 'Rojak'),

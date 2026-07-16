@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import '../services/logger_service.dart';
 import '../models/food_item.dart';
 import '../models/food_suggestion.dart';
 import 'firestore_service.dart';
@@ -74,8 +74,8 @@ class MyFCDService {
           source: 'MyFCD',
         );
       }
-    } catch (e) {
-      debugPrint('MyFCDService.crossReference failed: $e');
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'MyFCDService.crossReference failed');
       // Fall through to AI estimate fallback when Firestore lookup fails.
     }
 

@@ -313,15 +313,27 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             final wt = double.tryParse(_weightController.text);
             final age = int.tryParse(_ageController.text);
 
-            if (_nameController.text.trim().isEmpty ||
-                ht == null ||
-                ht <= 0 ||
-                wt == null ||
-                wt <= 0 ||
-                age == null ||
-                age <= 0) {
+            if (_nameController.text.trim().isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Please enter valid details')),
+                const SnackBar(content: Text('Please enter your name')),
+              );
+              return;
+            }
+            if (ht == null || ht <= 0 || ht > 300) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Please enter a valid height (0-300 cm)')),
+              );
+              return;
+            }
+            if (wt == null || wt <= 0 || wt > 500) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Please enter a valid weight (0-500 kg)')),
+              );
+              return;
+            }
+            if (age == null || age <= 0 || age > 120) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Please enter a valid age (0-120)')),
               );
               return;
             }

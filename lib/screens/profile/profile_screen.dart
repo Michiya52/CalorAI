@@ -7,6 +7,8 @@ import '../../providers/profile_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/meal_provider.dart';
 import '../../providers/chatbot_provider.dart';
+import '../../services/firestore_service.dart';
+import '../../models/weight_log.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -143,6 +145,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: AppColors.success,
       ),
     );
+  }
+
+  Future<void> _logWeight() async {
+    final uid = context.read<AuthProvider>().userId;
+    if (uid == null) return;
+
+    final controller = TextEditingController();
+    final weightStr = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Log Current Weight'),
+        content: TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: const InputDecoration(
+            hintText: 'e.g. 70.5',
+            suffixText: 'kg',
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+
+    if (weightStr == null || weightStr.isEmpty) return;
+    final weight = double.tryParse(weightStr);
+    if (weight == null || weight <= 0 || weight > 500) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter a valid weight'), backgroundColor: AppColors.error),
+        );
+      }
+      return;
+    }
+
+    try {
+      final log = WeightLog(
+        id: '',
+        date: DateTime.now().toIso8601String().substring(0, 10),
+        weightKg: weight,
+      );
+      await FirestoreService().saveWeightLog(uid, log);
+
+      // Also update profile weight
+      if (!mounted) return;
+      await context.read<ProfileProvider>().updateProfile(uid, {'weightKg': weight});
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Weight logged successfully!'), backgroundColor: AppColors.success),
+        );
+        _loadProfile();
+        setState(() {});
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to log weight'), backgroundColor: AppColors.error),
+        );
+      }
+    }
   }
 
   @override
@@ -456,6 +528,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: _recalculateTarget,
                   icon: const Icon(Icons.calculate_rounded),
                   label: const Text('Recalculate Target'),
+                ),
+                const SizedBox(height: 10),
+
+                OutlinedButton.icon(
+                  onPressed: _logWeight,
+                  icon: const Icon(Icons.scale_rounded),
+                  label: const Text('Log Current Weight'),
                 ),
                 const SizedBox(height: 24),
 

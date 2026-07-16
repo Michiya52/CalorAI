@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import '../services/logger_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_profile.dart';
 import '../models/meal_entry.dart';
@@ -207,8 +208,8 @@ Memory usage rules:
         _savedSessions = [];
       }
       notifyListeners();
-    } catch (e) {
-      debugPrint('Failed to load chat sessions: $e');
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Failed to load chat sessions');
     }
   }
 
@@ -224,8 +225,8 @@ Memory usage rules:
       final jsonStr =
           jsonEncode(_savedSessions.map((s) => s.toJson()).toList());
       await prefs.setString('${_storageKey}_$uid', jsonStr);
-    } catch (e) {
-      debugPrint('Failed to save chat sessions: $e');
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Failed to save chat sessions');
     }
   }
 
@@ -376,7 +377,7 @@ Memory usage rules:
         errorMsg =
             'Sorry, I could not respond right now. Error: ${e.toString().split('\n').first}';
       }
-      debugPrint('ChatbotProvider error: $e');
+      LoggerService().error(e, null, reason: 'ChatbotProvider API Error');
       _messages.add(ChatMessage(
         text: errorMsg,
         isUser: false,

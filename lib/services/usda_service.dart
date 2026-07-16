@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import '../services/logger_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/food_item.dart';
@@ -33,8 +33,8 @@ class UsdaService {
           .map((f) => _mapUsdaToFoodItem(f))
           .whereType<FoodItem>()
           .toList();
-    } catch (e) {
-      debugPrint('USDA search failed: $e');
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'USDA search failed');
       return const [];
     }
   }

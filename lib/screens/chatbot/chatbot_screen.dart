@@ -59,6 +59,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     if (profile == null || uid == null) return;
 
     _messageController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
 
     await context.read<ChatbotProvider>().sendMessage(
           text: text,
