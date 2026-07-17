@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/meal_provider.dart';
 import '../../models/meal_entry.dart';
 import '../../widgets/meal_card.dart';
+import 'package:flutter/services.dart';
 
 class MealHistoryScreen extends StatefulWidget {
   const MealHistoryScreen({super.key});
@@ -27,6 +28,12 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
   Future<void> _loadHistory() async {
     final uid = context.read<AuthProvider>().userId;
     if (uid == null) return;
+
+    HapticFeedback.lightImpact();
+    
+    // Refresh today's meals globally so dashboard updates too
+    final todayStr = DateTime.now().toIso8601String().substring(0, 10);
+    context.read<MealProvider>().loadMealsForDate(uid, todayStr);
 
     setState(() => _isLoading = true);
     final today = DateTime.now();
@@ -81,6 +88,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                   onRefresh: _loadHistory,
                   color: AppColors.primary,
                   child: ListView(
+                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
                     children: _groupByDate().entries.map((entry) {
                       final totalCals = entry.value

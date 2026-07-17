@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/user_profile.dart';
@@ -172,8 +171,9 @@ class FirestoreService {
 
       final foods = await _loadFoodCache();
 
-      // Run the heavy fuzzywuzzy math on a background isolate to prevent UI freezing
-      final scored = await Isolate.run(() => _runFuzzySearch(q, foods));
+      // Perform fuzzy math synchronously; for 1400 items it's extremely fast (~10ms)
+      // and avoids Isolate spawning overhead/serialization errors.
+      final scored = _runFuzzySearch(q, foods);
 
       scored.sort((a, b) {
         final scoreComparison = b.score.compareTo(a.score);

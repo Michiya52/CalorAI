@@ -8,8 +8,10 @@ import '../../providers/profile_provider.dart';
 import '../../providers/meal_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/calorie_ring.dart';
+import 'package:flutter/services.dart';
 import '../../widgets/macro_bar.dart';
 import '../../widgets/meal_card.dart';
+import '../../services/notification_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -55,6 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   }
 
   Future<void> _loadData() async {
+    HapticFeedback.lightImpact();
     final uid = context.read<AuthProvider>().userId;
     if (uid == null) return;
 
@@ -70,7 +73,18 @@ class _DashboardScreenState extends State<DashboardScreen>
         return;
       }
       final today = DateTime.now().toIso8601String().substring(0, 10);
-      await context.read<MealProvider>().loadMealsForDate(uid, today);
+      final mealProvider = context.read<MealProvider>();
+      await mealProvider.loadMealsForDate(uid, today);
+
+      final profile = profileProvider.profile;
+      if (profile != null) {
+        bool ateDinner = mealProvider.todaysMeals.any((m) =>
+            m.timestamp.hour >= 19 ||
+            m.foodNameEn.toLowerCase().contains('dinner'));
+
+        NotificationService().scheduleDailySummary(
+            mealProvider.totalCaloriesToday, profile.calorieTarget, ateDinner);
+      }
     }
   }
 
@@ -165,7 +179,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             onRefresh: _loadData,
             color: AppColors.primary,
             child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               slivers: [
                 // ─── Header ──────────────────────────────────
                 SliverToBoxAdapter(
@@ -311,16 +325,46 @@ class _DashboardScreenState extends State<DashboardScreen>
                         final meal = mealProv.todaysMeals[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),
-                          child: MealCard(
-                            meal: meal,
-                            onDelete: () async {
+                          child: Dismissible(
+                            key: Key(meal.id),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20),
+                              decoration: BoxDecoration(
+                                color: AppColors.error,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Icon(Icons.delete_outline_rounded,
+                                  color: Colors.white),
+                            ),
+                            // confirmDismiss (not onDismissed) so a failed
+                            // delete snaps the row back instead of leaving a
+                            // dismissed widget whose meal is still in the list.
+                            confirmDismiss: (_) async {
                               final uid = context.read<AuthProvider>().userId;
-                              if (uid != null) {
+                              if (uid == null) return false;
+                              try {
                                 await context
                                     .read<MealProvider>()
                                     .deleteMeal(uid, meal.id);
+                                HapticFeedback.lightImpact();
+                                return true;
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Could not delete meal.')),
+                                  );
+                                }
+                                return false;
                               }
                             },
+                            child: MealCard(
+                              meal: meal,
+                              onTap: () => context.push('/meal-detail', extra: meal),
+                            ),
                           ),
                         );
                       },

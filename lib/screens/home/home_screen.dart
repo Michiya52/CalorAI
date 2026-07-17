@@ -92,7 +92,7 @@ class _LogMenuSheet extends StatelessWidget {
               children: [
                 _LogOption(
                   icon: Icons.add_a_photo_rounded,
-                  label: 'AI Scanner',
+                  label: 'Scan Barcode & Food',
                   color: AppColors.primary,
                   onTap: () {
                     Navigator.pop(context);
@@ -142,12 +142,13 @@ class _LogOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Column(
-        children: [
-          Container(
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          children: [
+            Container(
             width: 60,
             height: 60,
             decoration: BoxDecoration(
@@ -156,12 +157,14 @@ class _LogOption extends StatelessWidget {
             ),
             child: Icon(icon, color: color, size: 26),
           ),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }

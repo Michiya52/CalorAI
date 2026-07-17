@@ -21,6 +21,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'firebase_options.dart';
 import 'theme.dart';
 import 'utils/seed_data.dart';
+import 'services/notification_service.dart';
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -112,6 +113,15 @@ Future<void> main() async {
     await dotenv.load(fileName: '.env');
   } catch (e) {
     debugPrint('WARNING: .env could not be loaded: $e');
+  }
+
+  // Notifications are nice-to-have: never let their init block Firebase.
+  // (init/requestPermissions are internally no-ops on web and desktop.)
+  try {
+    await NotificationService().init();
+    await NotificationService().requestPermissions();
+  } catch (e) {
+    debugPrint('Notification setup failed (non-fatal): $e');
   }
 
   try {

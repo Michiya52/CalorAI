@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 import '../../core/constants/app_colors.dart';
@@ -121,10 +122,10 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
     }
 
     if (mounted) {
-      // Apply strict relevance filtering/ranking to all sources
+      // Apply strict relevance filtering/ranking (skip regional as it's already filtered)
       var filtered = fetched;
 
-      if (normalizedQuery.isNotEmpty) {
+      if (normalizedQuery.isNotEmpty && _source != _SearchSource.regional) {
         final scored = fetched
             .map((food) {
               final query = normalizedQuery.toLowerCase().trim();
@@ -211,6 +212,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                     showSelectedIcon: false,
                     selected: {_source},
                     onSelectionChanged: (selection) {
+                      HapticFeedback.lightImpact();
                       setState(() {
                         _source = selection.first;
                         _results = [];
@@ -283,11 +285,31 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                     Icon(Icons.manage_search,
                         size: 48, color: AppColors.textSecondary),
                     const SizedBox(height: 12),
-                    Text(
-                        _source == _SearchSource.regional
-                            ? 'No results in MY/SG data. Try USDA.'
-                            : 'No results found. Try another keyword.',
-                        style: TextStyle(color: AppColors.textSecondary)),
+                    if (_source == _SearchSource.regional) ...[
+                      Text(
+                        'No results in MY/SG data.',
+                        style: TextStyle(color: AppColors.textSecondary),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _source = _SearchSource.usda;
+                          });
+                          _performSearch(_query, reset: true);
+                        },
+                        icon: const Icon(Icons.search),
+                        label: const Text('Search in USDA Database'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ] else
+                      Text(
+                        'No results found. Try another keyword.',
+                        style: TextStyle(color: AppColors.textSecondary),
+                      ),
                   ],
                 ),
               ),

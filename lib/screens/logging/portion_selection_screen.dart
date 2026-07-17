@@ -113,6 +113,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
       return;
     }
 
+    HapticFeedback.lightImpact();
     setState(() => _isSubmitting = true);
 
     final now = DateTime.now();

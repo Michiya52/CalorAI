@@ -9,6 +9,8 @@ import '../../providers/meal_provider.dart';
 import '../../providers/chatbot_provider.dart';
 import '../../services/firestore_service.dart';
 import '../../models/weight_log.dart';
+import '../../widgets/weight_chart.dart';
+import 'package:flutter/services.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -23,10 +25,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _weightController = TextEditingController();
   final _ageController = TextEditingController();
   bool _isEditing = false;
+  late Future<List<WeightLog>> _weightLogsFuture;
 
   @override
   void initState() {
     super.initState();
+    _loadWeightLogs();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _loadProfile();
@@ -39,6 +43,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       }
     });
+  }
+
+  Future<void> _refreshProfile() async {
+    HapticFeedback.lightImpact();
+    final uid = context.read<AuthProvider>().userId;
+    if (uid != null) {
+      final profileProv = context.read<ProfileProvider>();
+      final mealProv = context.read<MealProvider>();
+      final today = DateTime.now().toIso8601String().substring(0, 10);
+      await Future.wait([
+        profileProv.loadProfile(uid),
+        mealProv.loadMealsForDate(uid, today),
+      ]);
+      if (mounted) _loadProfile();
+      setState(() {
+        _loadWeightLogs();
+      });
+    }
+  }
+
+  void _loadWeightLogs() {
+    final uid = context.read<AuthProvider>().userId;
+    if (uid != null) {
+      _weightLogsFuture = FirestoreService().getWeightLogs(uid);
+    } else {
+      _weightLogsFuture = Future.value([]);
+    }
   }
 
   void _loadProfile() {
@@ -197,6 +228,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
       await FirestoreService().saveWeightLog(uid, log);
 
+      HapticFeedback.lightImpact();
+      setState(() {
+        _loadWeightLogs();
+      });
+
       // Also update profile weight
       if (!mounted) return;
       await context.read<ProfileProvider>().updateProfile(uid, {'weightKg': weight});
@@ -341,9 +377,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
+          return RefreshIndicator(
+            onRefresh: _refreshProfile,
+            color: AppColors.primary,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              padding: const EdgeInsets.all(20),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Avatar with gradient ring
@@ -471,6 +511,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 16),
 
+                // Weight Progress Card
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: AppColors.premiumCard(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Weight Progress',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: AppColors.textPrimary)),
+                      const SizedBox(height: 16),
+                      FutureBuilder<List<WeightLog>>(
+                        future: _weightLogsFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          final logs = snapshot.data ?? [];
+                          return WeightChart(logs: logs);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
                 // Theme card
                 Consumer<ThemeProvider>(
                   builder: (context, themeProvider, _) {
@@ -575,7 +643,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 100),
               ],
             ),
-          );
+          ));
         },
       ),
     );
