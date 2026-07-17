@@ -15,6 +15,14 @@ class UsdaService {
 
   /// Search for foods by generic query or barcode.
   Future<List<FoodItem>> searchFoods(String query) async {
+    if (_apiKey.isEmpty) {
+      LoggerService().error(
+        'USDA_API_KEY missing',
+        null,
+        reason: 'USDA search skipped: no API key in .env',
+      );
+      return const [];
+    }
     final uri = Uri.https(_baseUrl, '/fdc/v1/foods/search', {
       'api_key': _apiKey,
       'query': query,
@@ -104,7 +112,7 @@ class UsdaService {
           break;
         case '307':
         case '1093':
-          sodium = value / 1000.0; // mg to g for our model
+          sodium = value; // USDA reports mg; the app uses mg throughout
           break;
         case '269':
         case '2000':

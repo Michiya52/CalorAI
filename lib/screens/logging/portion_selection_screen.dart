@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -53,11 +54,15 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
 
   void _updateNutrition() {
     final suggestion = widget.suggestion;
+    // Treat zero/invalid custom input as "no custom value" so a meal can
+    // never be logged with zero or nonsense weight.
+    final rawCustom = double.tryParse(_customGramsController.text);
+    final customGrams = (rawCustom == null || rawCustom <= 0) ? null : rawCustom;
     if (suggestion.myfcdMatch != null) {
       final scaled = PortionScaler.scale(
         food: suggestion.myfcdMatch!,
         portionLabel: _selectedPortion,
-        customGrams: double.tryParse(_customGramsController.text),
+        customGrams: customGrams,
       );
       _displayCalories = scaled['calories'] as int;
       _displayProtein = scaled['proteinG'] as double;
@@ -74,9 +79,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
       final portionMultiplier = switch (_selectedPortion) {
         'Small' => 0.7,
         'Large' => 1.4,
-        'Custom' =>
-          (double.tryParse(_customGramsController.text) ?? estimatedBase) /
-              estimatedBase,
+        'Custom' => (customGrams ?? estimatedBase) / estimatedBase,
         _ => 1.0,
       };
       _displayGrams = estimatedBase * portionMultiplier;
@@ -89,8 +92,9 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
           portionMultiplier;
       _displayFats = (suggestion.resolvedFatsG ?? _displayGrams * 0.15) *
           portionMultiplier;
-      _displaySodium = 0.0; // AI rarely estimates sodium accurately yet
-      _displaySugar = 0.0;
+      // Use the AI's sodium/sugar estimates (mg / g); 0 when it gave none.
+      _displaySodium = (suggestion.resolvedSodiumG ?? 0.0) * portionMultiplier;
+      _displaySugar = (suggestion.resolvedSugarG ?? 0.0) * portionMultiplier;
     }
     setState(() {});
   }
@@ -271,9 +275,12 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               TextField(
                 controller: _customGramsController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                maxLength: 5,
                 decoration: InputDecoration(
                   labelText: 'GRAMS',
                   hintText: 'Enter weight in grams',
+                  counterText: '',
                   filled: true,
                   fillColor: AppColors.surface,
                   border: OutlineInputBorder(

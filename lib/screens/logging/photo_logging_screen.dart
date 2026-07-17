@@ -99,6 +99,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
 
       AppLogger.instance.log(
           'PhotoLoggingScreen: first suggestion = ${finalSuggestions.first.dishNameEn}');
+      if (!mounted) return;
       context.push('/log/suggestions', extra: finalSuggestions);
     } catch (e) {
       AppLogger.instance

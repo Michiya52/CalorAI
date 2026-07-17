@@ -4,69 +4,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import '../core/utils/app_logger.dart';
 import '../models/food_suggestion.dart';
-import '../models/user_profile.dart';
-import '../models/meal_entry.dart';
 
 /// GeminiService — connects to Google Gemini API for food identification
 /// (vision) and nutritional chatbot (text).
 class GeminiService {
-  static const String _modelName = 'gemini-3.5-flash';
-  static GenerativeModel? _visionModel;
-  static GenerativeModel? _chatModel;
-
-  GeminiService() {
-    _initModels();
-  }
-
-  void _initModels() {
-    if (_visionModel != null) return;
-    final apiKey = dotenv.env['GEMINI_API_KEY'];
-    if (apiKey == null || apiKey.isEmpty || apiKey == 'your_api_key_here') {
-      AppLogger.instance.log('WARNING: GEMINI_API_KEY not set in .env');
-      return;
-    }
-
-    _visionModel = GenerativeModel(
-      model: _modelName,
-      apiKey: apiKey,
-      generationConfig: GenerationConfig(
-        temperature: 0.4,
-        maxOutputTokens: 4096,
-        responseMimeType: 'application/json',
-      ),
-    );
-
-    _chatModel = GenerativeModel(
-      model: _modelName,
-      apiKey: apiKey,
-      generationConfig: GenerationConfig(
-        temperature: 0.7,
-        maxOutputTokens: 2048,
-      ),
-    );
-  }
-
-  /// Verifies if the Gemini API is reachable and the key is valid.
-  Future<bool> checkConnection() async {
-    try {
-      if (_chatModel == null) _initModels();
-      if (_chatModel == null) return false;
-
-      // Simple test prompt to verify the connection
-      final response =
-          await _chatModel!.generateContent([Content.text('ping')]);
-      return response.text != null && response.text!.isNotEmpty;
-    } catch (e) {
-      AppLogger.instance.log('Gemini Connection Check Failed: $e');
-      return false;
-    }
+  String? get _apiKey {
+    final key = dotenv.env['GEMINI_API_KEY'];
+    if (key == null || key.isEmpty || key == 'your_api_key_here') return null;
+    return key;
   }
 
   /// Uses Gemini Vision to identify food from an image.
   /// Returns a list of FoodSuggestion parsed from structured JSON output.
   Future<List<FoodSuggestion>> identifyFoodFromImage(
       Uint8List imageBytes) async {
-    if (_visionModel == null) {
+    if (_apiKey == null) {
       throw Exception(
           'Gemini API key is not configured. Check your .env file.');
     }
@@ -188,10 +140,9 @@ CRITICAL RULES:
     // Attempt generation across the fallback chain
     for (final modelId in modelsToTry) {
       try {
-        final apiKey = dotenv.env['GEMINI_API_KEY'];
         final tempModel = GenerativeModel(
           model: modelId,
-          apiKey: apiKey!,
+          apiKey: _apiKey!,
           generationConfig: GenerationConfig(
             temperature: 0.4,
             maxOutputTokens: 4096,
@@ -572,10 +523,12 @@ CRITICAL RULES:
         dishNameMy: dishNameMy,
         mainIngredients: [dishNameEn],
         estimatedPortionGrams: 300,
+        // Macros must roughly add up to the calories (4/4/9 kcal per gram):
+        // 20*4 + 55*4 + 16*9 = 444 ≈ 450 kcal.
         estimatedCalories: 450,
-        estimatedProteinG: 30.0,
-        estimatedCarbsG: 150.0,
-        estimatedFatsG: 45.0,
+        estimatedProteinG: 20.0,
+        estimatedCarbsG: 55.0,
+        estimatedFatsG: 16.0,
         estimatedSodiumG: 0.0,
         estimatedSugarG: 0.0,
         confidence: 'medium',
@@ -586,67 +539,20 @@ CRITICAL RULES:
   }
 
   /// Sends a chat message to Gemini with nutritional context.
+  ///
+  /// [systemPrompt] is built by the caller (see
+  /// [OpenRouterService.buildSystemPrompt]) so the primary and fallback
+  /// chat services always share one prompt instead of drifting apart.
   Future<String> chat({
     required String userMessage,
-    required UserProfile profile,
-    required List<MealEntry> recentMeals,
+    required String systemPrompt,
     required List<Map<String, String>> history,
   }) async {
-    final apiKey = dotenv.env['GEMINI_API_KEY'];
-    if (apiKey == null || apiKey.isEmpty || apiKey == 'your_api_key_here') {
+    final apiKey = _apiKey;
+    if (apiKey == null) {
       throw Exception(
           'Gemini API key is not configured. Check your .env file.');
     }
-
-    // Build context about the user's profile and recent meals
-    final mealSummary = recentMeals.isEmpty
-        ? 'No meals logged recently.'
-        : recentMeals
-            .take(10)
-            .map((m) => '- ${m.foodNameEn} (${m.calories} kcal, ${m.date})')
-            .join('\n');
-
-    final systemPrompt = '''
-You are **CalorAI**, a friendly, knowledgeable, and practical Malaysian nutrition assistant.
-
-You help users estimate calories and macros, track their diet, and make healthier food choices, with strong familiarity with Malaysian cuisine and everyday local eating habits.
-
-User Profile:
-- Name: ${profile.name}
-- Goal: ${profile.goal.replaceAll('_', ' ')}
-- Daily calorie target: ${profile.calorieTarget} kcal
-- Age: ${profile.age}, Sex: ${profile.sex}
-- Height: ${profile.heightCm} cm, Weight: ${profile.weightKg} kg
-- Activity level: ${profile.activityLevel.replaceAll('_', ' ')}
-
-Recent meals (last 7 days):
-$mealSummary
-
-Guidelines:
-- Answer the user's question directly first.
-- Optimize for accuracy over sounding certain.
-- Be warm, encouraging, and concise.
-- Keep responses under 200 words unless the user asks for more detail.
-- Use emojis sparingly.
-- Reference Malaysian foods naturally when relevant, such as Nasi Lemak, Roti Canai, Laksa, Char Kuey Teow, mixed rice, kuih, and mamak dishes.
-- Provide realistic calorie estimates when discussing foods, and present them as estimates rather than exact facts.
-- Prefer approximate values or ranges when uncertainty is meaningful.
-- Briefly state important assumptions when they affect the estimate, such as portion size, oil, gravy, sugar, sauces, toppings, or whether a drink/side was included.
-- If key details are missing and the estimate could change a lot, ask one brief clarifying question.
-- Do not invent ingredients, portion sizes, or cooking methods that were not given or strongly implied.
-- Give practical suggestions based on common Malaysian food options and ingredients.
-- Use simple markdown only: **bold** for emphasis, bullet lists with "- " prefix, and short paragraphs.
-- NEVER use markdown headers (#, ##, ###).
-- NEVER use citation references like [1], [2], [3] or source URLs.
-- Do not diagnose medical conditions.
-- If asked about medical conditions, symptoms, treatment, or disease-specific nutrition advice, politely recommend consulting a doctor or registered dietitian while offering only general wellness guidance.
-- When the user logs a meal with incomplete detail, prioritize the biggest calorie drivers first: portion size, cooking oil, sugar, coconut milk, gravy, fried components, drinks, sauces, and add-ons.
-- If the user gives a branded or packaged item, prefer label-based nutrition over generic food estimates.
-- If the user gives a restaurant or hawker item without details, estimate using a typical Malaysian serving and say that actual calories may vary by stall and oil usage.
-- If the user lists multiple foods in one meal, estimate each component separately before giving the total.
-- Do not pretend macro estimates are highly reliable when the food is visually identified from an image alone.
-- If the estimate depends heavily on missing details, ask one short clarifying question; otherwise give the best estimate possible with clear assumptions.
-''';
 
     // Define the fallback chain for the chatbot.
     // Matches the vision fallback chain to ensure high availability.

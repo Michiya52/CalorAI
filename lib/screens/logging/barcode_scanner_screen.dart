@@ -19,6 +19,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   bool _isProcessing = false;
   bool _hasPermission = false;
   bool _isCheckingPermission = true;
+  String? _lastFailedBarcode;
 
   @override
   void initState() {
@@ -38,25 +39,29 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
 
   Future<void> _handleBarcode(String barcode) async {
     if (_isProcessing) return;
+    // Don't re-query a barcode that already came back empty — the camera
+    // keeps detecting the same code every frame, which would loop forever.
+    if (barcode == _lastFailedBarcode) return;
     setState(() => _isProcessing = true);
 
     try {
-      // 2. Try USDA FDC
       final usdaResult =
           await UsdaService.instance.getProductByBarcode(barcode);
+      if (!mounted) return;
+
       if (usdaResult != null) {
         _navigateToPortion(usdaResult);
         return;
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Product not found in our open databases.'),
-            duration: Duration(seconds: 5),
-          ),
-        );
-      }
+      _lastFailedBarcode = barcode;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Product not found in our open databases. Try another barcode or search manually.'),
+          duration: Duration(seconds: 5),
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isProcessing = false);
     }
@@ -85,9 +90,14 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       resolvedCarbsG:
           food.carbsPer100g * (food.portionSizes.mediumGrams / 100.0),
       resolvedFatsG: food.fatsPer100g * (food.portionSizes.mediumGrams / 100.0),
+      resolvedSodiumG:
+          food.sodiumPer100g * (food.portionSizes.mediumGrams / 100.0),
+      resolvedSugarG:
+          food.sugarPer100g * (food.portionSizes.mediumGrams / 100.0),
       source: food.source,
     );
 
+    if (!mounted) return;
     context.push('/log/portion', extra: suggestion);
   }
 

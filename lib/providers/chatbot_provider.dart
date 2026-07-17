@@ -352,8 +352,14 @@ Memory usage rules:
         conversationMemory: conversationMemory,
         fallbackChat: () => _gemini.chat(
           userMessage: text,
-          profile: profile,
-          recentMeals: recentMeals,
+          // Same prompt as the primary service — the fallback keeps today's
+          // progress, macro targets, and conversation memory.
+          systemPrompt: _openRouter.buildSystemPrompt(
+            profile: profile,
+            recentMeals: recentMeals,
+            todaysMeals: effectiveTodaysMeals,
+            conversationMemory: conversationMemory,
+          ),
           history: _history,
         ),
       );

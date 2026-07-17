@@ -304,9 +304,14 @@ ${conversationMemory.isNotEmpty ? conversationMemory : ''}
         .timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final text = data['choices']?[0]?['message']?['content'] as String?;
-      if (text != null && text.isNotEmpty) return text;
+      // Decode bytes as UTF-8 explicitly: OpenRouter omits the charset header,
+      // so response.body would fall back to Latin-1 and garble non-ASCII text.
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      final choices = data['choices'] as List?;
+      if (choices != null && choices.isNotEmpty) {
+        final text = choices[0]?['message']?['content'] as String?;
+        if (text != null && text.isNotEmpty) return text;
+      }
     }
 
     final statusCode = response.statusCode;
