@@ -75,6 +75,30 @@ class AuthService {
   Future<void> logout() async {
     await _firebaseAuth.signOut();
   }
+
+  /// Reauthenticates with the current user's email + [password].
+  /// Required by Firebase before sensitive operations like account deletion.
+  Future<void> reauthenticate(String password) async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null || user.email == null) {
+      throw AuthException('no-user', 'No signed-in user.');
+    }
+    try {
+      await user.reauthenticateWithCredential(
+        EmailAuthProvider.credential(email: user.email!, password: password),
+      );
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code, e.message ?? 'Incorrect password.');
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      await _firebaseAuth.currentUser?.delete();
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code, e.message ?? 'Account deletion failed.');
+    }
+  }
 }
 
 /// Generic User class used throughout the app.

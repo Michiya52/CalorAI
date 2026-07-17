@@ -30,6 +30,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   Future<void> _checkPermission() async {
     final status = await Permission.camera.request();
     if (mounted) {
+      if (!status.isGranted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Camera permission required for barcode scanning.')),
+        );
+        context.pushReplacement('/log/search');
+        return;
+      }
       setState(() {
         _hasPermission = status.isGranted;
         _isCheckingPermission = false;

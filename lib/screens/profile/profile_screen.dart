@@ -7,6 +7,7 @@ import '../../providers/profile_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/meal_provider.dart';
 import '../../providers/chatbot_provider.dart';
+import '../../services/auth_service.dart';
 import '../../services/firestore_service.dart';
 import '../../models/weight_log.dart';
 import '../../widgets/weight_chart.dart';
@@ -248,6 +249,112 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to log weight'), backgroundColor: AppColors.error),
+        );
+      }
+    }
+  }
+
+  Future<void> _showWeightHistory() async {
+    final uid = context.read<AuthProvider>().userId;
+    if (uid == null) return;
+    final logs = await _weightLogsFuture;
+    if (!mounted) return;
+    if (logs.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No weight logs yet.')),
+      );
+      return;
+    }
+
+    await showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => ListView(
+        shrinkWrap: true,
+        children: [
+          for (final log in logs.reversed)
+            ListTile(
+              leading: const Icon(Icons.scale_rounded),
+              title: Text('${log.weightKg} kg'),
+              subtitle: Text(log.date),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete_outline_rounded,
+                    color: AppColors.error),
+                onPressed: () async {
+                  await FirestoreService().deleteWeightLog(uid, log.id);
+                  if (sheetContext.mounted) Navigator.pop(sheetContext);
+                  if (mounted) setState(_loadWeightLogs);
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteAccount() async {
+    final uid = context.read<AuthProvider>().userId;
+    if (uid == null) return;
+
+    final controller = TextEditingController();
+    final password = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+                'This permanently deletes your account and all logged data. '
+                'Enter your password to confirm.'),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              obscureText: true,
+              autofocus: true,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.pop(dialogContext, controller.text),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (password == null || password.isEmpty || !mounted) return;
+
+    try {
+      // Reauth first (Firebase requires a recent login), wipe Firestore data
+      // while still authenticated, then remove the auth user.
+      await AuthService().reauthenticate(password);
+      await FirestoreService().deleteUserData(uid);
+      await AuthService().deleteAccount();
+
+      if (!mounted) return;
+      context.read<ProfileProvider>().clear();
+      context.read<MealProvider>().clear();
+      context.read<ChatbotProvider>().clear();
+      context.go('/login');
+    } on AuthException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message), backgroundColor: AppColors.error),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Account deletion failed. Please try again.'),
+              backgroundColor: AppColors.error),
         );
       }
     }
@@ -518,11 +625,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Weight Progress',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.textPrimary)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Weight Progress',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: AppColors.textPrimary)),
+                          IconButton(
+                            icon: Icon(Icons.history_rounded,
+                                size: 20, color: AppColors.textSecondary),
+                            tooltip: 'Weight history',
+                            onPressed: _showWeightHistory,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 16),
                       FutureBuilder<List<WeightLog>>(
                         future: _weightLogsFuture,
@@ -639,6 +759,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(16)),
                     ),
                   ),
+                ),
+                const SizedBox(height: 12),
+
+                TextButton(
+                  onPressed: _deleteAccount,
+                  child: Text('Delete Account',
+                      style: TextStyle(
+                          color: AppColors.error.withValues(alpha: 0.8),
+                          fontSize: 13)),
                 ),
                 const SizedBox(height: 100),
               ],

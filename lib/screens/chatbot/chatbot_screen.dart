@@ -52,7 +52,14 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 
   Future<void> _sendMessage(String text) async {
-    if (text.trim().isEmpty) return;
+    if (text.trim().isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter a message.')),
+        );
+      }
+      return;
+    }
 
     final profile = context.read<ProfileProvider>().profile;
     final uid = context.read<AuthProvider>().userId;

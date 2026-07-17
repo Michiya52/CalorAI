@@ -315,6 +315,46 @@ class FirestoreService {
       return [];
     }
   }
+
+  Future<void> deleteWeightLog(String uid, String logId) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('weight_logs')
+          .doc(logId)
+          .delete();
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Firestore Error [deleteWeightLog]');
+      rethrow;
+    }
+  }
+
+  // ── Account Deletion ──────────────────────────────────────────
+
+  /// Deletes the user's meals, weight logs, and profile document.
+  /// Call before deleting the Firebase Auth user, while still authenticated.
+  Future<void> deleteUserData(String uid) async {
+    try {
+      final userDoc = _firestore.collection('users').doc(uid);
+      // ponytail: client-side sweep; switch to the Delete User Data
+      // extension if subcollections outgrow a few thousand docs.
+      for (final sub in ['meals', 'weight_logs']) {
+        final docs = (await userDoc.collection(sub).get()).docs;
+        for (var i = 0; i < docs.length; i += 500) {
+          final batch = _firestore.batch();
+          for (final doc in docs.skip(i).take(500)) {
+            batch.delete(doc.reference);
+          }
+          await batch.commit();
+        }
+      }
+      await userDoc.delete();
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Firestore Error [deleteUserData]');
+      rethrow;
+    }
+  }
 }
 
 class _CachedFoodRecord {

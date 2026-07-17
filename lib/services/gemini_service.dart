@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -150,7 +151,7 @@ CRITICAL RULES:
           ),
         );
 
-        response = await tempModel.generateContent([content]);
+        response = await tempModel.generateContent([content]).timeout(const Duration(seconds: 15));
         AppLogger.instance.log('Gemini vision success using model: $modelId');
         break; // Success, exit the fallback loop
       } on GenerativeAIException catch (e) {
