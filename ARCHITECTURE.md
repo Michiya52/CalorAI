@@ -240,7 +240,7 @@ The Firebase Firestore instance is protected by Security Rules (`firestore.rules
 - **Global `/foods` Collection:** Retired. Client writes are denied (`allow write: if false;`); reads remain open but nothing in the app queries it.
 
 ### Food Data Workflow
-Startup seeding has been removed (`lib/utils/seed_data.dart` is a stub). All food data ships as a single bundled asset, `assets/data/myfcd_full.json` (~2,000 entries), generated offline by `tool/merge_foods.py`, which merges MyFCD (1997/Current/Industry), SGFOCOS 2025, the "backed" USDA/MY sets, and a curated additions list; it cleans names, normalizes `foodGroup` to human-readable categories, dedupes by name with curated data winning, and rebuilds `searchTerms`. Search (`FirestoreService.searchFoods`) and the meal-creator ingredient library both read this asset — no Firestore involved.
+Startup seeding has been removed. All food data ships as a single bundled asset, `assets/data/myfcd_full.json` (~2,000 entries), generated offline by `tool/merge_foods.py`, which merges MyFCD (1997/Current/Industry), SGFOCOS 2025, the "backed" USDA/MY sets, and a curated additions list; it cleans names, normalizes `foodGroup` to human-readable categories, dedupes by name with curated data winning, and rebuilds `searchTerms`. Search (`FirestoreService.searchFoods`) and the meal-creator ingredient library both read this asset — no Firestore involved.
 
 ---
 

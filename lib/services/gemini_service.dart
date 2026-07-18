@@ -59,12 +59,18 @@ Use these visual differentiators:
 - Bak Kut Teh: herbal pork rib soup, dark herbal broth, often in claypot
 - Rendang: dry dark brown curry coating, thick caramelized coconut-spice paste, usually beef or chicken
 - Nasi Kandar: rice with multiple curries or gravies mixed over it, colorful layered presentation
+- Hokkien Mee (Singapore): pale stir-fried yellow noodles with bee hoon in prawn stock, lime and sambal on the side; KL Hokkien Mee is dark soy-braised thick noodles
+- Bak Chor Mee: flat mee pok tossed in vinegar-chili with minced pork and liver; Wan Tan Mee has char siu and wontons instead
+- Chai Tow Kway (Carrot Cake): black version is coated in sweet dark soy; white version is pale with an egg crust
+- Economy Rice / Cai Fan / Nasi Campur: plate of white rice with 2-3 distinct scooped dishes on top
+- Chicken Rice: pale poached or roasted chicken slices over glossy oily rice with chili and ginger sauces
 
 STEP 3 — UNCERTAINTY AND RANKING
 - Rank suggestions by actual visual likelihood, not by popularity.
 - If the image is blurry, cropped, obstructed, poorly lit, or contains multiple foods, reduce confidence realistically.
 - All 4 suggestions must be different dishes.
 - Prefer Malaysian or Southeast Asian dishes when the visual evidence supports them.
+- If the dish is clearly from another cuisine (Western, Japanese, Korean, Chinese, Indian, Middle Eastern, etc.), identify it by its common international name — do NOT force a Southeast Asian interpretation onto foreign food.
 - Do not force high confidence if the visual evidence is weak.
 - If multiple dishes are visually similar, use lower confidencePercent and explain the ambiguity in visualEvidence.
 - Focus on the dominant visible dish if multiple items are present.
@@ -84,7 +90,7 @@ Return a JSON array of EXACTLY 4 objects, ranked from most likely to least likel
 [
   {
     "rank": 1,
-    "dishNameEn": "Prawn Noodle Soup (Mee Udang)",
+    "dishNameEn": "Prawn Mee",
     "dishNameMy": "Mee Udang",
     "mainIngredients": ["yellow noodles", "prawns", "prawn broth", "hard-boiled egg", "kangkung"],
     "estimatedPortionGrams": 450,
@@ -116,6 +122,7 @@ CRITICAL RULES:
 - 'estimatedPortionGrams' must reflect the visible portion only.
 - 'estimatedCalories', 'estimatedProteinG', 'estimatedCarbsG', 'estimatedFatsG', 'estimatedSodiumG' (in mg), and 'estimatedSugarG' must reflect realistically calculated macros for the estimated portion.
 - Ensure that the sum of protein, carbs, and fats in grams does not exceed the estimatedPortionGrams.
+- 'dishNameEn' must be the short, common menu name of the dish (e.g. "Char Kuey Teow", "Chicken Rice", "Nasi Lemak", "Carbonara") — NOT a long description. Put the local-language name in 'dishNameMy'. Short canonical names match the nutrition database; decorated names do not.
 - 'mainIngredients' should list only the most likely core ingredients.
 - 'visualEvidence' must describe the visible features that support that specific guess.
 - Do not claim ingredients, garnishes, or side dishes unless they are visible or strongly implied by the dish's core identity.

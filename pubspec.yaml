@@ -16,8 +16,6 @@ dependencies:
   firebase_core: 4.7.0
   firebase_auth: 6.4.0
   cloud_firestore: 6.3.0
-  firebase_data_connect: 0.3.0
-  gql: ^1.0.0
 
   # AI
   google_generative_ai: ^0.4.6
@@ -71,7 +69,6 @@ flutter:
   assets:
     - .env
     - assets/data/myfcd_full.json
-    - assets/animations/loading.json
 
 flutter_launcher_icons:
   android: "launcher_icon"

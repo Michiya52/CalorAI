@@ -2540,6 +2540,41 @@
   "source": "MyFCD_Industry"
  },
  {
+  "myfcdCode": "CAL0002",
+  "nameEn": "Ayam Geprek (Smashed Fried Chicken)",
+  "nameMy": "Ayam Geprek",
+  "nameEnLower": "ayam geprek (smashed fried chicken)",
+  "nameMyLower": "ayam geprek",
+  "searchTerms": [
+   "ayam",
+   "ayam geprek",
+   "ayam geprek smashed fried chicken",
+   "chicken",
+   "fried",
+   "geprek",
+   "smashed"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 230.0,
+  "proteinPer100g": 16.0,
+  "carbsPer100g": 9.0,
+  "fatsPer100g": 15.0,
+  "sodiumPer100g": 520.0,
+  "sugarPer100g": 1.5,
+  "ingredients": [
+   "Fried Chicken",
+   "Sambal",
+   "Garlic",
+   "Oil"
+  ],
+  "portionSizes": {
+   "smallGrams": 150,
+   "mediumGrams": 250,
+   "largeGrams": 400
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "MB024",
   "nameEn": "Ayam Goreng Berempah",
   "nameMy": "Ayam Goreng Berempah",
@@ -2600,7 +2635,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "CAL0002",
+  "myfcdCode": "CAL0003",
   "nameEn": "Ayam Masak Merah",
   "nameMy": "Ayam Masak Merah",
   "nameEnLower": "ayam masak merah",
@@ -2933,7 +2968,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "CAL0003",
+  "myfcdCode": "CAL0004",
   "nameEn": "Bak Chor Mee (Dry)",
   "nameMy": "Mee Daging Cincang",
   "nameEnLower": "bak chor mee (dry)",
@@ -3598,31 +3633,38 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "F05060005",
+  "myfcdCode": "CAL0005",
   "nameEn": "Ban Mian (Soup)",
-  "nameMy": "Soup",
+  "nameMy": "Ban Mian",
   "nameEnLower": "ban mian (soup)",
-  "nameMyLower": "soup",
+  "nameMyLower": "ban mian",
   "searchTerms": [
    "ban",
+   "ban mian",
    "ban mian soup",
    "mian",
    "soup"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 77.0,
-  "proteinPer100g": 3.24,
-  "carbsPer100g": 11.15,
-  "fatsPer100g": 2.2,
-  "sodiumPer100g": 292.0,
-  "sugarPer100g": 0.0,
-  "ingredients": [],
+  "caloriesPer100g": 95.0,
+  "proteinPer100g": 4.5,
+  "carbsPer100g": 13.0,
+  "fatsPer100g": 2.8,
+  "sodiumPer100g": 380.0,
+  "sugarPer100g": 0.5,
+  "ingredients": [
+   "Handmade Noodles",
+   "Anchovy Broth",
+   "Minced Pork",
+   "Egg",
+   "Vegetables"
+  ],
   "portionSizes": {
-   "smallGrams": 475,
-   "mediumGrams": 792,
-   "largeGrams": 1109
+   "smallGrams": 350,
+   "mediumGrams": 500,
+   "largeGrams": 650
   },
-  "source": "SGFOCOS_2025"
+  "source": "Curated"
  },
  {
   "myfcdCode": "CB002",
@@ -4391,6 +4433,40 @@
    "largeGrams": 700
   },
   "source": "SGFOCOS_2025"
+ },
+ {
+  "myfcdCode": "CAL0006",
+  "nameEn": "Barley Water (Sweetened)",
+  "nameMy": "Air Barli",
+  "nameEnLower": "barley water (sweetened)",
+  "nameMyLower": "air barli",
+  "searchTerms": [
+   "air",
+   "air barli",
+   "barley",
+   "barley water sweetened",
+   "barli",
+   "sweetened",
+   "water"
+  ],
+  "foodGroup": "Beverages",
+  "caloriesPer100g": 25.0,
+  "proteinPer100g": 0.3,
+  "carbsPer100g": 6.0,
+  "fatsPer100g": 0.1,
+  "sodiumPer100g": 5.0,
+  "sugarPer100g": 4.5,
+  "ingredients": [
+   "Barley",
+   "Sugar",
+   "Water"
+  ],
+  "portionSizes": {
+   "smallGrams": 250,
+   "mediumGrams": 350,
+   "largeGrams": 500
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "101001",
@@ -5936,6 +6012,38 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_1997"
+ },
+ {
+  "myfcdCode": "CAL0007",
+  "nameEn": "Begedil (Potato Patty)",
+  "nameMy": "Begedil",
+  "nameEnLower": "begedil (potato patty)",
+  "nameMyLower": "begedil",
+  "searchTerms": [
+   "begedil",
+   "begedil potato patty",
+   "patty",
+   "potato"
+  ],
+  "foodGroup": "Snacks",
+  "caloriesPer100g": 190.0,
+  "proteinPer100g": 4.0,
+  "carbsPer100g": 22.0,
+  "fatsPer100g": 9.5,
+  "sodiumPer100g": 300.0,
+  "sugarPer100g": 1.0,
+  "ingredients": [
+   "Potato",
+   "Fried Shallots",
+   "Egg",
+   "Oil"
+  ],
+  "portionSizes": {
+   "smallGrams": 50,
+   "mediumGrams": 100,
+   "largeGrams": 150
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "106016",
@@ -8382,7 +8490,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "CAL0004",
+  "myfcdCode": "CAL0008",
   "nameEn": "Braised Duck Rice",
   "nameMy": "Nasi Itik",
   "nameEnLower": "braised duck rice",
@@ -10756,7 +10864,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "ESS036",
+  "myfcdCode": "MB039",
   "nameEn": "Cendol",
   "nameMy": "Cendol",
   "nameEnLower": "cendol",
@@ -10766,24 +10874,24 @@
   ],
   "foodGroup": "Desserts & Sweets",
   "caloriesPer100g": 115.0,
-  "proteinPer100g": 1.5,
-  "carbsPer100g": 18.0,
-  "fatsPer100g": 4.5,
-  "sodiumPer100g": 85.0,
-  "sugarPer100g": 12.0,
+  "proteinPer100g": 1.2,
+  "carbsPer100g": 18.5,
+  "fatsPer100g": 3.8,
+  "sodiumPer100g": 40.0,
+  "sugarPer100g": 14.5,
   "ingredients": [
    "Shaved Ice",
    "Coconut Milk",
-   "Palm Sugar (Gula Melaka)",
-   "Green Jelly Noodles",
+   "Palm Sugar Syrup",
+   "Green Rice Flour Jelly",
    "Red Beans"
   ],
   "portionSizes": {
-   "smallGrams": 200,
-   "mediumGrams": 300,
-   "largeGrams": 450
+   "smallGrams": 250,
+   "mediumGrams": 350,
+   "largeGrams": 500
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q039"
  },
  {
   "myfcdCode": "109001",
@@ -11505,7 +11613,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0005",
+  "myfcdCode": "CAL0009",
   "nameEn": "Cheng Tng",
   "nameMy": "Cheng Tng",
   "nameEnLower": "cheng tng",
@@ -11931,7 +12039,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0006",
+  "myfcdCode": "CAL0010",
   "nameEn": "Chicken Porridge (Congee)",
   "nameMy": "Bubur Ayam",
   "nameEnLower": "chicken porridge (congee)",
@@ -13869,7 +13977,7 @@
   "source": "MyFCD_Industry"
  },
  {
-  "myfcdCode": "CAL0007",
+  "myfcdCode": "CAL0011",
   "nameEn": "Chwee Kueh",
   "nameMy": "Chwee Kueh",
   "nameEnLower": "chwee kueh",
@@ -14065,6 +14173,44 @@
    "largeGrams": 924
   },
   "source": "SGFOCOS_2025"
+ },
+ {
+  "myfcdCode": "CAL0012",
+  "nameEn": "Claypot Rice (With Chicken)",
+  "nameMy": "Nasi Periuk Tanah",
+  "nameEnLower": "claypot rice (with chicken)",
+  "nameMyLower": "nasi periuk tanah",
+  "searchTerms": [
+   "chicken",
+   "claypot",
+   "claypot rice with chicken",
+   "nasi",
+   "nasi periuk tanah",
+   "periuk",
+   "rice",
+   "tanah",
+   "with"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 165.0,
+  "proteinPer100g": 7.0,
+  "carbsPer100g": 22.0,
+  "fatsPer100g": 5.5,
+  "sodiumPer100g": 420.0,
+  "sugarPer100g": 1.0,
+  "ingredients": [
+   "Rice",
+   "Chicken",
+   "Chinese Sausage",
+   "Dark Soy Sauce",
+   "Salted Fish"
+  ],
+  "portionSizes": {
+   "smallGrams": 300,
+   "mediumGrams": 450,
+   "largeGrams": 600
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "114022",
@@ -20947,7 +21093,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "CAL0008",
+  "myfcdCode": "CAL0013",
   "nameEn": "Economy Rice (Cai Fan, 1 Meat 2 Veg)",
   "nameMy": "Nasi Campur",
   "nameEnLower": "economy rice (cai fan, 1 meat 2 veg)",
@@ -25940,6 +26086,41 @@
   "source": "SGFOCOS_2025"
  },
  {
+  "myfcdCode": "CAL0014",
+  "nameEn": "Grass Jelly Drink (Chin Chow)",
+  "nameMy": "Air Cincau",
+  "nameEnLower": "grass jelly drink (chin chow)",
+  "nameMyLower": "air cincau",
+  "searchTerms": [
+   "air",
+   "air cincau",
+   "chin",
+   "chow",
+   "cincau",
+   "drink",
+   "grass",
+   "grass jelly drink chin chow",
+   "jelly"
+  ],
+  "foodGroup": "Beverages",
+  "caloriesPer100g": 30.0,
+  "proteinPer100g": 0.1,
+  "carbsPer100g": 7.0,
+  "fatsPer100g": 0.0,
+  "sodiumPer100g": 10.0,
+  "sugarPer100g": 6.5,
+  "ingredients": [
+   "Grass Jelly",
+   "Sugar Syrup"
+  ],
+  "portionSizes": {
+   "smallGrams": 250,
+   "mediumGrams": 350,
+   "largeGrams": 500
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "CB017",
   "nameEn": "Greek Yogurt",
   "nameMy": "Yogurt Greek",
@@ -26671,7 +26852,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0009",
+  "myfcdCode": "CAL0015",
   "nameEn": "Half-boiled Eggs (Kopitiam Style)",
   "nameMy": "Telur Separuh Masak",
   "nameEnLower": "half-boiled eggs (kopitiam style)",
@@ -27317,7 +27498,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0010",
+  "myfcdCode": "CAL0016",
   "nameEn": "Hokkien Prawn Mee (Fried)",
   "nameMy": "Mee Hokkien Goreng",
   "nameEnLower": "hokkien prawn mee (fried)",
@@ -27968,7 +28149,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0011",
+  "myfcdCode": "CAL0017",
   "nameEn": "Ikan Bakar (Grilled Fish with Sambal)",
   "nameMy": "Ikan Bakar",
   "nameEnLower": "ikan bakar (grilled fish with sambal)",
@@ -28157,6 +28338,41 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_1997"
+ },
+ {
+  "myfcdCode": "CAL0018",
+  "nameEn": "Instant Noodles (Soup, Cooked)",
+  "nameMy": "Mee Segera",
+  "nameEnLower": "instant noodles (soup, cooked)",
+  "nameMyLower": "mee segera",
+  "searchTerms": [
+   "cooked",
+   "instant",
+   "instant noodles soup cooked",
+   "mee",
+   "mee segera",
+   "noodles",
+   "segera",
+   "soup"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 130.0,
+  "proteinPer100g": 3.0,
+  "carbsPer100g": 17.0,
+  "fatsPer100g": 5.5,
+  "sodiumPer100g": 580.0,
+  "sugarPer100g": 0.8,
+  "ingredients": [
+   "Instant Noodles",
+   "Seasoning",
+   "Water"
+  ],
+  "portionSizes": {
+   "smallGrams": 250,
+   "mediumGrams": 400,
+   "largeGrams": 550
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "1200019",
@@ -30500,7 +30716,7 @@
   "source": "MyFCD_Current"
  },
  {
-  "myfcdCode": "CAL0012",
+  "myfcdCode": "CAL0019",
   "nameEn": "Kopi (Coffee with Condensed Milk)",
   "nameMy": "Kopi",
   "nameEnLower": "kopi (coffee with condensed milk)",
@@ -30532,7 +30748,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "CAL0013",
+  "myfcdCode": "CAL0020",
   "nameEn": "Kopi O (Black Coffee with Sugar)",
   "nameMy": "Kopi O",
   "nameEnLower": "kopi o (black coffee with sugar)",
@@ -30681,6 +30897,72 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_Industry"
+ },
+ {
+  "myfcdCode": "CAL0021",
+  "nameEn": "Kueh Salat (Seri Muka)",
+  "nameMy": "Kuih Seri Muka",
+  "nameEnLower": "kueh salat (seri muka)",
+  "nameMyLower": "kuih seri muka",
+  "searchTerms": [
+   "kueh",
+   "kueh salat seri muka",
+   "kuih",
+   "kuih seri muka",
+   "muka",
+   "salat",
+   "seri"
+  ],
+  "foodGroup": "Desserts & Sweets",
+  "caloriesPer100g": 235.0,
+  "proteinPer100g": 3.0,
+  "carbsPer100g": 38.0,
+  "fatsPer100g": 8.0,
+  "sodiumPer100g": 120.0,
+  "sugarPer100g": 18.0,
+  "ingredients": [
+   "Glutinous Rice",
+   "Pandan Custard",
+   "Coconut Milk"
+  ],
+  "portionSizes": {
+   "smallGrams": 60,
+   "mediumGrams": 120,
+   "largeGrams": 200
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0022",
+  "nameEn": "Kueh Tutu",
+  "nameMy": "Kuih Tutu",
+  "nameEnLower": "kueh tutu",
+  "nameMyLower": "kuih tutu",
+  "searchTerms": [
+   "kueh",
+   "kueh tutu",
+   "kuih",
+   "kuih tutu",
+   "tutu"
+  ],
+  "foodGroup": "Desserts & Sweets",
+  "caloriesPer100g": 215.0,
+  "proteinPer100g": 3.0,
+  "carbsPer100g": 44.0,
+  "fatsPer100g": 2.5,
+  "sodiumPer100g": 100.0,
+  "sugarPer100g": 18.0,
+  "ingredients": [
+   "Rice Flour",
+   "Coconut Filling",
+   "Palm Sugar"
+  ],
+  "portionSizes": {
+   "smallGrams": 40,
+   "mediumGrams": 80,
+   "largeGrams": 150
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "1700741",
@@ -31342,7 +31624,7 @@
   "source": "MYFCD ID: Q034"
  },
  {
-  "myfcdCode": "CAL0014",
+  "myfcdCode": "CAL0023",
   "nameEn": "Kuih Lapis (Steamed Layer Cake)",
   "nameMy": "Kuih Lapis",
   "nameEnLower": "kuih lapis (steamed layer cake)",
@@ -32333,6 +32615,37 @@
   "source": "MyFCD_1997"
  },
  {
+  "myfcdCode": "CAL0024",
+  "nameEn": "Laksa Johor",
+  "nameMy": "Laksa Johor",
+  "nameEnLower": "laksa johor",
+  "nameMyLower": "laksa johor",
+  "searchTerms": [
+   "johor",
+   "laksa",
+   "laksa johor"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 120.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 14.0,
+  "fatsPer100g": 4.5,
+  "sodiumPer100g": 400.0,
+  "sugarPer100g": 2.0,
+  "ingredients": [
+   "Spaghetti",
+   "Fish Gravy",
+   "Coconut Milk",
+   "Herbs"
+  ],
+  "portionSizes": {
+   "smallGrams": 300,
+   "mediumGrams": 450,
+   "largeGrams": 600
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "ESS027",
   "nameEn": "Laksa Lemak",
   "nameMy": "Laksa Nyonya",
@@ -32630,6 +32943,35 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_1997"
+ },
+ {
+  "myfcdCode": "CAL0025",
+  "nameEn": "Lemang",
+  "nameMy": "Lemang",
+  "nameEnLower": "lemang",
+  "nameMyLower": "lemang",
+  "searchTerms": [
+   "lemang"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 195.0,
+  "proteinPer100g": 3.5,
+  "carbsPer100g": 33.0,
+  "fatsPer100g": 5.5,
+  "sodiumPer100g": 180.0,
+  "sugarPer100g": 0.5,
+  "ingredients": [
+   "Glutinous Rice",
+   "Coconut Milk",
+   "Bamboo",
+   "Salt"
+  ],
+  "portionSizes": {
+   "smallGrams": 100,
+   "mediumGrams": 200,
+   "largeGrams": 300
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "106043",
@@ -33123,6 +33465,40 @@
   "source": "Curated"
  },
  {
+  "myfcdCode": "CAL0026",
+  "nameEn": "Lime Juice (Kopitiam)",
+  "nameMy": "Air Limau",
+  "nameEnLower": "lime juice (kopitiam)",
+  "nameMyLower": "air limau",
+  "searchTerms": [
+   "air",
+   "air limau",
+   "juice",
+   "kopitiam",
+   "limau",
+   "lime",
+   "lime juice kopitiam"
+  ],
+  "foodGroup": "Beverages",
+  "caloriesPer100g": 30.0,
+  "proteinPer100g": 0.1,
+  "carbsPer100g": 7.5,
+  "fatsPer100g": 0.0,
+  "sodiumPer100g": 8.0,
+  "sugarPer100g": 7.0,
+  "ingredients": [
+   "Lime",
+   "Sugar Syrup",
+   "Water"
+  ],
+  "portionSizes": {
+   "smallGrams": 250,
+   "mediumGrams": 350,
+   "largeGrams": 500
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "106045",
   "nameEn": "Lime, Common (Limau Kapas)",
   "nameMy": "Limau Kapas",
@@ -33410,7 +33786,36 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "ESS051",
+  "myfcdCode": "CAL0027",
+  "nameEn": "Longan (Fresh)",
+  "nameMy": "Mata Kucing",
+  "nameEnLower": "longan (fresh)",
+  "nameMyLower": "mata kucing",
+  "searchTerms": [
+   "fresh",
+   "kucing",
+   "longan",
+   "longan fresh",
+   "mata",
+   "mata kucing"
+  ],
+  "foodGroup": "Fruits",
+  "caloriesPer100g": 60.0,
+  "proteinPer100g": 1.3,
+  "carbsPer100g": 15.0,
+  "fatsPer100g": 0.1,
+  "sodiumPer100g": 0.0,
+  "sugarPer100g": 14.0,
+  "ingredients": [],
+  "portionSizes": {
+   "smallGrams": 50,
+   "mediumGrams": 100,
+   "largeGrams": 200
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "MB048",
   "nameEn": "Lontong",
   "nameMy": "Lontong / Sayur Lodeh",
   "nameEnLower": "lontong",
@@ -33422,26 +33827,25 @@
    "sayur"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 130.0,
-  "proteinPer100g": 3.5,
-  "carbsPer100g": 12.0,
-  "fatsPer100g": 7.5,
-  "sodiumPer100g": 240.0,
-  "sugarPer100g": 1.5,
+  "caloriesPer100g": 125.0,
+  "proteinPer100g": 3.8,
+  "carbsPer100g": 15.5,
+  "fatsPer100g": 5.5,
+  "sodiumPer100g": 340.0,
+  "sugarPer100g": 2.5,
   "ingredients": [
-   "Compressed Rice Cake (Nasi Impit)",
-   "Coconut Milk",
+   "Rice Cakes",
+   "Coconut Milk Broth",
    "Cabbage",
    "Long Beans",
-   "Tempeh",
    "Tofu"
   ],
   "portionSizes": {
-   "smallGrams": 300,
-   "mediumGrams": 450,
-   "largeGrams": 600
+   "smallGrams": 350,
+   "mediumGrams": 500,
+   "largeGrams": 700
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q048"
  },
  {
   "myfcdCode": "105052",
@@ -33529,7 +33933,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0015",
+  "myfcdCode": "CAL0028",
   "nameEn": "Lor Mee",
   "nameMy": "Lor Mee",
   "nameEnLower": "lor mee",
@@ -34056,7 +34460,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "ESS049",
+  "myfcdCode": "MB007",
   "nameEn": "Maggi Goreng",
   "nameMy": "Maggi Goreng",
   "nameEnLower": "maggi goreng",
@@ -34067,27 +34471,25 @@
    "maggi goreng"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 220.0,
-  "proteinPer100g": 6.5,
-  "carbsPer100g": 28.0,
-  "fatsPer100g": 9.0,
-  "sodiumPer100g": 550.0,
-  "sugarPer100g": 2.5,
+  "caloriesPer100g": 210.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 27.5,
+  "fatsPer100g": 8.5,
+  "sodiumPer100g": 600.0,
+  "sugarPer100g": 3.0,
   "ingredients": [
    "Instant Noodles",
    "Egg",
    "Tofu",
-   "Cabbage",
-   "Soy Sauce",
-   "Curry Seasoning",
-   "Oil"
+   "Vegetables",
+   "Soy Sauce"
   ],
   "portionSizes": {
    "smallGrams": 200,
-   "mediumGrams": 300,
-   "largeGrams": 450
+   "mediumGrams": 350,
+   "largeGrams": 500
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q007"
  },
  {
   "myfcdCode": "0900616",
@@ -34331,6 +34733,41 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_1997"
+ },
+ {
+  "myfcdCode": "CAL0029",
+  "nameEn": "Mala Xiang Guo (Mixed Stir-fry)",
+  "nameMy": "Mala Xiang Guo",
+  "nameEnLower": "mala xiang guo (mixed stir-fry)",
+  "nameMyLower": "mala xiang guo",
+  "searchTerms": [
+   "guo",
+   "mala",
+   "mala xiang guo",
+   "mala xiang guo mixed stir-fry",
+   "mixed",
+   "stir-fry",
+   "xiang"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 185.0,
+  "proteinPer100g": 9.0,
+  "carbsPer100g": 10.0,
+  "fatsPer100g": 12.5,
+  "sodiumPer100g": 650.0,
+  "sugarPer100g": 2.0,
+  "ingredients": [
+   "Mixed Meats",
+   "Vegetables",
+   "Sichuan Peppercorn",
+   "Chilli Oil"
+  ],
+  "portionSizes": {
+   "smallGrams": 250,
+   "mediumGrams": 400,
+   "largeGrams": 550
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "1600420",
@@ -35441,7 +35878,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "CAL0016",
+  "myfcdCode": "CAL0030",
   "nameEn": "Mee Hoon Goreng (Fried Rice Vermicelli)",
   "nameMy": "Bihun Goreng",
   "nameEnLower": "mee hoon goreng (fried rice vermicelli)",
@@ -35534,7 +35971,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "ESS052",
+  "myfcdCode": "MB011",
   "nameEn": "Mee Rebus",
   "nameMy": "Mee Rebus",
   "nameEnLower": "mee rebus",
@@ -35545,27 +35982,24 @@
    "rebus"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 145.0,
-  "proteinPer100g": 5.0,
+  "caloriesPer100g": 135.0,
+  "proteinPer100g": 4.8,
   "carbsPer100g": 22.0,
-  "fatsPer100g": 4.0,
+  "fatsPer100g": 3.1,
   "sodiumPer100g": 380.0,
   "sugarPer100g": 4.5,
   "ingredients": [
    "Yellow Noodles",
    "Sweet Potato Gravy",
-   "Hard-boiled Egg",
-   "Bean Sprouts",
-   "Fried Shallots",
-   "Tofu",
-   "Lime"
+   "Boiled Egg",
+   "Fried Shallots"
   ],
   "portionSizes": {
    "smallGrams": 300,
    "mediumGrams": 450,
    "largeGrams": 600
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q011"
  },
  {
   "myfcdCode": "F10040011",
@@ -35683,7 +36117,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "ESS053",
+  "myfcdCode": "MB013",
   "nameEn": "Mee Soto",
   "nameMy": "Mee Soto",
   "nameEnLower": "mee soto",
@@ -35694,26 +36128,24 @@
    "soto"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 95.0,
-  "proteinPer100g": 5.0,
-  "carbsPer100g": 12.0,
-  "fatsPer100g": 3.0,
-  "sodiumPer100g": 350.0,
-  "sugarPer100g": 0.5,
+  "caloriesPer100g": 105.0,
+  "proteinPer100g": 6.2,
+  "carbsPer100g": 14.5,
+  "fatsPer100g": 2.5,
+  "sodiumPer100g": 360.0,
+  "sugarPer100g": 1.0,
   "ingredients": [
    "Yellow Noodles",
    "Chicken Broth",
    "Shredded Chicken",
-   "Bean Sprouts",
-   "Fried Shallots",
-   "Celery Leaves"
+   "Bean Sprouts"
   ],
   "portionSizes": {
-   "smallGrams": 350,
-   "mediumGrams": 500,
-   "largeGrams": 700
+   "smallGrams": 300,
+   "mediumGrams": 450,
+   "largeGrams": 650
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q013"
  },
  {
   "myfcdCode": "MB044",
@@ -37075,7 +37507,7 @@
   "source": "MYFCD ID: Q042"
  },
  {
-  "myfcdCode": "CAL0017",
+  "myfcdCode": "CAL0031",
   "nameEn": "Milo Dinosaur",
   "nameMy": "Milo Dinosaur",
   "nameEnLower": "milo dinosaur",
@@ -39477,41 +39909,31 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "ESS045",
+  "myfcdCode": "F05100079",
   "nameEn": "Nasi Briyani (Chicken)",
-  "nameMy": "Nasi Briyani Ayam",
+  "nameMy": "Chicken",
   "nameEnLower": "nasi briyani (chicken)",
-  "nameMyLower": "nasi briyani ayam",
+  "nameMyLower": "chicken",
   "searchTerms": [
-   "ayam",
    "briyani",
    "chicken",
    "nasi",
-   "nasi briyani ayam",
    "nasi briyani chicken"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 165.0,
-  "proteinPer100g": 7.5,
-  "carbsPer100g": 20.0,
-  "fatsPer100g": 6.0,
-  "sodiumPer100g": 280.0,
+  "caloriesPer100g": 155.0,
+  "proteinPer100g": 7.13,
+  "carbsPer100g": 15.9,
+  "fatsPer100g": 6.9,
+  "sodiumPer100g": 392.0,
   "sugarPer100g": 0.5,
-  "ingredients": [
-   "Basmati Rice",
-   "Chicken",
-   "Ghee",
-   "Yogurt",
-   "Briyani Spices",
-   "Onions",
-   "Mint Leaves"
-  ],
+  "ingredients": [],
   "portionSizes": {
-   "smallGrams": 300,
-   "mediumGrams": 450,
-   "largeGrams": 650
+   "smallGrams": 455,
+   "mediumGrams": 759,
+   "largeGrams": 1063
   },
-  "source": "Curated"
+  "source": "SGFOCOS_2025"
  },
  {
   "myfcdCode": "F05100080",
@@ -39754,40 +40176,37 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "ESS030",
+  "myfcdCode": "MB002",
   "nameEn": "Nasi Goreng Kampung",
-  "nameMy": "Nasi Goreng",
+  "nameMy": "Nasi Goreng Kampung",
   "nameEnLower": "nasi goreng kampung",
-  "nameMyLower": "nasi goreng",
+  "nameMyLower": "nasi goreng kampung",
   "searchTerms": [
    "goreng",
    "kampung",
    "nasi",
-   "nasi goreng",
    "nasi goreng kampung"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 175.0,
-  "proteinPer100g": 6.0,
-  "carbsPer100g": 22.0,
-  "fatsPer100g": 7.0,
-  "sodiumPer100g": 320.0,
+  "caloriesPer100g": 172.0,
+  "proteinPer100g": 5.2,
+  "carbsPer100g": 22.1,
+  "fatsPer100g": 7.1,
+  "sodiumPer100g": 380.0,
   "sugarPer100g": 0.8,
   "ingredients": [
-   "White Rice",
+   "Rice",
    "Anchovies",
    "Water Spinach (Kangkung)",
-   "Bird's Eye Chili",
-   "Shrimp Paste",
-   "Egg",
-   "Oil"
+   "Chili",
+   "Shrimp Paste"
   ],
   "portionSizes": {
-   "smallGrams": 250,
-   "mediumGrams": 350,
-   "largeGrams": 500
+   "smallGrams": 200,
+   "mediumGrams": 300,
+   "largeGrams": 450
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q002"
  },
  {
   "myfcdCode": "1700468",
@@ -39922,7 +40341,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "CAL0018",
+  "myfcdCode": "CAL0032",
   "nameEn": "Nasi Kerabu",
   "nameMy": "Nasi Kerabu",
   "nameEnLower": "nasi kerabu",
@@ -43630,7 +44049,7 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "GAP006",
+  "myfcdCode": "MB022",
   "nameEn": "Otak-otak",
   "nameMy": "Otak-otak",
   "nameEnLower": "otak-otak",
@@ -43638,28 +44057,25 @@
   "searchTerms": [
    "otak-otak"
   ],
-  "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 160.0,
-  "proteinPer100g": 12.0,
+  "foodGroup": "Meats, Poultry & Seafood",
+  "caloriesPer100g": 165.0,
+  "proteinPer100g": 12.5,
   "carbsPer100g": 8.0,
-  "fatsPer100g": 9.0,
-  "sodiumPer100g": 290.0,
+  "fatsPer100g": 9.2,
+  "sodiumPer100g": 450.0,
   "sugarPer100g": 2.5,
   "ingredients": [
-   "Fish Paste (Mackerel)",
+   "Fish Paste",
    "Coconut Milk",
    "Chili Paste",
-   "Lemongrass",
-   "Galangal",
-   "Banana Leaves or Attap Leaves",
-   "Tapioca Starch"
+   "Spices"
   ],
   "portionSizes": {
-   "smallGrams": 50,
-   "mediumGrams": 125,
-   "largeGrams": 250
+   "smallGrams": 40,
+   "mediumGrams": 80,
+   "largeGrams": 160
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q022"
  },
  {
   "myfcdCode": "D04020026",
@@ -43876,6 +44292,41 @@
   "source": "SGFOCOS_2025"
  },
  {
+  "myfcdCode": "CAL0033",
+  "nameEn": "Oyster Omelette (Orh Luak)",
+  "nameMy": "Orh Luak",
+  "nameEnLower": "oyster omelette (orh luak)",
+  "nameMyLower": "orh luak",
+  "searchTerms": [
+   "luak",
+   "omelette",
+   "orh",
+   "orh luak",
+   "oyster",
+   "oyster omelette orh luak"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 210.0,
+  "proteinPer100g": 8.0,
+  "carbsPer100g": 14.0,
+  "fatsPer100g": 13.5,
+  "sodiumPer100g": 520.0,
+  "sugarPer100g": 0.5,
+  "ingredients": [
+   "Oysters",
+   "Egg",
+   "Starch",
+   "Lard",
+   "Chilli"
+  ],
+  "portionSizes": {
+   "smallGrams": 150,
+   "mediumGrams": 250,
+   "largeGrams": 400
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "110057",
   "nameEn": "Oyster, Sauce (Sos Tiram)",
   "nameMy": "Sos Tiram",
@@ -44070,40 +44521,39 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "ESS007",
+  "myfcdCode": "MB016",
   "nameEn": "Pan Mee (Dry)",
-  "nameMy": "Pan Mee",
+  "nameMy": "Pan Mee (Kering)",
   "nameEnLower": "pan mee (dry)",
-  "nameMyLower": "pan mee",
+  "nameMyLower": "pan mee (kering)",
   "searchTerms": [
    "dry",
+   "kering",
    "mee",
    "pan",
-   "pan mee",
-   "pan mee dry"
+   "pan mee dry",
+   "pan mee kering"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 175.0,
-  "proteinPer100g": 6.5,
-  "carbsPer100g": 25.0,
-  "fatsPer100g": 5.5,
-  "sodiumPer100g": 390.0,
-  "sugarPer100g": 1.5,
+  "caloriesPer100g": 185.0,
+  "proteinPer100g": 8.0,
+  "carbsPer100g": 26.5,
+  "fatsPer100g": 5.2,
+  "sodiumPer100g": 470.0,
+  "sugarPer100g": 2.0,
   "ingredients": [
    "Flat Flour Noodles",
-   "Minced Pork or Chicken",
-   "Fried Anchovies",
-   "Sayur Manis",
-   "Wood Ear Mushrooms",
-   "Dark Soy Sauce",
-   "Dried Chili Flakes"
+   "Minced Pork",
+   "Anchovies",
+   "Fried Onions",
+   "Dark Soy Sauce"
   ],
   "portionSizes": {
    "smallGrams": 250,
-   "mediumGrams": 400,
-   "largeGrams": 550
+   "mediumGrams": 350,
+   "largeGrams": 500
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q016"
  },
  {
   "myfcdCode": "MB017",
@@ -44510,31 +44960,39 @@
   "source": "SGFOCOS_2025"
  },
  {
-  "myfcdCode": "F02010014",
+  "myfcdCode": "CAL0034",
   "nameEn": "Pandan Chiffon Cake",
-  "nameMy": "Pandan Chiffon Cake",
+  "nameMy": "Kek Pandan",
   "nameEnLower": "pandan chiffon cake",
-  "nameMyLower": "pandan chiffon cake",
+  "nameMyLower": "kek pandan",
   "searchTerms": [
    "cake",
    "chiffon",
+   "kek",
+   "kek pandan",
    "pandan",
    "pandan chiffon cake"
   ],
-  "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 312.0,
-  "proteinPer100g": 9.19,
-  "carbsPer100g": 35.15,
-  "fatsPer100g": 14.9,
-  "sodiumPer100g": 214.0,
-  "sugarPer100g": 19.7,
-  "ingredients": [],
+  "foodGroup": "Desserts & Sweets",
+  "caloriesPer100g": 290.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 34.0,
+  "fatsPer100g": 14.5,
+  "sodiumPer100g": 220.0,
+  "sugarPer100g": 20.0,
+  "ingredients": [
+   "Flour",
+   "Egg",
+   "Pandan Juice",
+   "Coconut Milk",
+   "Sugar"
+  ],
   "portionSizes": {
-   "smallGrams": 30,
-   "mediumGrams": 44,
-   "largeGrams": 74
+   "smallGrams": 50,
+   "mediumGrams": 100,
+   "largeGrams": 180
   },
-  "source": "SGFOCOS_2025"
+  "source": "Curated"
  },
  {
   "myfcdCode": "F02010015",
@@ -48406,7 +48864,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0019",
+  "myfcdCode": "CAL0035",
   "nameEn": "Putu Mayam",
   "nameMy": "Putu Mayam",
   "nameEnLower": "putu mayam",
@@ -48767,6 +49225,38 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_1997"
+ },
+ {
+  "myfcdCode": "CAL0036",
+  "nameEn": "Ramen (With Chashu)",
+  "nameMy": "Ramen",
+  "nameEnLower": "ramen (with chashu)",
+  "nameMyLower": "ramen",
+  "searchTerms": [
+   "chashu",
+   "ramen",
+   "ramen with chashu",
+   "with"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 120.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 15.0,
+  "fatsPer100g": 4.0,
+  "sodiumPer100g": 480.0,
+  "sugarPer100g": 1.0,
+  "ingredients": [
+   "Ramen Noodles",
+   "Pork Broth",
+   "Chashu",
+   "Egg"
+  ],
+  "portionSizes": {
+   "smallGrams": 350,
+   "mediumGrams": 500,
+   "largeGrams": 700
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "0701244",
@@ -49851,7 +50341,7 @@
   "source": "MyFCD_Industry"
  },
  {
-  "myfcdCode": "CAL0020",
+  "myfcdCode": "CAL0037",
   "nameEn": "Roast Duck (Chinese Style)",
   "nameMy": "Itik Panggang",
   "nameEnLower": "roast duck (chinese style)",
@@ -49883,6 +50373,39 @@
    "smallGrams": 100,
    "mediumGrams": 180,
    "largeGrams": 300
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0038",
+  "nameEn": "Roast Pork (Siew Yoke)",
+  "nameMy": "Siew Yoke",
+  "nameEnLower": "roast pork (siew yoke)",
+  "nameMyLower": "siew yoke",
+  "searchTerms": [
+   "pork",
+   "roast",
+   "roast pork siew yoke",
+   "siew",
+   "siew yoke",
+   "yoke"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 380.0,
+  "proteinPer100g": 17.0,
+  "carbsPer100g": 0.5,
+  "fatsPer100g": 34.0,
+  "sodiumPer100g": 600.0,
+  "sugarPer100g": 0.0,
+  "ingredients": [
+   "Pork Belly",
+   "Five Spice",
+   "Salt"
+  ],
+  "portionSizes": {
+   "smallGrams": 80,
+   "mediumGrams": 150,
+   "largeGrams": 250
   },
   "source": "Curated"
  },
@@ -50168,7 +50691,7 @@
   "source": "MYFCD ID: Q045"
  },
  {
-  "myfcdCode": "CAL0021",
+  "myfcdCode": "CAL0039",
   "nameEn": "Roti John",
   "nameMy": "Roti John",
   "nameEnLower": "roti john",
@@ -50474,7 +50997,40 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0022",
+  "myfcdCode": "CAL0040",
+  "nameEn": "Sambal Ikan Bilis",
+  "nameMy": "Sambal Ikan Bilis",
+  "nameEnLower": "sambal ikan bilis",
+  "nameMyLower": "sambal ikan bilis",
+  "searchTerms": [
+   "bilis",
+   "ikan",
+   "sambal",
+   "sambal ikan bilis"
+  ],
+  "foodGroup": "Spices, Condiments & Sauces",
+  "caloriesPer100g": 300.0,
+  "proteinPer100g": 14.0,
+  "carbsPer100g": 12.0,
+  "fatsPer100g": 22.0,
+  "sodiumPer100g": 900.0,
+  "sugarPer100g": 8.0,
+  "ingredients": [
+   "Dried Anchovies",
+   "Chilli Paste",
+   "Onion",
+   "Sugar",
+   "Oil"
+  ],
+  "portionSizes": {
+   "smallGrams": 30,
+   "mediumGrams": 60,
+   "largeGrams": 100
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0041",
   "nameEn": "Sambal Kangkung",
   "nameMy": "Kangkung Belacan",
   "nameEnLower": "sambal kangkung",
@@ -51052,6 +51608,39 @@
    "smallGrams": 100,
    "mediumGrams": 200,
    "largeGrams": 400
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0042",
+  "nameEn": "Satay Bee Hoon",
+  "nameMy": "Satay Bee Hoon",
+  "nameEnLower": "satay bee hoon",
+  "nameMyLower": "satay bee hoon",
+  "searchTerms": [
+   "bee",
+   "hoon",
+   "satay",
+   "satay bee hoon"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 130.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 15.0,
+  "fatsPer100g": 5.5,
+  "sodiumPer100g": 380.0,
+  "sugarPer100g": 3.0,
+  "ingredients": [
+   "Rice Vermicelli",
+   "Peanut Sauce",
+   "Cuttlefish",
+   "Pork Slices",
+   "Kangkung"
+  ],
+  "portionSizes": {
+   "smallGrams": 300,
+   "mediumGrams": 450,
+   "largeGrams": 600
   },
   "source": "Curated"
  },
@@ -52475,6 +53064,42 @@
   "source": "Curated"
  },
  {
+  "myfcdCode": "CAL0043",
+  "nameEn": "Sliced Fish Soup",
+  "nameMy": "Sup Ikan",
+  "nameEnLower": "sliced fish soup",
+  "nameMyLower": "sup ikan",
+  "searchTerms": [
+   "fish",
+   "ikan",
+   "sliced",
+   "sliced fish soup",
+   "soup",
+   "sup",
+   "sup ikan"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 55.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 3.5,
+  "fatsPer100g": 2.0,
+  "sodiumPer100g": 320.0,
+  "sugarPer100g": 0.5,
+  "ingredients": [
+   "Fish Slices",
+   "Clear Broth",
+   "Vegetables",
+   "Tofu",
+   "Evaporated Milk"
+  ],
+  "portionSizes": {
+   "smallGrams": 350,
+   "mediumGrams": 500,
+   "largeGrams": 700
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "1200293",
   "nameEn": "Smooth Cappuccino Milk Coffee Drink Cup (Nestle)",
   "nameMy": "Nestle",
@@ -52709,7 +53334,7 @@
   "source": "MyFCD_Industry"
  },
  {
-  "myfcdCode": "CAL0023",
+  "myfcdCode": "CAL0044",
   "nameEn": "Soon Kueh",
   "nameMy": "Soon Kueh",
   "nameEnLower": "soon kueh",
@@ -52741,7 +53366,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "ESS054",
+  "myfcdCode": "MB047",
   "nameEn": "Soto Ayam",
   "nameMy": "Soto Ayam",
   "nameEnLower": "soto ayam",
@@ -52752,25 +53377,24 @@
    "soto ayam"
   ],
   "foodGroup": "Local & Mixed Dishes",
-  "caloriesPer100g": 75.0,
-  "proteinPer100g": 6.0,
-  "carbsPer100g": 5.0,
+  "caloriesPer100g": 105.0,
+  "proteinPer100g": 6.5,
+  "carbsPer100g": 12.0,
   "fatsPer100g": 3.5,
-  "sodiumPer100g": 320.0,
-  "sugarPer100g": 0.5,
+  "sodiumPer100g": 420.0,
+  "sugarPer100g": 1.2,
   "ingredients": [
-   "Chicken Broth",
+   "Rice Cakes (Nasi Impit)",
+   "Spiced Chicken Broth",
    "Shredded Chicken",
-   "Compressed Rice Cake",
-   "Bean Sprouts",
-   "Fried Shallots"
+   "Peanuts"
   ],
   "portionSizes": {
    "smallGrams": 350,
    "mediumGrams": 500,
    "largeGrams": 700
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q047"
  },
  {
   "myfcdCode": "106089",
@@ -53979,6 +54603,31 @@
   "source": "MyFCD_1997"
  },
  {
+  "myfcdCode": "CAL0045",
+  "nameEn": "Starfruit",
+  "nameMy": "Belimbing",
+  "nameEnLower": "starfruit",
+  "nameMyLower": "belimbing",
+  "searchTerms": [
+   "belimbing",
+   "starfruit"
+  ],
+  "foodGroup": "Fruits",
+  "caloriesPer100g": 31.0,
+  "proteinPer100g": 1.0,
+  "carbsPer100g": 7.0,
+  "fatsPer100g": 0.3,
+  "sodiumPer100g": 2.0,
+  "sugarPer100g": 4.0,
+  "ingredients": [],
+  "portionSizes": {
+   "smallGrams": 100,
+   "mediumGrams": 150,
+   "largeGrams": 250
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "110096",
   "nameEn": "Starry Triggerfish (Jebong)",
   "nameMy": "Jebong",
@@ -54004,6 +54653,41 @@
    "mediumGrams": 150
   },
   "source": "MyFCD_1997"
+ },
+ {
+  "myfcdCode": "CAL0046",
+  "nameEn": "Steamboat (Mixed, with Soup)",
+  "nameMy": "Stimbot",
+  "nameEnLower": "steamboat (mixed, with soup)",
+  "nameMyLower": "stimbot",
+  "searchTerms": [
+   "mixed",
+   "soup",
+   "steamboat",
+   "steamboat mixed with soup",
+   "stimbot",
+   "with"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 85.0,
+  "proteinPer100g": 8.0,
+  "carbsPer100g": 4.0,
+  "fatsPer100g": 4.0,
+  "sodiumPer100g": 350.0,
+  "sugarPer100g": 0.5,
+  "ingredients": [
+   "Mixed Meats",
+   "Seafood",
+   "Vegetables",
+   "Tofu",
+   "Broth"
+  ],
+  "portionSizes": {
+   "smallGrams": 400,
+   "mediumGrams": 600,
+   "largeGrams": 800
+  },
+  "source": "Curated"
  },
  {
   "myfcdCode": "1301088",
@@ -54602,7 +55286,7 @@
   "source": "MyFCD_Industry"
  },
  {
-  "myfcdCode": "CAL0024",
+  "myfcdCode": "CAL0047",
   "nameEn": "Sup Kambing (Mutton Soup)",
   "nameMy": "Sup Kambing",
   "nameEnLower": "sup kambing (mutton soup)",
@@ -54632,6 +55316,37 @@
    "smallGrams": 300,
    "mediumGrams": 450,
    "largeGrams": 600
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0048",
+  "nameEn": "Sushi (Assorted)",
+  "nameMy": "Sushi",
+  "nameEnLower": "sushi (assorted)",
+  "nameMyLower": "sushi",
+  "searchTerms": [
+   "assorted",
+   "sushi",
+   "sushi assorted"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 150.0,
+  "proteinPer100g": 6.0,
+  "carbsPer100g": 26.0,
+  "fatsPer100g": 2.5,
+  "sodiumPer100g": 320.0,
+  "sugarPer100g": 4.0,
+  "ingredients": [
+   "Rice",
+   "Fish",
+   "Seaweed",
+   "Vinegar"
+  ],
+  "portionSizes": {
+   "smallGrams": 100,
+   "mediumGrams": 200,
+   "largeGrams": 350
   },
   "source": "Curated"
  },
@@ -55000,7 +55715,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "ESS047",
+  "myfcdCode": "MB049",
   "nameEn": "Tandoori Chicken",
   "nameMy": "Ayam Tandoori",
   "nameEnLower": "tandoori chicken",
@@ -55012,27 +55727,24 @@
    "tandoori",
    "tandoori chicken"
   ],
-  "foodGroup": "Local & Mixed Dishes",
+  "foodGroup": "Meats, Poultry & Seafood",
   "caloriesPer100g": 155.0,
   "proteinPer100g": 22.0,
   "carbsPer100g": 3.5,
   "fatsPer100g": 5.5,
-  "sodiumPer100g": 390.0,
-  "sugarPer100g": 0.5,
+  "sodiumPer100g": 380.0,
+  "sugarPer100g": 1.0,
   "ingredients": [
    "Chicken",
    "Yogurt",
-   "Tandoori Spices",
-   "Lemon Juice",
-   "Garlic",
-   "Ginger"
+   "Tandoori Spices"
   ],
   "portionSizes": {
    "smallGrams": 150,
    "mediumGrams": 250,
    "largeGrams": 400
   },
-  "source": "Curated"
+  "source": "MYFCD ID: Q049"
  },
  {
   "myfcdCode": "102011",
@@ -55471,7 +56183,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0025",
+  "myfcdCode": "CAL0049",
   "nameEn": "Tau Huay (Soya Beancurd, Sweet)",
   "nameMy": "Tauhu Air",
   "nameEnLower": "tau huay (soya beancurd, sweet)",
@@ -55502,6 +56214,41 @@
    "smallGrams": 200,
    "mediumGrams": 300,
    "largeGrams": 450
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0050",
+  "nameEn": "Tauhu Goreng (With Peanut Sauce)",
+  "nameMy": "Tauhu Goreng",
+  "nameEnLower": "tauhu goreng (with peanut sauce)",
+  "nameMyLower": "tauhu goreng",
+  "searchTerms": [
+   "goreng",
+   "peanut",
+   "sauce",
+   "tauhu",
+   "tauhu goreng",
+   "tauhu goreng with peanut sauce",
+   "with"
+  ],
+  "foodGroup": "Vegetables & Legumes",
+  "caloriesPer100g": 155.0,
+  "proteinPer100g": 9.0,
+  "carbsPer100g": 8.0,
+  "fatsPer100g": 10.0,
+  "sodiumPer100g": 350.0,
+  "sugarPer100g": 4.0,
+  "ingredients": [
+   "Fried Tofu",
+   "Peanut Sauce",
+   "Cucumber",
+   "Bean Sprouts"
+  ],
+  "portionSizes": {
+   "smallGrams": 100,
+   "mediumGrams": 180,
+   "largeGrams": 300
   },
   "source": "Curated"
  },
@@ -55683,7 +56430,7 @@
   "source": "MyFCD_Industry"
  },
  {
-  "myfcdCode": "CAL0026",
+  "myfcdCode": "CAL0051",
   "nameEn": "Teh (Tea with Condensed Milk)",
   "nameMy": "Teh",
   "nameEnLower": "teh (tea with condensed milk)",
@@ -55715,7 +56462,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "CAL0027",
+  "myfcdCode": "CAL0052",
   "nameEn": "Teh C (Tea with Evaporated Milk)",
   "nameMy": "Teh C",
   "nameEnLower": "teh c (tea with evaporated milk)",
@@ -55749,7 +56496,7 @@
   "source": "Curated"
  },
  {
-  "myfcdCode": "CAL0028",
+  "myfcdCode": "CAL0053",
   "nameEn": "Teh O (Black Tea with Sugar)",
   "nameMy": "Teh O",
   "nameEnLower": "teh o (black tea with sugar)",
@@ -55814,7 +56561,7 @@
   "source": "MYFCD ID: Q041"
  },
  {
-  "myfcdCode": "CAL0029",
+  "myfcdCode": "CAL0054",
   "nameEn": "Teh Tarik",
   "nameMy": "Teh Tarik",
   "nameEnLower": "teh tarik",
@@ -57784,7 +58531,7 @@
   "source": "MyFCD_1997"
  },
  {
-  "myfcdCode": "CAL0030",
+  "myfcdCode": "CAL0055",
   "nameEn": "Vadai",
   "nameMy": "Vadai",
   "nameEnLower": "vadai",
@@ -58032,7 +58779,7 @@
   "source": "USDA FDC ID: 170187"
  },
  {
-  "myfcdCode": "CAL0031",
+  "myfcdCode": "CAL0056",
   "nameEn": "Wan Tan Mee (Dry)",
   "nameMy": "Mee Wantan",
   "nameEnLower": "wan tan mee (dry)",
@@ -58614,6 +59361,70 @@
   "source": "SG FOCOS ID: 244"
  },
  {
+  "myfcdCode": "CAL0057",
+  "nameEn": "Wonton Soup",
+  "nameMy": "Sup Wantan",
+  "nameEnLower": "wonton soup",
+  "nameMyLower": "sup wantan",
+  "searchTerms": [
+   "soup",
+   "sup",
+   "sup wantan",
+   "wantan",
+   "wonton",
+   "wonton soup"
+  ],
+  "foodGroup": "Local & Mixed Dishes",
+  "caloriesPer100g": 60.0,
+  "proteinPer100g": 4.0,
+  "carbsPer100g": 7.0,
+  "fatsPer100g": 1.8,
+  "sodiumPer100g": 380.0,
+  "sugarPer100g": 0.5,
+  "ingredients": [
+   "Wontons",
+   "Clear Broth",
+   "Spring Onions"
+  ],
+  "portionSizes": {
+   "smallGrams": 250,
+   "mediumGrams": 400,
+   "largeGrams": 550
+  },
+  "source": "Curated"
+ },
+ {
+  "myfcdCode": "CAL0058",
+  "nameEn": "Xiao Long Bao",
+  "nameMy": "Xiao Long Bao",
+  "nameEnLower": "xiao long bao",
+  "nameMyLower": "xiao long bao",
+  "searchTerms": [
+   "bao",
+   "long",
+   "xiao",
+   "xiao long bao"
+  ],
+  "foodGroup": "Snacks",
+  "caloriesPer100g": 200.0,
+  "proteinPer100g": 9.0,
+  "carbsPer100g": 22.0,
+  "fatsPer100g": 8.5,
+  "sodiumPer100g": 400.0,
+  "sugarPer100g": 1.0,
+  "ingredients": [
+   "Pork Filling",
+   "Soup Gelatin",
+   "Flour Skin"
+  ],
+  "portionSizes": {
+   "smallGrams": 100,
+   "mediumGrams": 180,
+   "largeGrams": 280
+  },
+  "source": "Curated"
+ },
+ {
   "myfcdCode": "PKG009",
   "nameEn": "Yakult",
   "nameMy": "Yakult",
@@ -59010,7 +59821,7 @@
   "source": "SG FOCOS ID: 285"
  },
  {
-  "myfcdCode": "CAL0032",
+  "myfcdCode": "CAL0059",
   "nameEn": "You Tiao (Fried Dough Fritter)",
   "nameMy": "Cakoi",
   "nameEnLower": "you tiao (fried dough fritter)",
