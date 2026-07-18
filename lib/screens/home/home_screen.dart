@@ -1,18 +1,10 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   final Widget child;
   const HomeScreen({super.key, required this.child});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
 
   static const _routes = ['/home', '/history', '/chatbot', '/profile'];
 
@@ -27,25 +19,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
-    _selectedIndex = _locationToIndex(location);
+    final selectedIndex = _locationToIndex(location);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       extendBody: true,
-      body: widget.child,
+      body: child,
       bottomNavigationBar: _GlassBottomBar(
-        selectedIndex: _selectedIndex,
+        selectedIndex: selectedIndex,
         isDark: isDark,
-        onTap: (index) {
-          setState(() => _selectedIndex = index);
-          context.go(_routes[index]);
-        },
-        onAddTap: _showLogMenu,
+        onTap: (index) => context.go(_routes[index]),
+        onAddTap: () => _showLogMenu(context),
       ),
     );
   }
 
-  void _showLogMenu() {
+  void _showLogMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -58,70 +47,63 @@ class _HomeScreenState extends State<HomeScreen> {
 class _LogMenuSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-        decoration: BoxDecoration(
-          color: isDark
-              ? const Color(0xFF1E293B).withValues(alpha: 0.95)
-              : Colors.white.withValues(alpha: 0.95),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(2),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      decoration: BoxDecoration(
+        color: AppColors.surface(context),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'What do you want to log?',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 32),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _LogOption(
+                icon: Icons.add_a_photo_rounded,
+                label: 'Scan',
+                color: AppColors.primary,
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push('/log/photo');
+                },
               ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'What do you want to log?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _LogOption(
-                  icon: Icons.add_a_photo_rounded,
-                  label: 'Scan Barcode & Food',
-                  color: AppColors.primary,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.push('/log/photo');
-                  },
-                ),
-                _LogOption(
-                  icon: Icons.search_rounded,
-                  label: 'Manual',
-                  color: Colors.blue,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.push('/log/search');
-                  },
-                ),
-                _LogOption(
-                  icon: Icons.soup_kitchen_rounded,
-                  label: 'Cook Meal',
-                  color: Colors.orange,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.push('/log/create-meal');
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
+              _LogOption(
+                icon: Icons.search_rounded,
+                label: 'Manual',
+                color: AppColors.aura,
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push('/log/search');
+                },
+              ),
+              _LogOption(
+                icon: Icons.soup_kitchen_rounded,
+                label: 'Cook Meal',
+                color: AppColors.accent,
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push('/log/create-meal');
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }
@@ -149,14 +131,14 @@ class _LogOption extends StatelessWidget {
         child: Column(
           children: [
             Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(icon, color: color, size: 26),
             ),
-            child: Icon(icon, color: color, size: 26),
-          ),
             const SizedBox(height: 10),
             Text(
               label,
@@ -190,9 +172,7 @@ class _GlassBottomBar extends StatelessWidget {
       child: Container(
         height: 76,
         decoration: BoxDecoration(
-          color: isDark
-              ? const Color(0xFF1E293B).withValues(alpha: 0.85)
-              : Colors.white.withValues(alpha: 0.9),
+          color: AppColors.surface(context).withValues(alpha: 0.95),
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
@@ -202,73 +182,66 @@ class _GlassBottomBar extends StatelessWidget {
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _NavItem(
-                  icon: Icons.dashboard_outlined,
-                  activeIcon: Icons.dashboard_rounded,
-                  label: 'Home',
-                  isSelected: selectedIndex == 0,
-                  isDark: isDark,
-                  onTap: () => onTap(0),
-                ),
-                _NavItem(
-                  icon: Icons.history_outlined,
-                  activeIcon: Icons.history_rounded,
-                  label: 'History',
-                  isSelected: selectedIndex == 1,
-                  isDark: isDark,
-                  onTap: () => onTap(1),
-                ),
-                // The Add Button
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: onAddTap,
-                      customBorder: const CircleBorder(),
-                      child: const Icon(Icons.add_rounded,
-                          color: Colors.white, size: 30),
-                    ),
-                  ),
-                ),
-                _NavItem(
-                  icon: Icons.auto_awesome_outlined,
-                  activeIcon: Icons.auto_awesome,
-                  label: 'AI Chat',
-                  isSelected: selectedIndex == 2,
-                  isDark: isDark,
-                  onTap: () => onTap(2),
-                ),
-                _NavItem(
-                  icon: Icons.person_outline_rounded,
-                  activeIcon: Icons.person_rounded,
-                  label: 'Profile',
-                  isSelected: selectedIndex == 3,
-                  isDark: isDark,
-                  onTap: () => onTap(3),
-                ),
-              ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _NavItem(
+              icon: Icons.dashboard_outlined,
+              activeIcon: Icons.dashboard_rounded,
+              label: 'Home',
+              isSelected: selectedIndex == 0,
+              onTap: () => onTap(0),
             ),
-          ),
+            _NavItem(
+              icon: Icons.history_outlined,
+              activeIcon: Icons.history_rounded,
+              label: 'History',
+              isSelected: selectedIndex == 1,
+              onTap: () => onTap(1),
+            ),
+            // The Add Button
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                gradient: AppColors.primaryGradient(context),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.4),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onAddTap,
+                  customBorder: const CircleBorder(),
+                  child: const Tooltip(
+                    message: 'Log food',
+                    child:
+                        Icon(Icons.add_rounded, color: Colors.white, size: 30),
+                  ),
+                ),
+              ),
+            ),
+            _NavItem(
+              icon: Icons.auto_awesome_outlined,
+              activeIcon: Icons.auto_awesome,
+              label: 'AI Chat',
+              isSelected: selectedIndex == 2,
+              onTap: () => onTap(2),
+            ),
+            _NavItem(
+              icon: Icons.person_outline_rounded,
+              activeIcon: Icons.person_rounded,
+              label: 'Profile',
+              isSelected: selectedIndex == 3,
+              onTap: () => onTap(3),
+            ),
+          ],
         ),
       ),
     );
@@ -280,7 +253,6 @@ class _NavItem extends StatelessWidget {
   final IconData activeIcon;
   final String label;
   final bool isSelected;
-  final bool isDark;
   final VoidCallback onTap;
 
   const _NavItem({
@@ -288,50 +260,54 @@ class _NavItem extends StatelessWidget {
     required this.activeIcon,
     required this.label,
     required this.isSelected,
-    required this.isDark,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = isDark ? AppColors.primaryLight : AppColors.primary;
-    final inactiveColor = AppColors.textSecondary;
+    final activeColor = Theme.of(context).colorScheme.primary;
+    final inactiveColor = AppColors.textSecondary(context);
 
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? activeColor.withValues(alpha: 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                isSelected ? activeIcon : icon,
-                key: ValueKey(isSelected),
-                color: isSelected ? activeColor : inactiveColor,
-                size: 24,
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: label,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? activeColor.withValues(alpha: 0.1)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  isSelected ? activeIcon : icon,
+                  key: ValueKey(isSelected),
+                  color: isSelected ? activeColor : inactiveColor,
+                  size: 24,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? activeColor : inactiveColor,
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected ? activeColor : inactiveColor,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

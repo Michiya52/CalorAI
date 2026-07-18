@@ -70,7 +70,8 @@ class LoggerService {
       );
     } else {
       if (kDebugMode) {
-        debugPrint('⚠️ [WARN] Tried to show toast, but ScaffoldMessenger is null.');
+        debugPrint(
+            '⚠️ [WARN] Tried to show toast, but ScaffoldMessenger is null.');
       }
     }
   }

@@ -17,13 +17,13 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-// import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 import 'theme.dart';
 import 'utils/seed_data.dart';
 import 'services/notification_service.dart';
 
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -50,12 +50,6 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
 
       // 2. Performance Monitoring
       await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
-
-      // 3. App Check - Security (using debug provider for development)
-      // await FirebaseAppCheck.instance.activate(
-      //   providerAndroid: AndroidDebugProvider(),
-      //   providerApple: AppleDebugProvider(),
-      // );
 
       // 4. Analytics - Engagement tracking
       await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);

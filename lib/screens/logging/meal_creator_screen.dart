@@ -194,7 +194,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
   Widget _buildSummaryHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      color: AppColors.surface,
+      color: AppColors.surface(context),
       child: Column(
         children: [
           Row(
@@ -243,7 +243,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.surface(context),
         boxShadow: [
           BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),

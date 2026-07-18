@@ -151,7 +151,8 @@ CRITICAL RULES:
           ),
         );
 
-        response = await tempModel.generateContent([content]).timeout(const Duration(seconds: 15));
+        response = await tempModel
+            .generateContent([content]).timeout(const Duration(seconds: 15));
         AppLogger.instance.log('Gemini vision success using model: $modelId');
         break; // Success, exit the fallback loop
       } on GenerativeAIException catch (e) {

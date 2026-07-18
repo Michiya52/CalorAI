@@ -30,7 +30,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
     if (uid == null) return;
 
     HapticFeedback.lightImpact();
-    
+
     // Refresh today's meals globally so dashboard updates too
     final todayStr = DateTime.now().toIso8601String().substring(0, 10);
     context.read<MealProvider>().loadMealsForDate(uid, todayStr);
@@ -57,7 +57,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Meal History'),
         backgroundColor: Colors.transparent,
@@ -68,12 +68,12 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
+              color: AppColors.surfaceContainer(context),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
               icon: Icon(Icons.refresh_rounded,
-                  size: 18, color: AppColors.textSecondary),
+                  size: 18, color: AppColors.textSecondary(context)),
               onPressed: _loadHistory,
               padding: EdgeInsets.zero,
             ),
@@ -88,7 +88,8 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                   onRefresh: _loadHistory,
                   color: AppColors.primary,
                   child: ListView(
-                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
                     children: _groupByDate().entries.map((entry) {
                       final totalCals = entry.value
@@ -105,7 +106,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14,
-                                    color: AppColors.textSecondary,
+                                    color: AppColors.textSecondary(context),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -221,7 +222,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
           Text(
             'No meals logged yet',
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: AppColors.textSecondary(context),
               fontWeight: FontWeight.w600,
               fontSize: 16,
             ),
@@ -230,7 +231,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
           Text(
             'Your meal history will appear here',
             style: TextStyle(
-              color: AppColors.textSecondary.withValues(alpha: 0.7),
+              color: AppColors.textSecondary(context).withValues(alpha: 0.7),
               fontSize: 13,
             ),
           ),

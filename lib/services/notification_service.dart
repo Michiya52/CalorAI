@@ -34,7 +34,8 @@ class NotificationService {
       );
       _initialized = true;
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'NotificationService.init failed');
+      LoggerService()
+          .error(e, stack, reason: 'NotificationService.init failed');
     }
   }
 

@@ -43,7 +43,8 @@ class IngredientLibraryService {
       _brandedCategorizedItems = _groupItems(_allBrandedItems);
       _isLoaded = true;
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Failed to load ingredient library');
+      LoggerService()
+          .error(e, stack, reason: 'Failed to load ingredient library');
     }
   }
 

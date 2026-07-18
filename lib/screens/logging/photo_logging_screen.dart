@@ -49,7 +49,9 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
     try {
       final gemini = GeminiService();
 
-      final aiSuggestions = await gemini.identifyFoodFromImage(_imageBytes!);
+      final aiSuggestions = await gemini
+          .identifyFoodFromImage(_imageBytes!)
+          .timeout(const Duration(seconds: 15));
       AppLogger.instance.log(
           'PhotoLoggingScreen: suggestions returned = ${aiSuggestions.length}');
 
@@ -127,7 +129,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Log Meal'),
         backgroundColor: Colors.transparent,
@@ -146,11 +148,13 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                   const SizedBox(height: 24),
                   Text('Identifying your meal...',
                       style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 16)),
+                          color: AppColors.textSecondary(context),
+                          fontSize: 16)),
                   const SizedBox(height: 8),
                   Text('This may take a moment',
                       style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 12)),
+                          color: AppColors.textSecondary(context),
+                          fontSize: 12)),
                 ],
               ),
             )
@@ -174,7 +178,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                   Text(
                     'Take a photo or choose from gallery\nand we\'ll identify it for you',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(color: AppColors.textSecondary(context)),
                   ),
                   const SizedBox(height: 40),
                   SizedBox(
@@ -230,7 +234,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                     icon: const Icon(Icons.search),
                     label: const Text('Search manually instead'),
                     style: TextButton.styleFrom(
-                        foregroundColor: AppColors.textSecondary),
+                        foregroundColor: AppColors.textSecondary(context)),
                   ),
                 ],
               ),

@@ -22,7 +22,7 @@ class MacroBar extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: AppColors.premiumCard(radius: 16),
+      decoration: AppColors.premiumCard(context, radius: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,7 +45,7 @@ class MacroBar extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                      color: AppColors.textPrimary,
+                      color: AppColors.textPrimary(context),
                     ),
                   ),
                 ],
@@ -54,7 +54,9 @@ class MacroBar extends StatelessWidget {
                 '${current.toStringAsFixed(1)}g / ${target.toStringAsFixed(0)}g',
                 style: TextStyle(
                   fontSize: 13,
-                  color: isOver ? AppColors.warning : AppColors.textSecondary,
+                  color: isOver
+                      ? AppColors.warning
+                      : AppColors.textSecondary(context),
                   fontWeight: isOver ? FontWeight.w700 : FontWeight.w500,
                 ),
               ),

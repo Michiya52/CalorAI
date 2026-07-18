@@ -215,7 +215,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (weight == null || weight <= 0 || weight > 500) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter a valid weight'), backgroundColor: AppColors.error),
+          const SnackBar(
+              content: Text('Please enter a valid weight'),
+              backgroundColor: AppColors.error),
         );
       }
       return;
@@ -236,11 +238,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       // Also update profile weight
       if (!mounted) return;
-      await context.read<ProfileProvider>().updateProfile(uid, {'weightKg': weight});
-      
+      await context
+          .read<ProfileProvider>()
+          .updateProfile(uid, {'weightKg': weight});
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Weight logged successfully!'), backgroundColor: AppColors.success),
+          const SnackBar(
+              content: Text('Weight logged successfully!'),
+              backgroundColor: AppColors.success),
         );
         _loadProfile();
         setState(() {});
@@ -248,7 +254,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to log weight'), backgroundColor: AppColors.error),
+          const SnackBar(
+              content: Text('Failed to log weight'),
+              backgroundColor: AppColors.error),
         );
       }
     }
@@ -371,10 +379,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Force rebuild on theme change
-    context.watch<ThemeProvider>();
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Profile'),
         backgroundColor: Colors.transparent,
@@ -386,12 +392,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
+                color: AppColors.surfaceContainer(context),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
                 icon: Icon(Icons.edit_rounded,
-                    size: 18, color: AppColors.textSecondary),
+                    size: 18, color: AppColors.textSecondary(context)),
                 onPressed: () {
                   _loadProfile();
                   setState(() => _isEditing = true);
@@ -446,7 +452,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               'Please check your connection and try again.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: AppColors.textSecondary,
+                            color: AppColors.textSecondary(context),
                             fontSize: 14,
                           ),
                         ),
@@ -485,294 +491,302 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
 
           return RefreshIndicator(
-            onRefresh: _refreshProfile,
-            color: AppColors.primary,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Avatar with gradient ring
-                Center(
-                  child: Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: AppColors.primaryGradient,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
-                    ),
-                    child: Center(
+              onRefresh: _refreshProfile,
+              color: AppColors.primary,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Avatar with gradient ring
+                    Center(
                       child: Container(
-                        width: 88,
-                        height: 88,
+                        width: 96,
+                        height: 96,
                         decoration: BoxDecoration(
-                          color: AppColors.background,
                           shape: BoxShape.circle,
+                          gradient: AppColors.primaryGradient(context),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              blurRadius: 20,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
                         ),
                         child: Center(
                           child: Container(
-                            width: 80,
-                            height: 80,
+                            width: 88,
+                            height: 88,
                             decoration: BoxDecoration(
-                              gradient: AppColors.primaryGradient,
+                              color: AppColors.background(context),
                               shape: BoxShape.circle,
                             ),
                             child: Center(
-                              child: Text(
-                                profile.name.isNotEmpty
-                                    ? profile.name[0].toUpperCase()
-                                    : '?',
-                                style: const TextStyle(
-                                    fontSize: 32,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800),
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  gradient: AppColors.primaryGradient(context),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    profile.name.isNotEmpty
+                                        ? profile.name[0].toUpperCase()
+                                        : '?',
+                                    style: const TextStyle(
+                                        fontSize: 32,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: Text(profile.email,
-                      style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 14)),
-                ),
-                const SizedBox(height: 24),
-
-                // Editable fields card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: AppColors.premiumCard(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Personal Info',
+                    const SizedBox(height: 12),
+                    Center(
+                      child: Text(profile.email,
                           style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.textPrimary)),
-                      const SizedBox(height: 16),
-                      _buildProfileField('Name', _nameController, _isEditing),
-                      _buildProfileField(
-                          'Height (cm)', _heightController, _isEditing,
-                          keyboardType: TextInputType.number),
-                      _buildProfileField(
-                          'Weight (kg)', _weightController, _isEditing,
-                          keyboardType: TextInputType.number),
-                      _buildProfileField('Age', _ageController, _isEditing,
-                          keyboardType: TextInputType.number),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
+                              color: AppColors.textSecondary(context),
+                              fontSize: 14)),
+                    ),
+                    const SizedBox(height: 24),
 
-                // Read-only info card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: AppColors.premiumCard(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Goals & Targets',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.textPrimary)),
-                      const SizedBox(height: 16),
-                      _buildInfoRow(
-                          'Sex', profile.sex == 'male' ? 'Male' : 'Female'),
-                      _buildInfoRow('Activity',
-                          profile.activityLevel.replaceAll('_', ' ')),
-                      _buildInfoRow('Goal', profile.goal.replaceAll('_', ' ')),
-                      _buildInfoRow(
-                          'Daily Target', '${profile.calorieTarget} kcal'),
-                      _buildInfoRow(
-                        'Calorie Mode',
-                        profile.isCalorieTargetManual ? 'Manual' : 'Auto',
-                      ),
-                      if (profile.macroTargets != null) ...[
-                        _buildInfoRow(
-                            'Protein', '${profile.macroTargets!.proteinG}g'),
-                        _buildInfoRow(
-                            'Carbs', '${profile.macroTargets!.carbsG}g'),
-                        _buildInfoRow(
-                            'Fats', '${profile.macroTargets!.fatsG}g'),
-                      ],
-                      _buildInfoRow(
-                        'Macro Mode',
-                        profile.isMacroTargetsManual ? 'Manual' : 'Auto',
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Weight Progress Card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: AppColors.premiumCard(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Weight Progress',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: AppColors.textPrimary)),
-                          IconButton(
-                            icon: Icon(Icons.history_rounded,
-                                size: 20, color: AppColors.textSecondary),
-                            tooltip: 'Weight history',
-                            onPressed: _showWeightHistory,
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      FutureBuilder<List<WeightLog>>(
-                        future: _weightLogsFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          final logs = snapshot.data ?? [];
-                          return WeightChart(logs: logs);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Theme card
-                Consumer<ThemeProvider>(
-                  builder: (context, themeProvider, _) {
-                    return Container(
+                    // Editable fields card
+                    Container(
                       padding: const EdgeInsets.all(20),
-                      decoration: AppColors.premiumCard(),
+                      decoration: AppColors.premiumCard(context),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Appearance',
+                          Text('Personal Info',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 16,
-                                  color: AppColors.textPrimary)),
+                                  color: AppColors.textPrimary(context))),
                           const SizedBox(height: 16),
-                          SegmentedButton<ThemeMode>(
-                            segments: const [
-                              ButtonSegment(
-                                value: ThemeMode.system,
-                                label: Text('System'),
-                                icon: Icon(Icons.brightness_auto, size: 18),
-                              ),
-                              ButtonSegment(
-                                value: ThemeMode.light,
-                                label: Text('Light'),
-                                icon: Icon(Icons.light_mode, size: 18),
-                              ),
-                              ButtonSegment(
-                                value: ThemeMode.dark,
-                                label: Text('Dark'),
-                                icon: Icon(Icons.dark_mode, size: 18),
+                          _buildProfileField(
+                              'Name', _nameController, _isEditing),
+                          _buildProfileField(
+                              'Height (cm)', _heightController, _isEditing,
+                              keyboardType: TextInputType.number),
+                          _buildProfileField(
+                              'Weight (kg)', _weightController, _isEditing,
+                              keyboardType: TextInputType.number),
+                          _buildProfileField('Age', _ageController, _isEditing,
+                              keyboardType: TextInputType.number),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Read-only info card
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: AppColors.premiumCard(context),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Goals & Targets',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: AppColors.textPrimary(context))),
+                          const SizedBox(height: 16),
+                          _buildInfoRow(
+                              'Sex', profile.sex == 'male' ? 'Male' : 'Female'),
+                          _buildInfoRow('Activity',
+                              profile.activityLevel.replaceAll('_', ' ')),
+                          _buildInfoRow(
+                              'Goal', profile.goal.replaceAll('_', ' ')),
+                          _buildInfoRow(
+                              'Daily Target', '${profile.calorieTarget} kcal'),
+                          _buildInfoRow(
+                            'Calorie Mode',
+                            profile.isCalorieTargetManual ? 'Manual' : 'Auto',
+                          ),
+                          if (profile.macroTargets != null) ...[
+                            _buildInfoRow('Protein',
+                                '${profile.macroTargets!.proteinG}g'),
+                            _buildInfoRow(
+                                'Carbs', '${profile.macroTargets!.carbsG}g'),
+                            _buildInfoRow(
+                                'Fats', '${profile.macroTargets!.fatsG}g'),
+                          ],
+                          _buildInfoRow(
+                            'Macro Mode',
+                            profile.isMacroTargetsManual ? 'Manual' : 'Auto',
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Weight Progress Card
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: AppColors.premiumCard(context),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Weight Progress',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      color: AppColors.textPrimary(context))),
+                              IconButton(
+                                icon: Icon(Icons.history_rounded,
+                                    size: 20,
+                                    color: AppColors.textSecondary(context)),
+                                tooltip: 'Weight history',
+                                onPressed: _showWeightHistory,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
                             ],
-                            selected: {themeProvider.themeMode},
-                            onSelectionChanged: (selection) {
-                              themeProvider.setThemeMode(selection.first);
+                          ),
+                          const SizedBox(height: 16),
+                          FutureBuilder<List<WeightLog>>(
+                            future: _weightLogsFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              final logs = snapshot.data ?? [];
+                              return WeightChart(logs: logs);
                             },
                           ),
                         ],
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-
-                // Action buttons
-                OutlinedButton.icon(
-                  onPressed: () => context.push('/setup', extra: profile),
-                  icon: const Icon(Icons.tune_rounded),
-                  label: const Text('Set My Own Goals'),
-                ),
-                const SizedBox(height: 10),
-
-                OutlinedButton.icon(
-                  onPressed: _recalculateTarget,
-                  icon: const Icon(Icons.calculate_rounded),
-                  label: const Text('Recalculate Target'),
-                ),
-                const SizedBox(height: 10),
-
-                OutlinedButton.icon(
-                  onPressed: _logWeight,
-                  icon: const Icon(Icons.scale_rounded),
-                  label: const Text('Log Current Weight'),
-                ),
-                const SizedBox(height: 24),
-
-                // Footer
-                Center(
-                  child: Text(
-                    'Nutritional data powered by MyFCD 2026',
-                    style:
-                        TextStyle(color: AppColors.textSecondary, fontSize: 12),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Logout
-                SizedBox(
-                  height: 48,
-                  child: OutlinedButton.icon(
-                    onPressed: () async {
-                      context.read<ProfileProvider>().clear();
-                      context.read<MealProvider>().clear();
-                      context.read<ChatbotProvider>().clear();
-
-                      await context.read<AuthProvider>().logout();
-                      if (context.mounted) context.go('/login');
-                    },
-                    icon: const Icon(Icons.logout_rounded,
-                        color: AppColors.error),
-                    label: const Text('Log Out',
-                        style: TextStyle(color: AppColors.error)),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                          color: AppColors.error.withValues(alpha: 0.3)),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 12),
+                    const SizedBox(height: 16),
 
-                TextButton(
-                  onPressed: _deleteAccount,
-                  child: Text('Delete Account',
-                      style: TextStyle(
-                          color: AppColors.error.withValues(alpha: 0.8),
-                          fontSize: 13)),
+                    // Theme card
+                    Consumer<ThemeProvider>(
+                      builder: (context, themeProvider, _) {
+                        return Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: AppColors.premiumCard(context),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Appearance',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      color: AppColors.textPrimary(context))),
+                              const SizedBox(height: 16),
+                              SegmentedButton<ThemeMode>(
+                                segments: const [
+                                  ButtonSegment(
+                                    value: ThemeMode.system,
+                                    label: Text('System'),
+                                    icon: Icon(Icons.brightness_auto, size: 18),
+                                  ),
+                                  ButtonSegment(
+                                    value: ThemeMode.light,
+                                    label: Text('Light'),
+                                    icon: Icon(Icons.light_mode, size: 18),
+                                  ),
+                                  ButtonSegment(
+                                    value: ThemeMode.dark,
+                                    label: Text('Dark'),
+                                    icon: Icon(Icons.dark_mode, size: 18),
+                                  ),
+                                ],
+                                selected: {themeProvider.themeMode},
+                                onSelectionChanged: (selection) {
+                                  themeProvider.setThemeMode(selection.first);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Action buttons
+                    OutlinedButton.icon(
+                      onPressed: () => context.push('/setup', extra: profile),
+                      icon: const Icon(Icons.tune_rounded),
+                      label: const Text('Set My Own Goals'),
+                    ),
+                    const SizedBox(height: 10),
+
+                    OutlinedButton.icon(
+                      onPressed: _recalculateTarget,
+                      icon: const Icon(Icons.calculate_rounded),
+                      label: const Text('Recalculate Target'),
+                    ),
+                    const SizedBox(height: 10),
+
+                    OutlinedButton.icon(
+                      onPressed: _logWeight,
+                      icon: const Icon(Icons.scale_rounded),
+                      label: const Text('Log Current Weight'),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Footer
+                    Center(
+                      child: Text(
+                        'Nutritional data powered by MyFCD 2026',
+                        style: TextStyle(
+                            color: AppColors.textSecondary(context),
+                            fontSize: 12),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Logout
+                    SizedBox(
+                      height: 48,
+                      child: OutlinedButton.icon(
+                        onPressed: () async {
+                          context.read<ProfileProvider>().clear();
+                          context.read<MealProvider>().clear();
+                          context.read<ChatbotProvider>().clear();
+
+                          await context.read<AuthProvider>().logout();
+                          if (context.mounted) context.go('/login');
+                        },
+                        icon: const Icon(Icons.logout_rounded,
+                            color: AppColors.error),
+                        label: const Text('Log Out',
+                            style: TextStyle(color: AppColors.error)),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                              color: AppColors.error.withValues(alpha: 0.3)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    TextButton(
+                      onPressed: _deleteAccount,
+                      child: Text('Delete Account',
+                          style: TextStyle(
+                              color: AppColors.error.withValues(alpha: 0.8),
+                              fontSize: 13)),
+                    ),
+                    const SizedBox(height: 100),
+                  ],
                 ),
-                const SizedBox(height: 100),
-              ],
-            ),
-          ));
+              ));
         },
       ),
     );
@@ -791,8 +805,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: InputDecoration(
           labelText: label.toUpperCase(),
           filled: true,
-          fillColor:
-              editable ? AppColors.surfaceContainer : AppColors.background,
+          fillColor: editable
+              ? AppColors.surfaceContainer(context)
+              : AppColors.background(context),
         ),
       ),
     );
@@ -805,7 +820,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+              style: TextStyle(
+                  color: AppColors.textSecondary(context), fontSize: 14)),
           Text(value,
               style:
                   const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),

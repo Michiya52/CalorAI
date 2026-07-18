@@ -6,7 +6,6 @@ import '../../models/user_profile.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../providers/meal_provider.dart';
-import '../../providers/theme_provider.dart';
 import '../../widgets/calorie_ring.dart';
 import 'package:flutter/services.dart';
 import '../../widgets/macro_bar.dart';
@@ -90,12 +89,10 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Force rebuild on theme change to pick up AppColors static getters
-    context.watch<ThemeProvider>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       body: Consumer2<ProfileProvider, MealProvider>(
         builder: (context, profileProv, mealProv, _) {
           final profile = profileProv.profile;
@@ -134,7 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               'Please check your connection and try again.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: AppColors.textSecondary,
+                            color: AppColors.textSecondary(context),
                             fontSize: 14,
                           ),
                         ),
@@ -179,7 +176,8 @@ class _DashboardScreenState extends State<DashboardScreen>
             onRefresh: _loadData,
             color: AppColors.primary,
             child: CustomScrollView(
-              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               slivers: [
                 // ─── Header ──────────────────────────────────
                 SliverToBoxAdapter(
@@ -201,7 +199,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
                         padding: const EdgeInsets.all(24),
-                        decoration: AppColors.premiumCard(),
+                        decoration: AppColors.premiumCard(context),
                         child: Center(
                           child:
                               CalorieRing(consumed: consumed, target: target),
@@ -279,7 +277,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
                         padding: const EdgeInsets.all(32),
-                        decoration: AppColors.premiumCard(),
+                        decoration: AppColors.premiumCard(context),
                         child: Column(
                           children: [
                             Container(
@@ -298,7 +296,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             Text(
                               'No meals logged today',
                               style: TextStyle(
-                                color: AppColors.textSecondary,
+                                color: AppColors.textSecondary(context),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -306,7 +304,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             Text(
                               'Tap the camera button to get started!',
                               style: TextStyle(
-                                color: AppColors.textSecondary
+                                color: AppColors.textSecondary(context)
                                     .withValues(alpha: 0.7),
                                 fontSize: 13,
                               ),
@@ -363,7 +361,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                             },
                             child: MealCard(
                               meal: meal,
-                              onTap: () => context.push('/meal-detail', extra: meal),
+                              onTap: () =>
+                                  context.push('/meal-detail', extra: meal),
                             ),
                           ),
                         );
@@ -405,7 +404,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                     Text(
                       'Here\'s your daily summary',
                       style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: AppColors.textSecondary(context),
                         fontSize: 14,
                       ),
                     ),
@@ -418,12 +417,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainer,
+                        color: AppColors.surfaceContainer(context),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
                         icon: Icon(Icons.search_rounded,
-                            size: 20, color: AppColors.textSecondary),
+                            size: 20, color: AppColors.textSecondary(context)),
                         onPressed: () => context.push('/log/search'),
                         padding: EdgeInsets.zero,
                       ),
@@ -434,12 +433,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainer,
+                        color: AppColors.surfaceContainer(context),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
                         icon: Icon(Icons.refresh_rounded,
-                            size: 20, color: AppColors.textSecondary),
+                            size: 20, color: AppColors.textSecondary(context)),
                         onPressed: _loadData,
                         padding: EdgeInsets.zero,
                       ),

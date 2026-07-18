@@ -27,7 +27,8 @@ class FirestoreService {
           .doc(profile.uid)
           .set(profile.toMap());
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [createUserProfile]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [createUserProfile]');
       rethrow;
     }
   }
@@ -39,7 +40,8 @@ class FirestoreService {
         return UserProfile.fromMap(uid, doc.data()!);
       }
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [getUserProfile]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [getUserProfile]');
     }
     return null;
   }
@@ -48,7 +50,8 @@ class FirestoreService {
     try {
       await _firestore.collection('users').doc(uid).update(data);
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [updateUserProfile]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [updateUserProfile]');
       rethrow;
     }
   }
@@ -68,7 +71,8 @@ class FirestoreService {
 
       await docRef.set(finalEntry.toMap());
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [saveMealEntry]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [saveMealEntry]');
       rethrow;
     }
   }
@@ -88,14 +92,16 @@ class FirestoreService {
             try {
               return MealEntry.fromMap(doc.id, uid, doc.data());
             } catch (e, stack) {
-              LoggerService().error(e, stack, reason: 'Error parsing meal ${doc.id}');
+              LoggerService()
+                  .error(e, stack, reason: 'Error parsing meal ${doc.id}');
               return null;
             }
           })
           .whereType<MealEntry>()
           .toList();
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [getMealsForDate]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [getMealsForDate]');
       return [];
     }
   }
@@ -117,14 +123,16 @@ class FirestoreService {
             try {
               return MealEntry.fromMap(doc.id, uid, doc.data());
             } catch (e, stack) {
-              LoggerService().error(e, stack, reason: 'Error parsing meal range ${doc.id}');
+              LoggerService().error(e, stack,
+                  reason: 'Error parsing meal range ${doc.id}');
               return null;
             }
           })
           .whereType<MealEntry>()
           .toList();
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [getMealsForDateRange]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [getMealsForDateRange]');
       return [];
     }
   }
@@ -139,7 +147,8 @@ class FirestoreService {
           .doc(mealId)
           .update(data);
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [updateMealEntry]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [updateMealEntry]');
       rethrow;
     }
   }
@@ -153,7 +162,8 @@ class FirestoreService {
           .doc(mealId)
           .delete();
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [deleteMealEntry]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [deleteMealEntry]');
       rethrow;
     }
   }
@@ -270,7 +280,8 @@ class FirestoreService {
         return FoodItem.fromMap(doc.id, doc.data());
       }
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [getFoodByName]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [getFoodByName]');
     }
     return null;
   }
@@ -289,7 +300,8 @@ class FirestoreService {
 
       await docRef.set(finalLog.toMap());
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [saveWeightLog]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [saveWeightLog]');
       rethrow;
     }
   }
@@ -311,7 +323,8 @@ class FirestoreService {
           .map((doc) => WeightLog.fromMap(doc.id, doc.data()))
           .toList();
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [getWeightLogs]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [getWeightLogs]');
       return [];
     }
   }
@@ -325,7 +338,8 @@ class FirestoreService {
           .doc(logId)
           .delete();
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [deleteWeightLog]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [deleteWeightLog]');
       rethrow;
     }
   }
@@ -351,7 +365,8 @@ class FirestoreService {
       }
       await userDoc.delete();
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Firestore Error [deleteUserData]');
+      LoggerService()
+          .error(e, stack, reason: 'Firestore Error [deleteUserData]');
       rethrow;
     }
   }

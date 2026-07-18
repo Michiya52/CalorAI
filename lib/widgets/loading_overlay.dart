@@ -31,7 +31,7 @@ class LoadingOverlay extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(
               padding: const EdgeInsets.all(36),
-              decoration: AppColors.glassCard,
+              decoration: AppColors.glassCard(context),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -47,7 +47,7 @@ class LoadingOverlay extends StatelessWidget {
                   Text(
                     message,
                     style: TextStyle(
-                      color: AppColors.textSecondary,
+                      color: AppColors.textSecondary(context),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),

@@ -2505,7 +2505,12 @@ Future<void> seedFoodsDatabase() async {
   final backedRaw = await _loadFoodAsset('assets/data/backed_foods.json');
   final backedMyRaw = await _loadFoodAsset('assets/data/backed_my_foods.json');
 
-  final allSourceFoods = [...myfcdRaw, ...sgfocosRaw, ...backedRaw, ...backedMyRaw];
+  final allSourceFoods = [
+    ...myfcdRaw,
+    ...sgfocosRaw,
+    ...backedRaw,
+    ...backedMyRaw
+  ];
   final mergedFoods = <String, Map<String, dynamic>>{};
 
   /// Sanitizes food data (handles outliers and name cleaning)

@@ -55,7 +55,7 @@ class _SuggestionCardsScreenState extends State<SuggestionCardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Select Your Meal'),
         backgroundColor: Colors.transparent,
@@ -71,7 +71,7 @@ class _SuggestionCardsScreenState extends State<SuggestionCardsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             child: Text(
               'AI best guesses: ${widget.suggestions.length} possible matches',
-              style: TextStyle(color: AppColors.textSecondary),
+              style: TextStyle(color: AppColors.textSecondary(context)),
             ),
           ),
           Expanded(
@@ -115,7 +115,7 @@ class _SuggestionCardsScreenState extends State<SuggestionCardsScreen> {
                 icon: const Icon(Icons.search),
                 label: const Text('None of these — search manually'),
                 style: TextButton.styleFrom(
-                    foregroundColor: AppColors.textSecondary),
+                    foregroundColor: AppColors.textSecondary(context)),
               ),
             ),
           ),

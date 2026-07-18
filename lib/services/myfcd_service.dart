@@ -75,7 +75,8 @@ class MyFCDService {
         );
       }
     } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'MyFCDService.crossReference failed');
+      LoggerService()
+          .error(e, stack, reason: 'MyFCDService.crossReference failed');
       // Fall through to AI estimate fallback when Firestore lookup fails.
     }
 

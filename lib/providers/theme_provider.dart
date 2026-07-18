@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../core/constants/app_colors.dart';
 
 class ThemeProvider extends ChangeNotifier {
   static const String _themeModeKey = 'theme_mode';
@@ -10,7 +9,6 @@ class ThemeProvider extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
 
   ThemeProvider() {
-    AppColors.setThemeMode(_themeMode);
     _loadThemeMode();
   }
 
@@ -27,13 +25,11 @@ class ThemeProvider extends ChangeNotifier {
       default:
         _themeMode = ThemeMode.system;
     }
-    AppColors.setThemeMode(_themeMode);
     notifyListeners();
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
     _themeMode = mode;
-    AppColors.setThemeMode(mode);
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();

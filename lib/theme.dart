@@ -68,6 +68,11 @@ class AppTheme {
   static const Color darkSurface = Color(0xFF101413);
   static const Color darkOnSurface = Color(0xFFE1E3E2);
   static const Color darkOnSurfaceVariant = Color(0xFFBFC4C3);
+  static const Color darkSurfaceContainerLowest = Color(0xFF0B0F0E);
+  static const Color darkSurfaceContainerLow = Color(0xFF1B211F);
+  static const Color darkSurfaceContainer = Color(0xFF232927);
+  static const Color darkSurfaceContainerHigh = Color(0xFF2C3230);
+  static const Color darkSurfaceContainerHighest = Color(0xFF373D3B);
 
   static const Color darkOutline = Color(0xFF898E8D);
   static const Color darkOutlineVariant = Color(0xFF3F4443);
@@ -118,6 +123,12 @@ class AppTheme {
         onTertiaryContainer: onTertiaryContainer,
         surface: surface,
         onSurface: onSurface,
+        onSurfaceVariant: onSurfaceVariant,
+        surfaceContainerLowest: surfaceContainerLowest,
+        surfaceContainerLow: surfaceContainerLow,
+        surfaceContainer: surfaceContainer,
+        surfaceContainerHigh: surfaceContainerHigh,
+        surfaceContainerHighest: surfaceContainerHighest,
         error: error,
         onError: onError,
         errorContainer: errorContainer,
@@ -241,6 +252,12 @@ class AppTheme {
         onTertiaryContainer: darkOnTertiaryContainer,
         surface: darkSurface,
         onSurface: darkOnSurface,
+        onSurfaceVariant: darkOnSurfaceVariant,
+        surfaceContainerLowest: darkSurfaceContainerLowest,
+        surfaceContainerLow: darkSurfaceContainerLow,
+        surfaceContainer: darkSurfaceContainer,
+        surfaceContainerHigh: darkSurfaceContainerHigh,
+        surfaceContainerHighest: darkSurfaceContainerHighest,
         error: darkError,
         onError: darkOnError,
         errorContainer: darkErrorContainer,
@@ -267,7 +284,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        color: const Color(0xFF1E293B),
+        color: darkSurfaceContainerLow,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -300,7 +317,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF1E293B),
+        fillColor: darkSurfaceContainerLow,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,

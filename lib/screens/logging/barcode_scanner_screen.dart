@@ -32,9 +32,15 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     if (mounted) {
       if (!status.isGranted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Camera permission required for barcode scanning.')),
+          const SnackBar(
+              content:
+                  Text('Camera permission required for barcode scanning.')),
         );
-        context.pushReplacement('/log/search');
+        try {
+          context.replace('/log/search');
+        } catch (e) {
+          context.go('/log/search');
+        }
         return;
       }
       setState(() {
@@ -120,11 +126,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
+          title:
+              const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.black,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
-        body: const Center(child: CircularProgressIndicator(color: Colors.white)),
+        body:
+            const Center(child: CircularProgressIndicator(color: Colors.white)),
       );
     }
 
@@ -132,7 +140,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
+          title:
+              const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.black,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
@@ -140,11 +149,15 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.camera_alt_rounded, color: Colors.white54, size: 64),
+              const Icon(Icons.camera_alt_rounded,
+                  color: Colors.white54, size: 64),
               const SizedBox(height: 16),
               const Text(
                 'Camera permission is required',
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               const Text(

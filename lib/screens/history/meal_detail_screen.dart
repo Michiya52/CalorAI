@@ -105,21 +105,69 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
     }
   }
 
+  Future<void> _deleteMeal() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Meal'),
+        content: const Text('Are you sure you want to delete this meal?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true || !mounted) return;
+
+    final uid = context.read<AuthProvider>().userId;
+    if (uid == null) return;
+
+    try {
+      await context.read<MealProvider>().deleteMeal(uid, widget.meal.id);
+      if (mounted) context.pop(true);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not delete meal: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Meal Details'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: AppColors.error),
+            onPressed: _deleteMeal,
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           Card(
             elevation: 0,
-            color: AppColors.surface,
+            color: AppColors.surface(context),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: Padding(
@@ -133,7 +181,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                           )),
                   const SizedBox(height: 4),
                   Text(widget.meal.foodNameMy,
-                      style: TextStyle(color: AppColors.textSecondary)),
+                      style:
+                          TextStyle(color: AppColors.textSecondary(context))),
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
@@ -147,7 +196,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   const SizedBox(height: 12),
                   Text(
                     'Change portion size to adjust calories and macros.',
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(color: AppColors.textSecondary(context)),
                   ),
                 ],
               ),
@@ -179,7 +228,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
               decoration: InputDecoration(
                 labelText: 'Custom grams',
                 filled: true,
-                fillColor: AppColors.surface,
+                fillColor: AppColors.surface(context),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -194,7 +243,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
           const SizedBox(height: 12),
           Card(
             elevation: 0,
-            color: AppColors.surface,
+            color: AppColors.surface(context),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: Padding(
@@ -218,7 +267,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
             const SizedBox(height: 12),
             Card(
               elevation: 0,
-              color: AppColors.surface,
+              color: AppColors.surface(context),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               child: ListView.separated(
@@ -286,7 +335,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: AppColors.textSecondary)),
+          Text(label,
+              style: TextStyle(color: AppColors.textSecondary(context))),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
         ],
       ),

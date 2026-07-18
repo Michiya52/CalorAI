@@ -107,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: AppColors.surfaceContainer,
+                              color: AppColors.surfaceContainer(context),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: IconButton(
@@ -132,14 +132,16 @@ class _RegisterScreenState extends State<RegisterScreen>
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium
-                              ?.copyWith(color: AppColors.textSecondary),
+                              ?.copyWith(
+                                  color: AppColors.textSecondary(context)),
                         ),
                         const SizedBox(height: 32),
 
                         // Form card
                         Container(
                           padding: const EdgeInsets.all(24),
-                          decoration: AppColors.premiumCard(radius: 24),
+                          decoration:
+                              AppColors.premiumCard(context, radius: 24),
                           child: Column(
                             children: [
                               TextFormField(
@@ -155,7 +157,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                                   if (v == null || v.isEmpty) {
                                     return 'Email is required';
                                   }
-                                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim())) {
+                                  if (!RegExp(
+                                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                      .hasMatch(v.trim())) {
                                     return 'Enter a valid email address';
                                   }
                                   return null;
@@ -240,7 +244,8 @@ class _RegisterScreenState extends State<RegisterScreen>
                           children: [
                             Text(
                               'Already have an account? ',
-                              style: TextStyle(color: AppColors.textSecondary),
+                              style: TextStyle(
+                                  color: AppColors.textSecondary(context)),
                             ),
                             GestureDetector(
                               onTap: () => context.go('/login'),

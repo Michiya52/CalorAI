@@ -57,7 +57,8 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
     // Treat zero/invalid custom input as "no custom value" so a meal can
     // never be logged with zero or nonsense weight.
     final rawCustom = double.tryParse(_customGramsController.text);
-    final customGrams = (rawCustom == null || rawCustom <= 0) ? null : rawCustom;
+    final customGrams =
+        (rawCustom == null || rawCustom <= 0) ? null : rawCustom;
     if (suggestion.myfcdMatch != null) {
       final scaled = PortionScaler.scale(
         food: suggestion.myfcdMatch!,
@@ -161,7 +162,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Portion Size'),
         backgroundColor: Colors.transparent,
@@ -185,7 +186,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
             ),
             Text(
               widget.suggestion.dishNameMy,
-              style: TextStyle(color: AppColors.textSecondary),
+              style: TextStyle(color: AppColors.textSecondary(context)),
             ),
             const SizedBox(height: 8),
             Text(
@@ -193,7 +194,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                   ? 'Estimated portion: ${widget.suggestion.estimatedPortionGrams.toStringAsFixed(0)}g • AI confidence: ${widget.suggestion.effectiveConfidencePercent}%'
                   : 'Estimated portion: ${widget.suggestion.estimatedPortionGrams.toStringAsFixed(0)}g',
               style: TextStyle(
-                color: AppColors.textSecondary,
+                color: AppColors.textSecondary(context),
                 fontSize: 12,
               ),
             ),
@@ -217,12 +218,14 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               Text('Ingredients',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textSecondary)),
+                      color: AppColors.textSecondary(context))),
               const SizedBox(height: 4),
               Text(
                 widget.suggestion.myfcdMatch!.ingredients.join(', '),
                 style: TextStyle(
-                    color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+                    color: AppColors.textSecondary(context),
+                    fontSize: 12,
+                    height: 1.4),
               ),
               const SizedBox(height: 24),
             ] else if (widget.suggestion.mainIngredients.isNotEmpty &&
@@ -231,12 +234,14 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               Text('Main Ingredients',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textSecondary)),
+                      color: AppColors.textSecondary(context))),
               const SizedBox(height: 4),
               Text(
                 widget.suggestion.mainIngredients.join(', '),
                 style: TextStyle(
-                    color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+                    color: AppColors.textSecondary(context),
+                    fontSize: 12,
+                    height: 1.4),
               ),
               const SizedBox(height: 24),
             ] else ...[
@@ -266,7 +271,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                   if (states.contains(WidgetState.selected)) {
                     return AppColors.primary;
                   }
-                  return AppColors.surface;
+                  return AppColors.surface(context);
                 }),
               ),
             ),
@@ -283,7 +288,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                   hintText: 'Enter weight in grams',
                   counterText: '',
                   filled: true,
-                  fillColor: AppColors.surface,
+                  fillColor: AppColors.surface(context),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -298,7 +303,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: AppColors.surface(context),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
@@ -314,7 +319,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
                     children: [
                       Text('${_displayGrams.round()}g',
                           style: TextStyle(
-                              color: AppColors.textSecondary,
+                              color: AppColors.textSecondary(context),
                               fontSize: 16,
                               fontWeight: FontWeight.w500)),
                       if (widget.suggestion.myfcdMatch != null)
@@ -418,7 +423,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
         const SizedBox(height: 4),
         Text(label,
             style: TextStyle(
-                color: AppColors.textSecondary,
+                color: AppColors.textSecondary(context),
                 fontSize: 12,
                 fontWeight: FontWeight.w500)),
       ],
@@ -443,7 +448,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
             const SizedBox(width: 4),
             Text('MACRO BREAKDOWN',
                 style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: AppColors.textSecondary(context),
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.0)),

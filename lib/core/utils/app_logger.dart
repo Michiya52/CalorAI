@@ -9,8 +9,7 @@ class AppLogger {
     // Debug builds only: release builds must not dump AI responses and user
     // meal data into the device system log.
     if (kDebugMode) {
-      // ignore: avoid_print
-      print(message);
+      debugPrint(message);
     }
   }
 }

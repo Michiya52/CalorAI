@@ -61,6 +61,9 @@ class _CalorieRingState extends State<CalorieRing>
   Widget build(BuildContext context) {
     final isOver = widget.consumed > widget.target;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final ringColors = isOver
+        ? const [Color(0xFFEF4444), Color(0xFFF97316)]
+        : AppColors.primaryGradient(context).colors;
 
     return AnimatedBuilder(
       animation: _controller,
@@ -76,7 +79,7 @@ class _CalorieRingState extends State<CalorieRing>
                 size: const Size(220, 220),
                 painter: _CalorieRingPainter(
                   progress: _progressAnim.value,
-                  isOver: isOver,
+                  colors: ringColors,
                   isDark: isDark,
                 ),
               ),
@@ -91,9 +94,7 @@ class _CalorieRingState extends State<CalorieRing>
                       fontWeight: FontWeight.w800,
                       color: isOver
                           ? AppColors.error
-                          : (isDark
-                              ? AppColors.primaryLight
-                              : AppColors.primary),
+                          : Theme.of(context).colorScheme.primary,
                       letterSpacing: -1,
                     ),
                   ),
@@ -102,7 +103,7 @@ class _CalorieRingState extends State<CalorieRing>
                     'of ${widget.target} kcal',
                     style: TextStyle(
                       fontSize: 13,
-                      color: AppColors.textSecondary,
+                      color: AppColors.textSecondary(context),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -137,12 +138,12 @@ class _CalorieRingState extends State<CalorieRing>
 
 class _CalorieRingPainter extends CustomPainter {
   final double progress;
-  final bool isOver;
+  final List<Color> colors;
   final bool isDark;
 
   _CalorieRingPainter({
     required this.progress,
-    required this.isOver,
+    required this.colors,
     required this.isDark,
   });
 
@@ -169,17 +170,11 @@ class _CalorieRingPainter extends CustomPainter {
     if (progress > 0) {
       final rect = Rect.fromCircle(center: center, radius: radius);
 
-      final gradientColors = isOver
-          ? [const Color(0xFFEF4444), const Color(0xFFF97316)]
-          : isDark
-              ? [const Color(0xFF34D399), const Color(0xFF10B981)]
-              : [const Color(0xFF10B981), const Color(0xFF059669)];
-
       final arcPaint = Paint()
         ..shader = SweepGradient(
           startAngle: startAngle,
           endAngle: startAngle + sweepAngle,
-          colors: gradientColors,
+          colors: colors,
           transform: GradientRotation(startAngle),
         ).createShader(rect)
         ..style = PaintingStyle.stroke
@@ -194,7 +189,7 @@ class _CalorieRingPainter extends CustomPainter {
       final glowY = center.dy + radius * math.sin(glowAngle);
 
       final glowPaint = Paint()
-        ..color = gradientColors.last.withValues(alpha: 0.3)
+        ..color = colors.last.withValues(alpha: 0.3)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
       canvas.drawCircle(Offset(glowX, glowY), 6, glowPaint);
     }
@@ -203,6 +198,6 @@ class _CalorieRingPainter extends CustomPainter {
   @override
   bool shouldRepaint(_CalorieRingPainter oldDelegate) =>
       oldDelegate.progress != progress ||
-      oldDelegate.isOver != isOver ||
+      oldDelegate.colors != colors ||
       oldDelegate.isDark != isDark;
 }

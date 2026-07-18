@@ -179,7 +179,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: const Text('Search Food'),
         backgroundColor: Colors.transparent,
@@ -250,7 +250,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                           )
                         : null,
                     filled: true,
-                    fillColor: AppColors.surface,
+                    fillColor: AppColors.surface(context),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
@@ -271,7 +271,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                   child: Text(
                     _searchError!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(color: AppColors.textSecondary(context)),
                   ),
                 ),
               ),
@@ -283,12 +283,13 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.manage_search,
-                        size: 48, color: AppColors.textSecondary),
+                        size: 48, color: AppColors.textSecondary(context)),
                     const SizedBox(height: 12),
                     if (_source == _SearchSource.regional) ...[
                       Text(
                         'No results in MY/SG data.',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style:
+                            TextStyle(color: AppColors.textSecondary(context)),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
@@ -308,7 +309,8 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                     ] else
                       Text(
                         'No results found. Try another keyword.',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style:
+                            TextStyle(color: AppColors.textSecondary(context)),
                       ),
                   ],
                 ),
@@ -318,7 +320,8 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: _results.length + (_isLoadingMore ? 1 : 0),
                 itemBuilder: (context, index) {
@@ -340,7 +343,8 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                       subtitle: Text(
                         '${food.nameMy} • ${food.foodGroup} • ${food.caloriesPer100g.toStringAsFixed(0)} kcal/100g',
                         style: TextStyle(
-                            color: AppColors.textSecondary, fontSize: 12),
+                            color: AppColors.textSecondary(context),
+                            fontSize: 12),
                       ),
                       trailing: Container(
                         padding: const EdgeInsets.symmetric(

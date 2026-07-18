@@ -92,7 +92,8 @@ class _LoginScreenState extends State<LoginScreen>
                     if (v == null || v.isEmpty) {
                       return 'Email is required';
                     }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim())) {
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(v.trim())) {
                       return 'Enter a valid email address';
                     }
                     return null;
@@ -114,21 +115,24 @@ class _LoginScreenState extends State<LoginScreen>
                       : () async {
                           if (!dialogFormKey.currentState!.validate()) return;
                           final email = emailController.text.trim();
-                          final success = await auth.sendPasswordResetEmail(email);
-                          
+                          final success =
+                              await auth.sendPasswordResetEmail(email);
+
                           if (context.mounted) {
                             if (success) {
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Password reset email sent successfully!'),
+                                  content: Text(
+                                      'Password reset email sent successfully!'),
                                   backgroundColor: AppColors.success,
                                 ),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(auth.error ?? 'Failed to send reset email.'),
+                                  content: Text(auth.error ??
+                                      'Failed to send reset email.'),
                                   backgroundColor: AppColors.error,
                                 ),
                               );
@@ -140,7 +144,8 @@ class _LoginScreenState extends State<LoginScreen>
                       ? const SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: Colors.white),
                         )
                       : const Text('Send Reset Link'),
                 );
@@ -195,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen>
                             width: 80,
                             height: 80,
                             decoration: BoxDecoration(
-                              gradient: AppColors.primaryGradient,
+                              gradient: AppColors.primaryGradient(context),
                               borderRadius: BorderRadius.circular(24),
                               boxShadow: [
                                 BoxShadow(
@@ -226,14 +231,16 @@ class _LoginScreenState extends State<LoginScreen>
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium
-                              ?.copyWith(color: AppColors.textSecondary),
+                              ?.copyWith(
+                                  color: AppColors.textSecondary(context)),
                         ),
                         const SizedBox(height: 40),
 
                         // Form card
                         Container(
                           padding: const EdgeInsets.all(24),
-                          decoration: AppColors.premiumCard(radius: 24),
+                          decoration:
+                              AppColors.premiumCard(context, radius: 24),
                           child: Column(
                             children: [
                               TextFormField(
@@ -250,7 +257,9 @@ class _LoginScreenState extends State<LoginScreen>
                                   if (v == null || v.isEmpty) {
                                     return 'Email is required';
                                   }
-                                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim())) {
+                                  if (!RegExp(
+                                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                      .hasMatch(v.trim())) {
                                     return 'Enter a valid email address';
                                   }
                                   return null;
@@ -332,7 +341,8 @@ class _LoginScreenState extends State<LoginScreen>
                           children: [
                             Text(
                               "Don't have an account? ",
-                              style: TextStyle(color: AppColors.textSecondary),
+                              style: TextStyle(
+                                  color: AppColors.textSecondary(context)),
                             ),
                             GestureDetector(
                               onTap: () => context.go('/register'),

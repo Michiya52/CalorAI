@@ -13,7 +13,7 @@ class SuggestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: AppColors.premiumCard(radius: 20),
+      decoration: AppColors.premiumCard(context, radius: 20),
       child: Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(20),
@@ -42,7 +42,7 @@ class SuggestionCard extends StatelessWidget {
                             Text(
                               suggestion.dishNameMy,
                               style: TextStyle(
-                                color: AppColors.textSecondary,
+                                color: AppColors.textSecondary(context),
                                 fontSize: 13,
                               ),
                             ),
@@ -64,7 +64,7 @@ class SuggestionCard extends StatelessWidget {
                 Text(
                   suggestion.mainIngredients.join(', '),
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: AppColors.textSecondary(context),
                     fontSize: 12,
                   ),
                 ),
@@ -72,7 +72,7 @@ class SuggestionCard extends StatelessWidget {
                 Text(
                   'Portion estimate: ${suggestion.estimatedPortionGrams.toStringAsFixed(0)}g',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: AppColors.textSecondary(context),
                     fontSize: 12,
                   ),
                 ),
@@ -81,7 +81,7 @@ class SuggestionCard extends StatelessWidget {
                 // Separator
                 Container(
                   height: 1,
-                  color: AppColors.isDark
+                  color: Theme.of(context).brightness == Brightness.dark
                       ? Colors.white.withValues(alpha: 0.06)
                       : Colors.black.withValues(alpha: 0.04),
                 ),
@@ -92,18 +92,19 @@ class SuggestionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _nutrient(
+                      context,
                       '${suggestion.resolvedCalories ?? "~${(suggestion.estimatedPortionGrams * 1.5).round()}"} kcal',
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary,
                     ),
                     if (suggestion.resolvedProteinG != null)
-                      _nutrient(
+                      _nutrient(context,
                           'P: ${suggestion.resolvedProteinG!.toStringAsFixed(1)}g'),
                     if (suggestion.resolvedCarbsG != null)
-                      _nutrient(
+                      _nutrient(context,
                           'C: ${suggestion.resolvedCarbsG!.toStringAsFixed(1)}g'),
                     if (suggestion.resolvedFatsG != null)
-                      _nutrient(
+                      _nutrient(context,
                           'F: ${suggestion.resolvedFatsG!.toStringAsFixed(1)}g'),
                     // Source badge
                     Container(
@@ -134,14 +135,14 @@ class SuggestionCard extends StatelessWidget {
     );
   }
 
-  Widget _nutrient(String text,
+  Widget _nutrient(BuildContext context, String text,
       {FontWeight fontWeight = FontWeight.w500, Color? color}) {
     return Text(
       text,
       style: TextStyle(
         fontSize: 12,
         fontWeight: fontWeight,
-        color: color ?? AppColors.textPrimary,
+        color: color ?? AppColors.textPrimary(context),
       ),
     );
   }

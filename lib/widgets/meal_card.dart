@@ -5,15 +5,14 @@ import 'density_badge.dart';
 
 class MealCard extends StatelessWidget {
   final MealEntry meal;
-  final VoidCallback? onDelete;
   final VoidCallback? onTap;
 
-  const MealCard({super.key, required this.meal, this.onDelete, this.onTap});
+  const MealCard({super.key, required this.meal, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: AppColors.premiumCard(radius: 16),
+      decoration: AppColors.premiumCard(context, radius: 16),
       child: Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(16),
@@ -69,7 +68,7 @@ class MealCard extends StatelessWidget {
                         '${meal.portionLabel} \u2022 ${meal.portionGrams.toStringAsFixed(0)}g \u2022 ${meal.source}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.textSecondary,
+                          color: AppColors.textSecondary(context),
                         ),
                       ),
                     ],
@@ -93,7 +92,7 @@ class MealCard extends StatelessWidget {
                       'kcal',
                       style: TextStyle(
                         fontSize: 11,
-                        color: AppColors.textSecondary,
+                        color: AppColors.textSecondary(context),
                         fontWeight: FontWeight.w500,
                       ),
                     ),

@@ -222,7 +222,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: Text(
             _isEditingExistingProfile ? 'Update Profile' : 'Profile Setup'),
@@ -245,7 +245,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           decoration: BoxDecoration(
                             gradient: i <= _currentStep
-                                ? AppColors.primaryGradient
+                                ? AppColors.primaryGradient(context)
                                 : null,
                             color: i <= _currentStep
                                 ? null
@@ -288,7 +288,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
                   ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Text('Tell us about yourself',
-              style: TextStyle(color: AppColors.textSecondary)),
+              style: TextStyle(color: AppColors.textSecondary(context))),
           const SizedBox(height: 24),
           _buildField('Name', _nameController, TextInputType.text),
           const SizedBox(height: 16),
@@ -321,19 +321,22 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             }
             if (ht == null || ht <= 0 || ht > 300) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Please enter a valid height (0-300 cm)')),
+                const SnackBar(
+                    content: Text('Please enter a valid height (0-300 cm)')),
               );
               return;
             }
             if (wt == null || wt <= 0 || wt > 500) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Please enter a valid weight (0-500 kg)')),
+                const SnackBar(
+                    content: Text('Please enter a valid weight (0-500 kg)')),
               );
               return;
             }
             if (age == null || age <= 0 || age > 120) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Please enter a valid age (0-120)')),
+                const SnackBar(
+                    content: Text('Please enter a valid age (0-120)')),
               );
               return;
             }
@@ -357,7 +360,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
                   ?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Text('Select the goal that best describes you',
-              style: TextStyle(color: AppColors.textSecondary)),
+              style: TextStyle(color: AppColors.textSecondary(context))),
           const SizedBox(height: 24),
           _buildGoalCard(
               'Lose Weight', 'lose_weight', Icons.trending_down_rounded),
@@ -419,7 +422,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
           Container(
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
-              gradient: AppColors.primaryGradient,
+              gradient: AppColors.primaryGradient(context),
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
@@ -454,7 +457,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(4),
-            decoration: AppColors.premiumCard(radius: 16),
+            decoration: AppColors.premiumCard(context, radius: 16),
             child: SwitchListTile(
               title: const Text('Set my own calorie goal',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
@@ -478,7 +481,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(4),
-            decoration: AppColors.premiumCard(radius: 16),
+            decoration: AppColors.premiumCard(context, radius: 16),
             child: SwitchListTile(
               title: const Text('Set my own macro breakdown',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
@@ -514,13 +517,14 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: AppColors.premiumCard(radius: 16),
+              decoration: AppColors.premiumCard(context, radius: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Recommended macro split',
                       style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 12)),
+                          color: AppColors.textSecondary(context),
+                          fontSize: 12)),
                   const SizedBox(height: 8),
                   Text(
                     '${MacroTargets.fromCalories(_resolvedCalorieTarget()).proteinG}g protein • ${MacroTargets.fromCalories(_resolvedCalorieTarget()).carbsG}g carbs • ${MacroTargets.fromCalories(_resolvedCalorieTarget()).fatsG}g fats',
@@ -597,11 +601,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
           duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            gradient: selected ? AppColors.primaryGradient : null,
-            color: selected ? null : AppColors.surface,
+            gradient: selected ? AppColors.primaryGradient(context) : null,
+            color: selected ? null : AppColors.surface(context),
             borderRadius: BorderRadius.circular(16),
-            border:
-                selected ? null : Border.all(color: AppColors.surfaceContainer),
+            border: selected
+                ? null
+                : Border.all(color: AppColors.surfaceContainer(context)),
             boxShadow: selected
                 ? [
                     BoxShadow(
@@ -616,12 +621,16 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon,
-                  color: selected ? Colors.white : AppColors.textSecondary,
+                  color: selected
+                      ? Colors.white
+                      : AppColors.textSecondary(context),
                   size: 20),
               const SizedBox(width: 8),
               Text(label,
                   style: TextStyle(
-                    color: selected ? Colors.white : AppColors.textPrimary,
+                    color: selected
+                        ? Colors.white
+                        : AppColors.textPrimary(context),
                     fontWeight: FontWeight.w600,
                   )),
             ],
@@ -640,11 +649,12 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          gradient: selected ? AppColors.primaryGradient : null,
-          color: selected ? null : AppColors.surface,
+          gradient: selected ? AppColors.primaryGradient(context) : null,
+          color: selected ? null : AppColors.surface(context),
           borderRadius: BorderRadius.circular(16),
-          border:
-              selected ? null : Border.all(color: AppColors.surfaceContainer),
+          border: selected
+              ? null
+              : Border.all(color: AppColors.surfaceContainer(context)),
           boxShadow: selected
               ? [
                   BoxShadow(
@@ -674,7 +684,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
-                  color: selected ? Colors.white : AppColors.textPrimary,
+                  color:
+                      selected ? Colors.white : AppColors.textPrimary(context),
                 )),
             const Spacer(),
             if (selected)

@@ -105,7 +105,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       appBar: AppBar(
         title: Row(
           children: [
@@ -132,12 +132,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
+              color: AppColors.surfaceContainer(context),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
               icon: Icon(Icons.history_rounded,
-                  size: 18, color: AppColors.textSecondary),
+                  size: 18, color: AppColors.textSecondary(context)),
               onPressed: _showHistoryDrawer,
               tooltip: 'Chat history',
               padding: EdgeInsets.zero,
@@ -149,12 +149,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
+              color: AppColors.surfaceContainer(context),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
               icon: Icon(Icons.add_comment_outlined,
-                  size: 18, color: AppColors.textSecondary),
+                  size: 18, color: AppColors.textSecondary(context)),
               onPressed: () => context.read<ChatbotProvider>().startNewChat(),
               tooltip: 'New chat',
               padding: EdgeInsets.zero,
@@ -166,12 +166,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
+              color: AppColors.surfaceContainer(context),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
               icon: Icon(Icons.delete_outline_rounded,
-                  size: 18, color: AppColors.textSecondary),
+                  size: 18, color: AppColors.textSecondary(context)),
               onPressed: () => context.read<ChatbotProvider>().clearHistory(),
               tooltip: 'Clear chat',
               padding: EdgeInsets.zero,
@@ -211,9 +211,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               margin: const EdgeInsets.only(
                   bottom: 110), // Clears 76px nav + 24px padding + 10px gap
               decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF1E293B).withValues(alpha: 0.9)
-                    : Colors.white.withValues(alpha: 0.9),
+                color: AppColors.surface(context).withValues(alpha: 0.9),
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(24)),
                 border: Border(
@@ -239,7 +237,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: AppColors.surfaceContainer,
+                                color: AppColors.surfaceContainer(context),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: TextField(
@@ -268,9 +266,9 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                             decoration: BoxDecoration(
                               gradient: chatbot.isTyping
                                   ? null
-                                  : AppColors.primaryGradient,
+                                  : AppColors.primaryGradient(context),
                               color: chatbot.isTyping
-                                  ? AppColors.surfaceContainer
+                                  ? AppColors.surfaceContainer(context)
                                   : null,
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: chatbot.isTyping
@@ -291,7 +289,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                               icon: Icon(
                                 Icons.arrow_upward_rounded,
                                 color: chatbot.isTyping
-                                    ? AppColors.textSecondary
+                                    ? AppColors.textSecondary(context)
                                     : Colors.white,
                                 size: 22,
                               ),
@@ -350,7 +348,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             const SizedBox(height: 8),
             Text(
               'Your personal Malaysian food\nnutrition assistant',
-              style: TextStyle(color: AppColors.textSecondary, height: 1.4),
+              style: TextStyle(
+                  color: AppColors.textSecondary(context), height: 1.4),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -362,7 +361,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18, vertical: 14),
-                      decoration: AppColors.premiumCard(radius: 16),
+                      decoration: AppColors.premiumCard(context, radius: 16),
                       child: Row(
                         children: [
                           Icon(Icons.auto_awesome_rounded,
@@ -372,10 +371,11 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                             child: Text(s,
                                 style: TextStyle(
                                     fontSize: 13,
-                                    color: AppColors.textPrimary)),
+                                    color: AppColors.textPrimary(context))),
                           ),
                           Icon(Icons.arrow_forward_ios_rounded,
-                              size: 12, color: AppColors.textSecondary),
+                              size: 12,
+                              color: AppColors.textSecondary(context)),
                         ],
                       ),
                     ),
@@ -399,10 +399,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           maxWidth: MediaQuery.of(context).size.width * 0.78,
         ),
         decoration: BoxDecoration(
-          gradient: isUser ? AppColors.primaryGradient : null,
-          color: isUser
-              ? null
-              : (isDark ? const Color(0xFF1E293B) : AppColors.surface),
+          gradient: isUser ? AppColors.primaryGradient(context) : null,
+          color: isUser ? null : AppColors.surface(context),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(20),
             topRight: const Radius.circular(20),
@@ -434,16 +432,16 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 selectable: true,
                 styleSheet: MarkdownStyleSheet(
                   p: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.textPrimary(context),
                     fontSize: 14,
                     height: 1.5,
                   ),
                   strong: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.textPrimary(context),
                     fontWeight: FontWeight.w700,
                   ),
                   listBullet: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.textPrimary(context),
                     fontSize: 14,
                   ),
                   blockSpacing: 8,
@@ -451,7 +449,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   listBulletPadding: const EdgeInsets.only(right: 6),
                   a: TextStyle(color: AppColors.primary),
                   em: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: AppColors.textPrimary(context),
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -467,7 +465,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+          color: AppColors.surface(context),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -503,14 +501,12 @@ class _ChatHistorySheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.6,
       ),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        color: AppColors.surface(context),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -562,11 +558,12 @@ class _ChatHistorySheet extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.chat_bubble_outline,
-                            size: 40, color: AppColors.textSecondary),
+                            size: 40, color: AppColors.textSecondary(context)),
                         const SizedBox(height: 12),
                         Text(
                           'No previous chats',
-                          style: TextStyle(color: AppColors.textSecondary),
+                          style: TextStyle(
+                              color: AppColors.textSecondary(context)),
                         ),
                       ],
                     ),
@@ -616,7 +613,8 @@ class _ChatHistorySheet extends StatelessWidget {
                         subtitle: Text(
                           '$messageCount messages • $timeAgo',
                           style: TextStyle(
-                              color: AppColors.textSecondary, fontSize: 12),
+                              color: AppColors.textSecondary(context),
+                              fontSize: 12),
                         ),
                         onTap: () => onSessionTap(session),
                       ),
