@@ -237,11 +237,10 @@ Food composition database handlers.
 
 The Firebase Firestore instance is protected by Security Rules (`firestore.rules`). 
 - User Profiles, Meals, and Weight Logs are strictly scoped to the `request.auth.uid`.
-- **Global `/foods` Collection:** Access is permissive. `allow read: if true;` and `allow write: if isAuthenticated();`. This is a known limitation relying on convention, meaning any logged-in user can theoretically overwrite global food entries. 
+- **Global `/foods` Collection:** Retired. Client writes are denied (`allow write: if false;`); reads remain open but nothing in the app queries it.
 
-### Database Seeding Workflow
-The app performs global food database population at launch (if version increments) using `lib/utils/seed_data.dart`. 
-It reads local JSON files (`assets/data/myfcd_full.json`, `sgfocos_full.json`, etc.), sanitizes and merges the records using a slugified ID (`nameEnLower` string replacements), and performs batched Firestore deletes and updates to prevent duplicates. Live search queries are run against Firestore, not the local JSON.
+### Food Data Workflow
+Startup seeding has been removed (`lib/utils/seed_data.dart` is a stub). All food data ships as a single bundled asset, `assets/data/myfcd_full.json` (~2,000 entries), generated offline by `tool/merge_foods.py`, which merges MyFCD (1997/Current/Industry), SGFOCOS 2025, the "backed" USDA/MY sets, and a curated additions list; it cleans names, normalizes `foodGroup` to human-readable categories, dedupes by name with curated data winning, and rebuilds `searchTerms`. Search (`FirestoreService.searchFoods`) and the meal-creator ingredient library both read this asset — no Firestore involved.
 
 ---
 

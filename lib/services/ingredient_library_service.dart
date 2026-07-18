@@ -51,18 +51,16 @@ class IngredientLibraryService {
   Map<String, List<FoodItem>> _groupItems(List<FoodItem> items) {
     final Map<String, List<FoodItem>> grouped = {};
 
+    // foodGroup is already a human-readable category, normalized offline
+    // by tool/merge_foods.py. Anything unnormalized (e.g. legacy "Group 12"
+    // codes from a stale asset) falls back to the misc bucket instead of
+    // leaking raw IDs into the UI.
     for (final item in items) {
-      // Remove calorie filter to allow spices, water, beverages, etc.
-      final simplifiedItem = item.copyWith(
-        nameEn: _simplifyName(item.nameEn),
-        nameMy: _simplifyName(item.nameMy),
-      );
-
-      final category = _mapGroupToCategory(item.foodGroup);
-      if (!grouped.containsKey(category)) {
-        grouped[category] = [];
-      }
-      grouped[category]!.add(simplifiedItem);
+      final group = item.foodGroup;
+      final category = group.isEmpty || group.startsWith('Group')
+          ? 'Other / Miscellaneous'
+          : group;
+      (grouped[category] ??= []).add(item);
     }
 
     // Sort items alphabetically within each category
@@ -71,59 +69,6 @@ class IngredientLibraryService {
     }
 
     return grouped;
-  }
-
-  String _simplifyName(String name) {
-    if (name.isEmpty) return name;
-
-    // Split by commas
-    final parts = name.split(',').map((p) => p.trim()).toList();
-
-    // If it's something like "CHICKEN, BREAST, RAW" -> "Chicken Breast, Raw"
-    final cleanParts = parts.map((p) {
-      if (p.isEmpty) return p;
-      return p[0].toUpperCase() + p.substring(1).toLowerCase();
-    }).toList();
-
-    // Heuristic: If there are 3 parts, the middle one is often the specific type
-    // e.g. "CABBAGE, CHINESE, RAW" -> "Chinese Cabbage, Raw"
-    if (parts.length >= 2) {
-      // Common pattern: Main Item, Subtype, Detail
-      return cleanParts.join(', ');
-    }
-
-    return cleanParts.first;
-  }
-
-  String _mapGroupToCategory(String groupId) {
-    if (groupId.startsWith('Group 1.') || groupId == 'Group 1') {
-      return 'Grains, Noodles & Starches';
-    } else if (groupId.startsWith('Group 2.') ||
-        groupId == 'Group 2' ||
-        groupId == 'Group 4') {
-      return 'Vegetables & Legumes';
-    } else if (groupId == 'Group 3') {
-      return 'Fruits';
-    } else if (groupId == 'Group 5') {
-      return 'Nuts & Seeds';
-    } else if (groupId == 'Group 6' || groupId == 'Group 7') {
-      return 'Meats, Poultry & Seafood';
-    } else if (groupId == 'Group 8' || groupId == 'Group 9') {
-      return 'Dairy & Eggs';
-    } else if (groupId == 'Group 10') {
-      return 'Fats & Oils';
-    } else if (groupId == 'Group 12') {
-      return 'Beverages';
-    } else if (groupId == 'Group 13') {
-      return 'Spices, Condiments & Sauces';
-    } else if (groupId == 'Group 11' ||
-        groupId.startsWith('Group 23') ||
-        groupId.startsWith('Group 24') ||
-        groupId.startsWith('Group 25')) {
-      return 'Desserts & Sweets';
-    } else {
-      return 'Other / Miscellaneous';
-    }
   }
 
   List<FoodItem> searchLibrary(String query, {required bool isBranded}) {

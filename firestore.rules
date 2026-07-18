@@ -27,11 +27,12 @@ service cloud.firestore {
       }
     }
 
-    // 4. Global Food Database — read-only for all clients.
-    //    Writes should be performed via the Firebase Admin SDK or Cloud Functions.
+    // 4. Global Food Database — retired. The app now ships its food data as
+    //    a bundled asset (assets/data/myfcd_full.json); client-side seeding
+    //    has been removed. Locked down so no client can wipe or spam it.
     match /foods/{foodId} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if false;
     }
   }
 }

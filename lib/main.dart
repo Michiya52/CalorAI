@@ -19,7 +19,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'firebase_options.dart';
 import 'theme.dart';
-import 'utils/seed_data.dart';
 import 'services/notification_service.dart';
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -123,18 +122,6 @@ Future<void> main() async {
     await _initializeFirebaseWithRetry();
     firebaseReady = true;
     debugPrint('Firebase initialized successfully');
-
-    // Seed data in the background so startup is never blocked by network/db issues.
-    if (kIsWeb ||
-        defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.windows) {
-      unawaited(seedFoodsDatabase().catchError((e, stack) {
-        debugPrint('Background food seeding failed: $e');
-        debugPrint(stack.toString());
-      }));
-    }
   } catch (e, stack) {
     startupError = e.toString();
     debugPrint('Startup initialization failed: $e');

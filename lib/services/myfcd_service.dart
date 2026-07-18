@@ -61,7 +61,7 @@ class MyFCDService {
 
       final match = candidates.isNotEmpty ? candidates.values.first : null;
 
-      if (match != null) {
+      if (match != null && _isConfidentMatch(suggestion, match)) {
         final factor = suggestion.estimatedPortionGrams / 100.0;
         return suggestion.copyWith(
           myfcdMatch: match,
@@ -90,6 +90,37 @@ class MyFCDService {
       resolvedSodiumG: suggestion.estimatedSodiumG,
       resolvedSugarG: suggestion.estimatedSugarG,
     );
+  }
+
+  /// Guards against a weak fuzzy match overwriting the AI's estimates —
+  /// important for non-local cuisines, where the SG/MY database rarely has
+  /// a real equivalent and the top fuzzy hit can be unrelated.
+  // ponytail: token-overlap heuristic; swap for a scored-search API if
+  // mismatches still slip through.
+  bool _isConfidentMatch(FoodSuggestion suggestion, FoodItem match) {
+    String norm(String s) => s
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^\w\s]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+
+    final matchNames = [norm(match.nameEn), norm(match.nameMy)]
+        .where((n) => n.isNotEmpty)
+        .toList();
+    final queryNames = [norm(suggestion.dishNameEn), norm(suggestion.dishNameMy)]
+        .where((n) => n.isNotEmpty);
+
+    for (final q in queryNames) {
+      for (final m in matchNames) {
+        if (m == q || m.contains(q) || q.contains(m)) return true;
+      }
+      final queryTokens = q.split(' ').toSet();
+      final matchTokens =
+          matchNames.expand((m) => m.split(' ')).toSet();
+      final overlap = queryTokens.intersection(matchTokens).length;
+      if (overlap / queryTokens.length >= 0.6) return true;
+    }
+    return false;
   }
 
   /// Run cross-reference concurrently on all suggestions

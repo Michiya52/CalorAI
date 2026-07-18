@@ -83,8 +83,11 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
           estimatedFatsG: food.fatsPer100g * factor,
           estimatedSodiumG: food.sodiumPer100g * factor,
           estimatedSugarG: food.sugarPer100g * factor,
-          confidence: 'high',
-          confidencePercent: 100,
+          // Inherit the AI's visual confidence: the DB match was found by
+          // searching the AI's guessed name, so it can't be more certain
+          // than the guess itself. Only the nutrition data is ground truth.
+          confidence: top3Ai.first.confidence,
+          confidencePercent: top3Ai.first.effectiveConfidencePercent,
           cookingMethod: 'Database Match',
           myfcdMatch: food,
           resolvedCalories: (food.caloriesPer100g * factor).round(),
