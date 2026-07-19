@@ -115,24 +115,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
               controller: textController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                hintText: 'e.g. 3017620422003',
+                hintText: 'Enter barcode digits',
                 labelText: 'Barcode / GTIN Number',
                 border: OutlineInputBorder(),
               ),
-            ),
-            const SizedBox(height: 12),
-            const Text('Try famous global barcodes:',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: [
-                _sampleChip('Nutella', '3017620422003', textController),
-                _sampleChip('Coca-Cola', '5449000000996', textController),
-                _sampleChip('Milo (MY)', '9556001118182', textController),
-                _sampleChip('Maggi Kari', '9556001119561', textController),
-              ],
             ),
           ],
         ),
@@ -153,15 +139,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _sampleChip(String label, String code, TextEditingController c) {
-    return ActionChip(
-      label: Text('$label ($code)', style: const TextStyle(fontSize: 11)),
-      onPressed: () {
-        c.text = code;
-      },
     );
   }
 
