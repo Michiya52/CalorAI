@@ -4,7 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants/app_colors.dart';
 import '../../models/food_suggestion.dart';
-
+import '../../models/food_item.dart';
 import '../../services/usda_service.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
@@ -19,7 +19,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   bool _isProcessing = false;
   bool _hasPermission = false;
   bool _isCheckingPermission = true;
-  String? _lastFailedBarcode;
 
   @override
   void initState() {
@@ -51,67 +50,119 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   }
 
   Future<void> _handleBarcode(String barcode) async {
+    // One-shot: every outcome exits this screen, so never re-arm scanning.
     if (_isProcessing) return;
-    // Don't re-query a barcode that already came back empty — the camera
-    // keeps detecting the same code every frame, which would loop forever.
-    if (barcode == _lastFailedBarcode) return;
     setState(() => _isProcessing = true);
 
     try {
-      final usdaResult =
-          await UsdaService.instance.getProductByBarcode(barcode);
-      if (!mounted) return;
+      await controller.stop();
+    } catch (_) {}
 
-      if (usdaResult != null) {
-        _navigateToPortion(usdaResult);
-        return;
-      }
+    final usdaResult = await UsdaService.instance.getProductByBarcode(barcode);
+    if (!mounted) return;
 
-      _lastFailedBarcode = barcode;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Product not found in our open databases. Try another barcode or search manually.'),
-          duration: Duration(seconds: 5),
-        ),
-      );
-    } finally {
-      if (mounted) setState(() => _isProcessing = false);
+    if (usdaResult != null) {
+      _navigateToPortion(usdaResult);
+      return;
+    }
+
+    if (context.canPop()) {
+      context.pop({'notFound': true, 'barcode': barcode});
     }
   }
 
-  void _navigateToPortion(dynamic food) {
+  void _navigateToPortion(FoodItem food) {
+    final factor = food.portionSizes.mediumGrams / 100.0;
     final suggestion = FoodSuggestion(
       rank: 1,
       dishNameEn: food.nameEn,
       dishNameMy: food.nameMy,
       mainIngredients: [food.foodGroup],
       estimatedPortionGrams: food.portionSizes.mediumGrams,
-      estimatedCalories: 0,
-      estimatedProteinG: 0.0,
-      estimatedCarbsG: 0.0,
-      estimatedFatsG: 0.0,
-      estimatedSodiumG: 0.0,
-      estimatedSugarG: 0.0,
-      confidence: '', // Scanner is certain
-      cookingMethod: '',
+      estimatedCalories: (food.caloriesPer100g * factor).round(),
+      estimatedProteinG: food.proteinPer100g * factor,
+      estimatedCarbsG: food.carbsPer100g * factor,
+      estimatedFatsG: food.fatsPer100g * factor,
+      estimatedSodiumG: food.sodiumPer100g * factor,
+      estimatedSugarG: food.sugarPer100g * factor,
+      confidence: 'high', // Scanner is certain
+      cookingMethod: 'Packaged / Scanned',
       myfcdMatch: food,
-      resolvedCalories:
-          food.caloriesPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedProteinG:
-          food.proteinPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedCarbsG:
-          food.carbsPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedFatsG: food.fatsPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedSodiumG:
-          food.sodiumPer100g * (food.portionSizes.mediumGrams / 100.0),
-      resolvedSugarG:
-          food.sugarPer100g * (food.portionSizes.mediumGrams / 100.0),
+      resolvedCalories: (food.caloriesPer100g * factor).round(),
+      resolvedProteinG: food.proteinPer100g * factor,
+      resolvedCarbsG: food.carbsPer100g * factor,
+      resolvedFatsG: food.fatsPer100g * factor,
+      resolvedSodiumG: food.sodiumPer100g * factor,
+      resolvedSugarG: food.sugarPer100g * factor,
       source: food.source,
     );
 
     if (!mounted) return;
-    context.push('/log/portion', extra: suggestion);
+    context.replace('/log/portion', extra: suggestion);
+  }
+
+  void _showManualBarcodeEntry() {
+    final textController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Enter / Test Barcode'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: textController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'e.g. 3017620422003',
+                labelText: 'Barcode / GTIN Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text('Try famous global barcodes:',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _sampleChip('Nutella', '3017620422003', textController),
+                _sampleChip('Coca-Cola', '5449000000996', textController),
+                _sampleChip('Milo (MY)', '9556001118182', textController),
+                _sampleChip('Maggi Kari', '9556001119561', textController),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final val = textController.text.trim();
+              Navigator.of(ctx).pop();
+              if (val.isNotEmpty) {
+                _handleBarcode(val);
+              }
+            },
+            child: const Text('Lookup'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sampleChip(String label, String code, TextEditingController c) {
+    return ActionChip(
+      label: Text('$label ($code)', style: const TextStyle(fontSize: 11)),
+      onPressed: () {
+        c.text = code;
+      },
+    );
   }
 
   @override
@@ -183,6 +234,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             const Text('Scan Barcode', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.keyboard_alt_outlined),
+            tooltip: 'Enter barcode manually',
+            onPressed: _showManualBarcodeEntry,
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -218,12 +276,30 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
 
           Positioned(
             bottom: 40,
-            left: 0,
-            right: 0,
-            child: Text(
-              'Align barcode within the box',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
+            left: 20,
+            right: 20,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Align barcode within the box',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
+                ),
+                const SizedBox(height: 16),
+                TextButton.icon(
+                  onPressed: _showManualBarcodeEntry,
+                  icon: const Icon(Icons.keyboard_alt_outlined,
+                      color: Colors.white),
+                  label: const Text('Enter / Test Barcode Number',
+                      style: TextStyle(color: Colors.white)),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.black54,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -129,6 +129,52 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
     }
   }
 
+  void _showBarcodeNotFoundDialog(String barcode) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Icon(Icons.qr_code_scanner, color: AppColors.primary),
+            const SizedBox(width: 10),
+            const Text('Barcode Scanned'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Code: $barcode',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 12),
+            const Text(
+                'We searched our local database (MyFCD), Open Food Facts, and USDA FoodData Central, but exact nutrition details aren\'t listed for this item yet.'),
+            const SizedBox(height: 12),
+            const Text('Would you like to search manually or try another item?'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Close'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.push('/log/search');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Search Manually'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +184,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: AppColors.textPrimary(context)),
           onPressed: () => context.pop(),
         ),
       ),
@@ -219,7 +265,13 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                   SizedBox(
                     height: 56,
                     child: OutlinedButton.icon(
-                      onPressed: () => context.push('/log/barcode'),
+                      onPressed: () async {
+                        final result = await context.push('/log/barcode');
+                        if (result is Map && result['notFound'] == true && mounted) {
+                          final barcode = result['barcode'] as String? ?? '';
+                          _showBarcodeNotFoundDialog(barcode);
+                        }
+                      },
                       icon: const Icon(Icons.qr_code_scanner),
                       label: const Text('Scan Barcode',
                           style: TextStyle(fontSize: 16)),

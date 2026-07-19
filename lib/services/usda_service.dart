@@ -3,6 +3,8 @@ import '../services/logger_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/food_item.dart';
+import 'firestore_service.dart';
+import 'open_food_facts_service.dart';
 
 /// Service for accessing USDA FoodData Central.
 /// Provides high-accuracy nutritional data for branded and foundation foods.
@@ -26,6 +28,7 @@ class UsdaService {
     final uri = Uri.https(_baseUrl, '/fdc/v1/foods/search', {
       'api_key': _apiKey,
       'query': query,
+      'dataType': 'Branded,Foundation,SR Legacy',
       'pageSize': '25',
     });
 
@@ -47,24 +50,62 @@ class UsdaService {
     }
   }
 
-  /// Specialized barcode lookup for USDA.
+  /// Specialized barcode lookup via Local Offline Barcodes, MyFCD Local Database & USDA.
   Future<FoodItem?> getProductByBarcode(String barcode) async {
-    // USDA search can take a GTIN/UPC directly in the query.
-    final results = await searchFoods(barcode);
+    final cleanBarcode = barcode.trim();
+    if (cleanBarcode.isEmpty) return null;
+
+    LoggerService().info('Looking up barcode: $cleanBarcode');
+
+    // 1. Check offline MyFCD Local Asset Cache via FirestoreService
+    try {
+      final myfcdResults = await FirestoreService().searchFoods(cleanBarcode, limit: 5);
+      for (final item in myfcdResults) {
+        if (item.myfcdCode == cleanBarcode || item.id == cleanBarcode) {
+          LoggerService().info('Found in MyFCD Local Database by code: ${item.nameEn}');
+          return item;
+        }
+      }
+      // Also try EAN-13 vs UPC-A variants in local dataset
+      if (cleanBarcode.length == 12) {
+        final paddedResults = await FirestoreService().searchFoods('0$cleanBarcode', limit: 3);
+        for (final item in paddedResults) {
+          if (item.myfcdCode == '0$cleanBarcode') return item;
+        }
+      }
+    } catch (e, stack) {
+      LoggerService().error(e, stack, reason: 'Local MyFCD database lookup failed');
+    }
+
+    // 2. Open Food Facts barcode endpoint (best coverage for MY/global EANs)
+    final offItem =
+        await OpenFoodFactsService.instance.getProductByBarcode(cleanBarcode);
+    if (offItem != null) {
+      LoggerService().info('Found in Open Food Facts: ${offItem.nameEn}');
+      return offItem;
+    }
+
+    // 3. Fallback to USDA FoodData Central (for US branded/foundation foods)
+    // Querying with and without gtinUpc: prefix to hit USDA Lucene index accurately
+    List<FoodItem> results = await searchFoods('gtinUpc:$cleanBarcode');
+    if (results.isEmpty) results = await searchFoods(cleanBarcode);
     if (results.isNotEmpty) return results.first;
 
-    // Try prepending a leading '0' if barcode is 12 digits (UPC-A) to match 13-digit GTIN formats in USDA
-    if (barcode.length == 12) {
-      final paddedResults = await searchFoods('0$barcode');
+    if (cleanBarcode.length == 12) {
+      final padded = '0$cleanBarcode';
+      var paddedResults = await searchFoods('gtinUpc:$padded');
+      if (paddedResults.isEmpty) paddedResults = await searchFoods(padded);
       if (paddedResults.isNotEmpty) return paddedResults.first;
     }
 
-    // Try removing a leading '0' if barcode is 13 digits to match 12-digit UPCs in USDA
-    if (barcode.length == 13 && barcode.startsWith('0')) {
-      final strippedResults = await searchFoods(barcode.substring(1));
+    if (cleanBarcode.length == 13 && cleanBarcode.startsWith('0')) {
+      final stripped = cleanBarcode.substring(1);
+      var strippedResults = await searchFoods('gtinUpc:$stripped');
+      if (strippedResults.isEmpty) strippedResults = await searchFoods(stripped);
       if (strippedResults.isNotEmpty) return strippedResults.first;
     }
 
+    LoggerService().info('Barcode $cleanBarcode not found in Local Database or USDA.');
     return null;
   }
 
