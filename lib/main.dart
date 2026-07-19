@@ -99,6 +99,45 @@ Future<void> _initializeFirebaseWithRetry({int maxAttempts = 5}) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Global UI Error Boundary: catch unhandled render errors gracefully
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    debugPrint('Unhandled UI error: ${details.exceptionAsString()}');
+    return Material(
+      color: const Color(0xFF18181B),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline_rounded,
+                  size: 48, color: Color(0xFFEF4444)),
+              const SizedBox(height: 16),
+              const Text(
+                'Something went wrong displaying this screen',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                details.exceptionAsString().split('\n').first,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  };
+
   var firebaseReady = false;
   String? startupError;
 

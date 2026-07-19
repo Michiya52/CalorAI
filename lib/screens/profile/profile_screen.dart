@@ -89,6 +89,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profile = profileProv.profile;
     if (uid == null || profile == null) return;
 
+    FocusScope.of(context).unfocus();
+    HapticFeedback.lightImpact();
+
     final ht = double.tryParse(_heightController.text);
     final wt = double.tryParse(_weightController.text);
     final age = int.tryParse(_ageController.text);
@@ -110,20 +113,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return;
     }
 
-    await profileProv.updateProfile(uid, {
-      'name': _nameController.text.trim(),
-      'heightCm': ht,
-      'weightKg': wt,
-      'age': age,
-    });
+    try {
+      await profileProv.updateProfile(uid, {
+        'name': _nameController.text.trim(),
+        'heightCm': ht,
+        'weightKg': wt,
+        'age': age,
+      });
 
-    setState(() => _isEditing = false);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Profile updated!'),
-            backgroundColor: AppColors.success),
-      );
+      setState(() => _isEditing = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Profile updated!'),
+              backgroundColor: AppColors.success),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('Could not update profile: $e'),
+              backgroundColor: AppColors.error),
+        );
+      }
     }
   }
 
@@ -399,6 +412,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icon(Icons.edit_rounded,
                     size: 18, color: AppColors.textSecondary(context)),
                 onPressed: () {
+                  HapticFeedback.lightImpact();
                   _loadProfile();
                   setState(() => _isEditing = true);
                 },

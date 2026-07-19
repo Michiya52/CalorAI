@@ -67,6 +67,8 @@ class SuggestionCard extends StatelessWidget {
                     color: AppColors.textSecondary(context),
                     fontSize: 12,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -87,9 +89,12 @@ class SuggestionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
 
-                // Nutrition row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Nutrition wrap (responsive across narrow viewports)
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 12,
+                  runSpacing: 8,
                   children: [
                     _nutrient(
                       context,

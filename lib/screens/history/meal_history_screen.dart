@@ -25,11 +25,13 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadHistory());
   }
 
-  Future<void> _loadHistory() async {
+  Future<void> _loadHistory({bool isRefresh = false}) async {
     final uid = context.read<AuthProvider>().userId;
     if (uid == null) return;
 
-    HapticFeedback.lightImpact();
+    if (isRefresh) {
+      HapticFeedback.lightImpact();
+    }
 
     // Refresh today's meals globally so dashboard updates too
     final todayStr = DateTime.now().toIso8601String().substring(0, 10);
@@ -38,11 +40,15 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
     setState(() => _isLoading = true);
     final today = DateTime.now();
     final thirtyDaysAgo = today.subtract(const Duration(days: 30));
-    _allMeals = await context.read<MealProvider>().getMealsForDateRange(
-          uid,
-          thirtyDaysAgo.toIso8601String().substring(0, 10),
-          today.toIso8601String().substring(0, 10),
-        );
+    try {
+      _allMeals = await context.read<MealProvider>().getMealsForDateRange(
+            uid,
+            thirtyDaysAgo.toIso8601String().substring(0, 10),
+            today.toIso8601String().substring(0, 10),
+          );
+    } catch (_) {
+      _allMeals = [];
+    }
     if (mounted) setState(() => _isLoading = false);
   }
 
@@ -74,7 +80,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
             child: IconButton(
               icon: Icon(Icons.refresh_rounded,
                   size: 18, color: AppColors.textSecondary(context)),
-              onPressed: _loadHistory,
+              onPressed: () => _loadHistory(isRefresh: true),
               padding: EdgeInsets.zero,
             ),
           ),
@@ -85,7 +91,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
           : _allMeals.isEmpty
               ? _buildEmptyState()
               : RefreshIndicator(
-                  onRefresh: _loadHistory,
+                  onRefresh: () => _loadHistory(isRefresh: true),
                   color: AppColors.primary,
                   child: ListView(
                     physics: const BouncingScrollPhysics(
@@ -146,6 +152,7 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                                         color: Colors.white),
                                   ),
                                   confirmDismiss: (_) async {
+                                    HapticFeedback.lightImpact();
                                     return await showDialog(
                                       context: context,
                                       builder: (ctx) => AlertDialog(
@@ -159,8 +166,10 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                                             child: const Text('Cancel'),
                                           ),
                                           TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(ctx, true),
+                                            onPressed: () {
+                                              HapticFeedback.lightImpact();
+                                              Navigator.pop(ctx, true);
+                                            },
                                             child: const Text('Delete',
                                                 style: TextStyle(
                                                     color: AppColors.error)),
@@ -173,22 +182,35 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                                     final uid =
                                         context.read<AuthProvider>().userId;
                                     if (uid != null) {
-                                      await context
-                                          .read<MealProvider>()
-                                          .deleteMeal(uid, meal.id);
-                                      _allMeals
-                                          .removeWhere((m) => m.id == meal.id);
-                                      setState(() {});
+                                      try {
+                                        await context
+                                            .read<MealProvider>()
+                                            .deleteMeal(uid, meal.id);
+                                        _allMeals
+                                            .removeWhere((m) => m.id == meal.id);
+                                        setState(() {});
+                                      } catch (e) {
+                                        if (mounted && context.mounted) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Could not delete meal: $e'),
+                                              backgroundColor: AppColors.error,
+                                            ),
+                                          );
+                                          _loadHistory();
+                                        }
+                                      }
                                     }
                                   },
                                   child: MealCard(
                                     meal: meal,
                                     onTap: () async {
+                                      HapticFeedback.lightImpact();
                                       final changed = await context.push<bool>(
                                         '/meal-detail',
                                         extra: meal,
                                       );
-                                      if (changed == true && mounted) {
+                                      if (changed == true && mounted && context.mounted) {
                                         await _loadHistory();
                                       }
                                     },

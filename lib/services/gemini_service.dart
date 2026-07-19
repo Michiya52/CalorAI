@@ -135,7 +135,7 @@ CRITICAL RULES:
     ]);
 
     GenerateContentResponse? response;
-    GenerativeAIException? lastError;
+    Object? lastError;
 
     // Define the fallback chain: Start with the most capable model (3.5 Flash),
     // and gracefully degrade to older/more available models if quotas are hit.
@@ -181,17 +181,27 @@ CRITICAL RULES:
 
         // If it's a fatal error (like invalid API key), crash immediately
         rethrow;
+      } catch (e) {
+        lastError = e;
+        final msg = e.toString().toLowerCase();
+        AppLogger.instance
+            .log('Gemini model $modelId network/timeout error ($msg). Falling back...');
+        continue;
       }
     }
 
     // If all models failed, surface the most relevant error to the user
     if (response == null && lastError != null) {
-      if (lastError.message.contains('503') ||
-          lastError.message.contains('high demand')) {
+      final errStr = lastError.toString().toLowerCase();
+      if (errStr.contains('503') || errStr.contains('high demand')) {
         throw Exception(
             'The AI is currently busy (high demand). Please try again in a few seconds.');
+      } else if (errStr.contains('timeout')) {
+        throw Exception(
+            'Vision analysis timed out after multiple attempts. Please check your network connection and try again.');
       }
-      throw lastError;
+      if (lastError is Exception) throw lastError;
+      throw Exception(lastError.toString());
     }
 
     final text = response?.text;

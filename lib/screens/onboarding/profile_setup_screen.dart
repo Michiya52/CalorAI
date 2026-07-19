@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -94,6 +95,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
   }
 
   void _goToStep(int step) {
+    FocusScope.of(context).unfocus();
+    HapticFeedback.lightImpact();
     _stepAnimController.forward(from: 0);
     setState(() => _currentStep = step);
   }
@@ -148,6 +151,15 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen>
   }
 
   Future<void> _finish() async {
+    FocusScope.of(context).unfocus();
+    if (_nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your name'), backgroundColor: AppColors.error),
+      );
+      _goToStep(0);
+      return;
+    }
+    HapticFeedback.lightImpact();
     final auth = context.read<AuthProvider>();
     final profileProvider = context.read<ProfileProvider>();
     final uid = auth.userId;

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -65,19 +66,32 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     final uid = context.read<AuthProvider>().userId;
     if (profile == null || uid == null) return;
 
+    HapticFeedback.lightImpact();
     _messageController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
 
-    await context.read<ChatbotProvider>().sendMessage(
-          text: text,
-          profile: profile,
-          uid: uid,
-          todaysMeals: context.read<MealProvider>().todaysMeals,
+    try {
+      await context.read<ChatbotProvider>().sendMessage(
+            text: text,
+            profile: profile,
+            uid: uid,
+            todaysMeals: context.read<MealProvider>().todaysMeals,
+          );
+      _scrollToBottom();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not send message: $e'),
+            backgroundColor: AppColors.error,
+          ),
         );
-    _scrollToBottom();
+      }
+    }
   }
 
   void _showHistoryDrawer() {
+    HapticFeedback.lightImpact();
     showModalBottomSheet(
       context: context,
       useRootNavigator: true,
@@ -85,14 +99,17 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       isScrollControlled: true,
       builder: (ctx) => _ChatHistorySheet(
         onSessionTap: (session) {
+          HapticFeedback.lightImpact();
           Navigator.pop(ctx);
           context.read<ChatbotProvider>().loadSession(session);
           _scrollToBottom();
         },
         onDeleteSession: (sessionId) {
+          HapticFeedback.lightImpact();
           context.read<ChatbotProvider>().deleteSession(sessionId);
         },
         onNewChat: () {
+          HapticFeedback.lightImpact();
           Navigator.pop(ctx);
           context.read<ChatbotProvider>().startNewChat();
         },
@@ -155,7 +172,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             child: IconButton(
               icon: Icon(Icons.add_comment_outlined,
                   size: 18, color: AppColors.textSecondary(context)),
-              onPressed: () => context.read<ChatbotProvider>().startNewChat(),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                context.read<ChatbotProvider>().startNewChat();
+              },
               tooltip: 'New chat',
               padding: EdgeInsets.zero,
             ),
@@ -172,7 +192,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             child: IconButton(
               icon: Icon(Icons.delete_outline_rounded,
                   size: 18, color: AppColors.textSecondary(context)),
-              onPressed: () => context.read<ChatbotProvider>().clearHistory(),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                context.read<ChatbotProvider>().clearHistory();
+              },
               tooltip: 'Clear chat',
               padding: EdgeInsets.zero,
             ),

@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../constants/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/food_suggestion.dart';
 import '../../models/meal_entry.dart';
@@ -23,6 +25,42 @@ class AppRouter {
   static GoRouter create(AuthProvider authProvider) {
     return GoRouter(
       initialLocation: '/login',
+      errorBuilder: (context, state) => Scaffold(
+        backgroundColor: AppColors.background(context),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.broken_image_rounded,
+                    size: 56, color: AppColors.textSecondary(context)),
+                const SizedBox(height: 16),
+                Text(
+                  'Page Not Found',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary(context),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'The screen or link you attempted to visit does not exist or has expired.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14, color: AppColors.textSecondary(context)),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => context.go('/home'),
+                  child: const Text('Go to Dashboard'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       refreshListenable: authProvider.authStateNotifier,
       redirect: (context, state) {
         final isLoggedIn = authProvider.isLoggedIn;

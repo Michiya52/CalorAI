@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../models/food_suggestion.dart';
@@ -26,6 +27,7 @@ class _SuggestionCardsScreenState extends State<SuggestionCardsScreen> {
   Future<void> _onSuggestionTap(int index) async {
     if (_loadingIndex != null) return; // prevent double taps
 
+    HapticFeedback.lightImpact();
     setState(() => _loadingIndex = index);
     try {
       final suggestion = widget.suggestions[index];
@@ -111,7 +113,10 @@ class _SuggestionCardsScreenState extends State<SuggestionCardsScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: TextButton.icon(
-                onPressed: () => context.push('/log/search'),
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  context.push('/log/search');
+                },
                 icon: const Icon(Icons.search),
                 label: const Text('None of these — search manually'),
                 style: TextButton.styleFrom(

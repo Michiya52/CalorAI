@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/constants/app_colors.dart';
@@ -28,6 +28,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
   Uint8List? _imageBytes;
 
   Future<void> _pickImage(ImageSource source) async {
+    HapticFeedback.lightImpact();
     AppLogger.instance.log('PhotoLoggingScreen: picking image from $source');
     final picker = ImagePicker();
     final XFile? imageFile = await picker.pickImage(
@@ -149,7 +150,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             const SizedBox(height: 12),
             const Text(
-                'We searched our local database (MyFCD), Open Food Facts, and USDA FoodData Central, but exact nutrition details aren\'t listed for this item yet.'),
+                'We searched Open Food Facts and USDA FoodData Central, but exact nutrition details aren\'t listed for this item yet.'),
             const SizedBox(height: 12),
             const Text('Would you like to search manually or try another item?'),
           ],
@@ -266,6 +267,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                     height: 56,
                     child: OutlinedButton.icon(
                       onPressed: () async {
+                        HapticFeedback.lightImpact();
                         final result = await context.push('/log/barcode');
                         if (result is Map && result['notFound'] == true && mounted) {
                           final barcode = result['barcode'] as String? ?? '';
@@ -285,7 +287,10 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
                   ),
                   const Spacer(),
                   TextButton.icon(
-                    onPressed: () => context.push('/log/search'),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      context.push('/log/search');
+                    },
                     icon: const Icon(Icons.search),
                     label: const Text('Search manually instead'),
                     style: TextButton.styleFrom(

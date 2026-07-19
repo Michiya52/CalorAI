@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 
@@ -28,8 +29,14 @@ class HomeScreen extends StatelessWidget {
       bottomNavigationBar: _GlassBottomBar(
         selectedIndex: selectedIndex,
         isDark: isDark,
-        onTap: (index) => context.go(_routes[index]),
-        onAddTap: () => _showLogMenu(context),
+        onTap: (index) {
+          HapticFeedback.lightImpact();
+          context.go(_routes[index]);
+        },
+        onAddTap: () {
+          HapticFeedback.lightImpact();
+          _showLogMenu(context);
+        },
       ),
     );
   }
@@ -78,6 +85,7 @@ class _LogMenuSheet extends StatelessWidget {
                 label: 'Scan',
                 color: AppColors.primary,
                 onTap: () {
+                  HapticFeedback.lightImpact();
                   Navigator.pop(context);
                   context.push('/log/photo');
                 },
@@ -87,6 +95,7 @@ class _LogMenuSheet extends StatelessWidget {
                 label: 'Manual',
                 color: AppColors.aura,
                 onTap: () {
+                  HapticFeedback.lightImpact();
                   Navigator.pop(context);
                   context.push('/log/search');
                 },
@@ -96,6 +105,7 @@ class _LogMenuSheet extends StatelessWidget {
                 label: 'Cook Meal',
                 color: AppColors.accent,
                 onTap: () {
+                  HapticFeedback.lightImpact();
                   Navigator.pop(context);
                   context.push('/log/create-meal');
                 },

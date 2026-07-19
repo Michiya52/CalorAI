@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -53,6 +54,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     // One-shot: every outcome exits this screen, so never re-arm scanning.
     if (_isProcessing) return;
     setState(() => _isProcessing = true);
+    HapticFeedback.lightImpact();
 
     try {
       await controller.stop();
@@ -139,7 +141,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           ),
         ],
       ),
-    );
+      // Dispose after the dialog's exit animation; the TextField is still
+      // alive (and may rebuild) while the route animates out.
+    ).then((_) => Future.delayed(
+        const Duration(milliseconds: 400), textController.dispose));
   }
 
   @override

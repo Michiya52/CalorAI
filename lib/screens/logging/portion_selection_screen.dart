@@ -263,6 +263,7 @@ class _PortionSelectionScreenState extends State<PortionSelectionScreen> {
               ],
               selected: {_selectedPortion},
               onSelectionChanged: (selected) {
+                HapticFeedback.lightImpact();
                 _selectedPortion = selected.first;
                 _updateNutrition();
               },

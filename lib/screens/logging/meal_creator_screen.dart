@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -38,11 +39,10 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
       _ingredients.fold(0.0, (sum, item) => sum + item.grams);
 
   void _addIngredient(IngredientDetail detail) {
+    HapticFeedback.lightImpact();
     setState(() {
       _ingredients.add(detail);
     });
-    // Don't auto-pop if we want them to pick multiples in the library,
-    // but the library is currently popping. This is fine.
   }
 
   void _updateIngredientWeight(int index, double newWeight) {
@@ -75,6 +75,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
         ? 'Homecooked Meal'
         : _mealNameController.text.trim();
 
+    HapticFeedback.lightImpact();
     setState(() => _isSaving = true);
     final userId = context.read<AuthProvider>().userId;
     if (userId != null) {
@@ -96,12 +97,29 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
         ingredients: _ingredients,
       );
 
-      await context.read<MealProvider>().addMeal(newMeal);
-    }
-    setState(() => _isSaving = false);
-
-    if (mounted) {
-      context.go('/home'); // Return to dashboard
+      try {
+        await context.read<MealProvider>().addMeal(newMeal);
+        if (mounted) {
+          context.go('/home'); // Return to dashboard
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not save cooked meal: $e'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isSaving = false);
+        }
+      }
+    } else {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
@@ -141,6 +159,7 @@ class _MealCreatorScreenState extends State<MealCreatorScreen> {
                       ),
                       TextButton.icon(
                         onPressed: () {
+                          HapticFeedback.lightImpact();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

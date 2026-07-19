@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -66,6 +67,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
 
   Future<void> _saveChanges() async {
     if (_isSaving) return;
+    FocusScope.of(context).unfocus();
+    HapticFeedback.lightImpact();
     final uid = context.read<AuthProvider>().userId;
     if (uid == null) return;
 
@@ -106,6 +109,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
   }
 
   Future<void> _deleteMeal() async {
+    HapticFeedback.lightImpact();
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -214,6 +218,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
             ],
             selected: {_selectedPortion},
             onSelectionChanged: (selected) {
+              HapticFeedback.lightImpact();
               setState(() {
                 _selectedPortion = selected.first;
                 _updateNutrition();

@@ -117,8 +117,13 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
       } else {
         fetched = await UsdaService.instance.searchFoods(normalizedQuery);
       }
-    } catch (_) {
+    } catch (e) {
       fetched = const [];
+      if (mounted) {
+        setState(() {
+          _searchError = 'Could not load search results. Please check your connection or try again.';
+        });
+      }
     }
 
     if (mounted) {
@@ -206,7 +211,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                       ),
                       ButtonSegment(
                         value: _SearchSource.usda,
-                        label: Text('USDA (FOSS)'),
+                        label: Text('USDA (FCD)'),
                       ),
                     ],
                     showSelectedIcon: false,
@@ -294,6 +299,7 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
                         onPressed: () {
+                          HapticFeedback.lightImpact();
                           setState(() {
                             _source = _SearchSource.usda;
                           });
@@ -358,6 +364,8 @@ class _ManualSearchScreenState extends State<ManualSearchScreen> {
                                 color: Colors.white, fontSize: 10)),
                       ),
                       onTap: () {
+                        HapticFeedback.lightImpact();
+                        FocusScope.of(context).unfocus();
                         // Create a FoodSuggestion from the FoodItem
                         final suggestion = FoodSuggestion(
                           rank: 1,

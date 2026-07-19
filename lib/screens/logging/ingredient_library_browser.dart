@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/constants/app_colors.dart';
 import '../../services/ingredient_library_service.dart';
 import '../../models/meal_entry.dart';
@@ -38,7 +39,9 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
   }
 
   Future<void> _loadData() async {
-    await _libraryService.loadLibrary();
+    try {
+      await _libraryService.loadLibrary();
+    } catch (_) {}
     if (mounted) {
       setState(() {
         _isLoading = false;
@@ -194,6 +197,7 @@ class _IngredientLibraryBrowserState extends State<IngredientLibraryBrowser> {
       ),
       trailing: const Icon(Icons.add_circle, color: AppColors.primary),
       onTap: () {
+        HapticFeedback.lightImpact();
         final detail = IngredientDetail(
           name: item.nameEn,
           grams: 100.0,

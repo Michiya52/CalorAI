@@ -3,7 +3,6 @@ import '../services/logger_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/food_item.dart';
-import 'firestore_service.dart';
 import 'open_food_facts_service.dart';
 
 /// Service for accessing USDA FoodData Central.
@@ -50,34 +49,14 @@ class UsdaService {
     }
   }
 
-  /// Specialized barcode lookup via Local Offline Barcodes, MyFCD Local Database & USDA.
+  /// Specialized barcode lookup via Open Food Facts & USDA.
   Future<FoodItem?> getProductByBarcode(String barcode) async {
     final cleanBarcode = barcode.trim();
     if (cleanBarcode.isEmpty) return null;
 
     LoggerService().info('Looking up barcode: $cleanBarcode');
 
-    // 1. Check offline MyFCD Local Asset Cache via FirestoreService
-    try {
-      final myfcdResults = await FirestoreService().searchFoods(cleanBarcode, limit: 5);
-      for (final item in myfcdResults) {
-        if (item.myfcdCode == cleanBarcode || item.id == cleanBarcode) {
-          LoggerService().info('Found in MyFCD Local Database by code: ${item.nameEn}');
-          return item;
-        }
-      }
-      // Also try EAN-13 vs UPC-A variants in local dataset
-      if (cleanBarcode.length == 12) {
-        final paddedResults = await FirestoreService().searchFoods('0$cleanBarcode', limit: 3);
-        for (final item in paddedResults) {
-          if (item.myfcdCode == '0$cleanBarcode') return item;
-        }
-      }
-    } catch (e, stack) {
-      LoggerService().error(e, stack, reason: 'Local MyFCD database lookup failed');
-    }
-
-    // 2. Open Food Facts barcode endpoint (best coverage for MY/global EANs)
+    // 1. Open Food Facts barcode endpoint (best coverage for MY/global EANs)
     final offItem =
         await OpenFoodFactsService.instance.getProductByBarcode(cleanBarcode);
     if (offItem != null) {
@@ -85,27 +64,36 @@ class UsdaService {
       return offItem;
     }
 
-    // 3. Fallback to USDA FoodData Central (for US branded/foundation foods)
-    // Querying with and without gtinUpc: prefix to hit USDA Lucene index accurately
-    List<FoodItem> results = await searchFoods('gtinUpc:$cleanBarcode');
-    if (results.isEmpty) results = await searchFoods(cleanBarcode);
-    if (results.isNotEmpty) return results.first;
-
-    if (cleanBarcode.length == 12) {
-      final padded = '0$cleanBarcode';
-      var paddedResults = await searchFoods('gtinUpc:$padded');
-      if (paddedResults.isEmpty) paddedResults = await searchFoods(padded);
-      if (paddedResults.isNotEmpty) return paddedResults.first;
+    // 2. Fallback to USDA FoodData Central (for US branded/foundation foods),
+    // trying EAN-13 vs UPC-A variants of the code.
+    final candidates = [
+      cleanBarcode,
+      if (cleanBarcode.length == 12) '0$cleanBarcode',
+      if (cleanBarcode.length == 13 && cleanBarcode.startsWith('0'))
+        cleanBarcode.substring(1),
+    ];
+    for (final code in candidates) {
+      final item = await _usdaByGtin(code);
+      if (item != null) return item;
     }
 
-    if (cleanBarcode.length == 13 && cleanBarcode.startsWith('0')) {
-      final stripped = cleanBarcode.substring(1);
-      var strippedResults = await searchFoods('gtinUpc:$stripped');
-      if (strippedResults.isEmpty) strippedResults = await searchFoods(stripped);
-      if (strippedResults.isNotEmpty) return strippedResults.first;
-    }
+    LoggerService().info(
+        'Barcode $cleanBarcode not found in Open Food Facts or USDA.');
+    return null;
+  }
 
-    LoggerService().info('Barcode $cleanBarcode not found in Local Database or USDA.');
+  /// USDA lookup by GTIN: the gtinUpc:-prefixed query is an exact-field match,
+  /// so its first hit is trusted. The plain full-text fallback can match the
+  /// digits anywhere, so a result is only accepted if its gtinUpc equals the
+  /// scanned code.
+  Future<FoodItem?> _usdaByGtin(String code) async {
+    final prefixed = await searchFoods('gtinUpc:$code');
+    if (prefixed.isNotEmpty) return prefixed.first;
+
+    final plain = await searchFoods(code);
+    for (final item in plain) {
+      if (item.myfcdCode == code) return item;
+    }
     return null;
   }
 
@@ -168,7 +156,10 @@ class UsdaService {
 
     // USDA usually provides data per 100g/100ml.
     // We'll estimate portion sizes if not provided.
-    final servingSize = (f['servingSize'] as num?)?.toDouble() ?? 150.0;
+    // servingSize can be labelled in oz; g and ml are treated as-is.
+    var servingSize = (f['servingSize'] as num?)?.toDouble() ?? 150.0;
+    final servingUnit = (f['servingSizeUnit'] as String? ?? '').toLowerCase();
+    if (servingUnit.contains('oz')) servingSize *= 28.35;
 
     return FoodItem(
       id: id,

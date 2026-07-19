@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../models/meal_entry.dart';
 import '../../core/constants/app_colors.dart';
 
@@ -77,16 +78,16 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Row(
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
                   children: [
                     _macroChip('🔥', '${widget.ingredient.calories} kcal',
                         AppColors.primary),
-                    const SizedBox(width: 8),
                     _macroChip(
                         'P',
                         '${widget.ingredient.proteinG.toStringAsFixed(1)}g',
                         Colors.blue),
-                    const SizedBox(width: 8),
                     _macroChip(
                         'C',
                         '${widget.ingredient.carbsG.toStringAsFixed(1)}g',
@@ -111,6 +112,7 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                     IconButton(
                       icon: const Icon(Icons.remove, size: 16),
                       onPressed: () {
+                        HapticFeedback.lightImpact();
                         if (widget.ingredient.grams > 10) {
                           widget.onWeightChanged(widget.ingredient.grams - 10);
                         } else if (widget.ingredient.grams > 1) {
@@ -149,8 +151,10 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.add, size: 16),
-                      onPressed: () =>
-                          widget.onWeightChanged(widget.ingredient.grams + 10),
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        widget.onWeightChanged(widget.ingredient.grams + 10);
+                      },
                       padding: EdgeInsets.zero,
                       constraints:
                           const BoxConstraints(minWidth: 32, minHeight: 32),
@@ -160,7 +164,10 @@ class _MealIngredientTileState extends State<MealIngredientTile> {
               ),
               const SizedBox(height: 4),
               InkWell(
-                onTap: widget.onRemove,
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  widget.onRemove();
+                },
                 child: const Text(
                   'Remove',
                   style: TextStyle(

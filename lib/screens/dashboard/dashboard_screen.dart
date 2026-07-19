@@ -55,8 +55,10 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.dispose();
   }
 
-  Future<void> _loadData() async {
-    HapticFeedback.lightImpact();
+  Future<void> _loadData({bool isRefresh = false}) async {
+    if (isRefresh) {
+      HapticFeedback.lightImpact();
+    }
     final uid = context.read<AuthProvider>().userId;
     if (uid == null) return;
 
@@ -138,7 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton.icon(
-                        onPressed: _loadData,
+                        onPressed: () => _loadData(isRefresh: true),
                         icon: const Icon(Icons.refresh_rounded),
                         label: const Text('Try Again'),
                         style: ElevatedButton.styleFrom(
@@ -173,7 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               profile.macroTargets ?? MacroTargets.fromCalories(target);
 
           return RefreshIndicator(
-            onRefresh: _loadData,
+            onRefresh: () => _loadData(isRefresh: true),
             color: AppColors.primary,
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(

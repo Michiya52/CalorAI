@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
@@ -47,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Future<void> _login() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
+    HapticFeedback.lightImpact();
     final auth = context.read<AuthProvider>();
     await auth.login(_emailController.text.trim(), _passwordController.text);
 
@@ -154,7 +157,10 @@ class _LoginScreenState extends State<LoginScreen>
           ],
         );
       },
-    );
+      // Dispose after the dialog's exit animation; the TextField is still
+      // alive (and may rebuild) while the route animates out.
+    ).then((_) => Future.delayed(
+        const Duration(milliseconds: 400), emailController.dispose));
   }
 
   @override
