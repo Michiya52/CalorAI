@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -60,7 +62,35 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       await controller.stop();
     } catch (_) {}
 
-    final usdaResult = await UsdaService.instance.getProductByBarcode(barcode);
+    FoodItem? usdaResult;
+    try {
+      usdaResult = await UsdaService.instance.getProductByBarcode(barcode);
+    } catch (e) {
+      if (!mounted) return;
+      final errStr = e.toString().toLowerCase();
+      final isOffline = e is SocketException ||
+          e is TimeoutException ||
+          errStr.contains('timeout') ||
+          errStr.contains('socket') ||
+          errStr.contains('network') ||
+          errStr.contains('connection') ||
+          errStr.contains('clientexception');
+      if (isOffline) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 4),
+            content: Text('Unable to connect. Please check your internet connection.'),
+          ),
+        );
+        setState(() => _isProcessing = false);
+        try {
+          await controller.start();
+        } catch (_) {}
+        return;
+      }
+      rethrow;
+    }
+
     if (!mounted) return;
 
     if (usdaResult != null) {

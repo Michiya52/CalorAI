@@ -52,7 +52,7 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
 
       final aiSuggestions = await gemini
           .identifyFoodFromImage(_imageBytes!)
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 45));
       AppLogger.instance.log(
           'PhotoLoggingScreen: suggestions returned = ${aiSuggestions.length}');
 
@@ -112,10 +112,19 @@ class _PhotoLoggingScreenState extends State<PhotoLoggingScreen> {
           .log('PhotoLoggingScreen: image identification failed: $e');
 
       if (mounted) {
-        final isOffline = e is SocketException || e is TimeoutException;
-        final errorMessage = isOffline
-            ? 'Network too weak for AI Vision. Please use manual search.'
-            : 'Could not identify food. Try again or search manually.';
+        final errStr = e.toString().toLowerCase();
+        final isQuota = errStr.contains('429') || errStr.contains('quota') || errStr.contains('limit');
+        final isOffline = e is SocketException ||
+            e is TimeoutException ||
+            errStr.contains('timeout') ||
+            errStr.contains('socket') ||
+            errStr.contains('network') ||
+            errStr.contains('connection');
+        final errorMessage = isQuota
+            ? 'Daily AI free-tier quota reached (20 RPD). Please search food manually.'
+            : (isOffline
+                ? 'Network too weak for AI Vision. Please use manual search.'
+                : 'Could not identify food. Try again or search manually.');
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

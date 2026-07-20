@@ -159,7 +159,7 @@ CRITICAL RULES:
         );
 
         response = await tempModel
-            .generateContent([content]).timeout(const Duration(seconds: 15));
+            .generateContent([content]).timeout(const Duration(seconds: 35));
         AppLogger.instance.log('Gemini vision success using model: $modelId');
         break; // Success, exit the fallback loop
       } on GenerativeAIException catch (e) {
@@ -578,7 +578,9 @@ CRITICAL RULES:
     final modelsToTry = [
       'gemini-3.5-flash',
       'gemini-3.0-flash',
-      'gemini-2.5-flash'
+      'gemini-2.5-flash',
+      'gemini-1.5-flash-latest',
+      'gemini-1.5-flash',
     ];
 
     GenerateContentResponse? response;
