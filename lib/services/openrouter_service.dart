@@ -52,6 +52,12 @@ class OpenRouterService {
     final todayCarbs = todaysMeals.fold<double>(0, (s, m) => s + m.carbsG);
     final todayFats = todaysMeals.fold<double>(0, (s, m) => s + m.fatsG);
     final remaining = profile.calorieTarget - todayCalories;
+    final remainingText = remaining >= 0
+        ? '$remaining kcal remaining'
+        : '${remaining.abs()} kcal OVER target';
+    final remainingGuidance = remaining >= 0
+        ? "You've still got $remaining kcal left today."
+        : "You are currently ${remaining.abs()} kcal over your daily target today.";
 
     final macroTargets = profile.macroTargets ??
         MacroTargets.fromCalories(profile.calorieTarget);
@@ -125,7 +131,7 @@ BMI: ${bmi.toStringAsFixed(1)} ($bmiCategory)
 Activity level: ${profile.activityLevel.replaceAll('_', ' ')}
 
 ═══ TODAY'S PROGRESS ═══
-Calories: $todayCalories / ${profile.calorieTarget} kcal ($remaining remaining)
+Calories: $todayCalories / ${profile.calorieTarget} kcal ($remainingText)
 Protein: ${todayProtein.toStringAsFixed(0)}g / ${macroTargets.proteinG}g — $proteinNote
 Carbs: ${todayCarbs.toStringAsFixed(0)}g / ${macroTargets.carbsG}g — $carbsNote
 Fats: ${todayFats.toStringAsFixed(0)}g / ${macroTargets.fatsG}g — $fatsNote
@@ -146,6 +152,7 @@ $mealLog
 - Give practical guidance that fits Malaysian and Southeast Asian foods, portions, and eating habits.
 
 ═══ ACCURACY RULES ═══
+- NEVER output negative numbers for remaining calories (e.g. NEVER write "-35 kcal remaining"). If remaining calories are negative, state that the user is X kcal over their target (e.g., "35 kcal over your target").
 - Never present calorie or macro estimates as exact facts unless the user provided exact nutrition data.
 - When estimating foods, prefer realistic ranges or approximate values rather than false precision.
 - State key assumptions briefly when they materially affect the estimate, such as portion size, cooking oil, gravy, sugar, milk, toppings, sauces, or whether skin/fat was included.
