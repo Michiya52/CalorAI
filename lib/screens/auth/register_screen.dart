@@ -216,28 +216,37 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 },
                               ),
                               const SizedBox(height: 24),
-                              Consumer<AuthProvider>(
-                                builder: (context, auth, _) => SizedBox(
-                                  width: double.infinity,
-                                  height: 52,
-                                  child: ElevatedButton(
-                                    onPressed:
-                                        auth.isLoading ? null : _register,
-                                    child: auth.isLoading
-                                        ? const SizedBox(
-                                            width: 24,
-                                            height: 24,
-                                            child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                                strokeWidth: 2),
-                                          )
-                                        : const Text('Create Account',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700)),
-                                  ),
-                                ),
-                              ),
+                               Consumer<AuthProvider>(
+                                 builder: (context, auth, _) => ConstrainedBox(
+                                   constraints: const BoxConstraints(minHeight: 52),
+                                   child: SizedBox(
+                                     width: double.infinity,
+                                     child: ElevatedButton(
+                                       style: ElevatedButton.styleFrom(
+                                         padding: const EdgeInsets.symmetric(
+                                             horizontal: 16, vertical: 12),
+                                       ),
+                                       onPressed:
+                                           auth.isLoading ? null : _register,
+                                       child: auth.isLoading
+                                           ? const SizedBox(
+                                               width: 24,
+                                               height: 24,
+                                               child: CircularProgressIndicator(
+                                                   color: Colors.white,
+                                                   strokeWidth: 2),
+                                             )
+                                           : const FittedBox(
+                                               fit: BoxFit.scaleDown,
+                                               child: Text('Create Account',
+                                                   style: TextStyle(
+                                                       fontSize: 16,
+                                                       fontWeight: FontWeight.w700)),
+                                             ),
+                                     ),
+                                   ),
+                                 ),
+                               ),
                             ],
                           ),
                         ),

@@ -510,7 +510,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  20,
+                  20,
+                  130 + MediaQuery.of(context).padding.bottom,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -765,26 +770,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 20),
 
                     // Logout
-                    SizedBox(
-                      height: 48,
-                      child: OutlinedButton.icon(
-                        onPressed: () async {
-                          context.read<ProfileProvider>().clear();
-                          context.read<MealProvider>().clear();
-                          context.read<ChatbotProvider>().clear();
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 52),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () async {
+                            context.read<ProfileProvider>().clear();
+                            context.read<MealProvider>().clear();
+                            context.read<ChatbotProvider>().clear();
 
-                          await context.read<AuthProvider>().logout();
-                          if (context.mounted) context.go('/login');
-                        },
-                        icon: const Icon(Icons.logout_rounded,
-                            color: AppColors.error),
-                        label: const Text('Log Out',
-                            style: TextStyle(color: AppColors.error)),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                              color: AppColors.error.withValues(alpha: 0.3)),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
+                            await context.read<AuthProvider>().logout();
+                            if (context.mounted) context.go('/login');
+                          },
+                          icon: const Icon(Icons.logout_rounded,
+                              color: AppColors.error),
+                          label: const Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text('Log Out',
+                                  style: TextStyle(
+                                      color: AppColors.error,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700)),
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            side: BorderSide(
+                                color: AppColors.error.withValues(alpha: 0.3)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                          ),
                         ),
                       ),
                     ),

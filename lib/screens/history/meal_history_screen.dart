@@ -96,7 +96,12 @@ class _MealHistoryScreenState extends State<MealHistoryScreen> {
                   child: ListView(
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+                    padding: EdgeInsets.fromLTRB(
+                      20,
+                      8,
+                      20,
+                      130 + MediaQuery.of(context).padding.bottom,
+                    ),
                     children: _groupByDate().entries.map((entry) {
                       final totalCals = entry.value
                           .fold<int>(0, (sum, m) => sum + m.calories);
